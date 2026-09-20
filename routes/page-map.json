@@ -1,0 +1,17 @@
+{
+  "anasayfa.html": "/Home",
+  "stok.html": "/Stok",
+  "stokyonetimi.html": "/StokYonetimi",
+  "raporlar.html": "/Raporlar",
+  "magazalar.html": "/Magazalar",
+  "ayarlar.html": "/Ayarlar",
+  "kullanicilar.html": "/Kullanicilar",
+  "transferler.html": "/Transfer",
+  "satis-analizi.html": "/SatisAnalizi",
+  "ai-onerileri.html": "/AiOnerileri",
+  "bildirimler.html": "/Bildirimler",
+  "entegrasyon.html": "/Entegrasyon",
+  "login.html": "/Login",
+  "erisim-yok.html": "/ErisimYok",
+  "index.html": "/Index"
+}

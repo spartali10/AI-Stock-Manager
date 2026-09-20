@@ -1,0 +1,25 @@
+const { test } = require('node:test');
+const assert = require('node:assert/strict');
+const ExcelJS = require('exceljs');
+require('../public/js/transfer-order-matrix');
+require('../public/js/transfer-order-excel');
+test('order metrics use product-color inventory and period sales, export preserves values and size colors', async () => {
+    const records = [{ product: '001', color: 'Black', from: 'A', to: 'B', size: '1', quantity: 2, inventorySnapshot: { source: 8, target: 3, phase: 'before-transfer' }, salesDateRange: { start: '2026-01-01', end: '2026-01-31' } }];
+    const context = { products: [{ code: '001', color: 'Black', store: 'A', stock: 8 }, { code: '001', color: 'White', store: 'A', stock: 99 }, { code: '001', color: 'Black', store: 'B', stock: 3 }], sales: [{ code: '001', color: 'Black', store: 'A', date: '2026-01-03', quantity: 4 }, { code: '001', color: 'Black', store: 'A', date: '2025-12-31', quantity: 100 }], meta: { salesCoverage: { start: '2026-01-01', end: '2026-01-31' } } };
+    const row = TransferOrderMatrix.build(records, context).rows[0];
+    assert.equal(row.sourceInventory, 8); assert.equal(row.targetInventory, 3);
+    assert.equal(row.sourceSales, 4); assert.equal(row.targetSales, 0);
+    assert.equal(TransferOrderMatrix.build(records).rows[0].sourceSales, null);
+    const columns = [['product', 'Ürün'], ['size', 'Beden'], ['sourceInventory', 'Kaynak Envanter'], ['sourceSales', 'Kaynak Satış'], ['targetInventory', 'Hedef Envanter'], ['targetSales', 'Hedef Satış'], ['quantity', 'Sevk Adet']];
+    const book = TransferOrderExcel.build(records, context, columns, new Set(), ExcelJS);
+    const loaded = new ExcelJS.Workbook(); await loaded.xlsx.load(await book.xlsx.writeBuffer());
+    const sheet = loaded.worksheets[0];
+    assert.equal(sheet.getCell('A2').value, '001');
+    assert.equal(sheet.getCell('B2').value, 0);
+    assert.equal(sheet.getCell('B2').fill.fgColor.argb, 'FFFFE8EC');
+    assert.equal(sheet.getCell('C2').value, 2);
+    assert.equal(sheet.getCell('C2').fill.fgColor.argb, 'FFE5F7EE');
+    assert.equal(sheet.getCell('G2').value, 8);
+    assert.equal(sheet.getCell('H2').value, 4);
+    assert.equal(sheet.getCell('K3').value.result, 2);
+});

@@ -1,0 +1,50 @@
+/* Shared appearance from anasayfa.html. */
+#logoutBtn.account-item.logout {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    width: 100%;
+    min-height: 40px;
+    height: auto;
+    margin: 6px 0 3px;
+    padding: 0 10px;
+    border: 0;
+    border-top: 1px solid rgba(255, 255, 255, .07);
+    border-radius: 8px;
+    background: transparent;
+    color: #ff3d5a;
+    font: 400 10px Arial, Helvetica, sans-serif;
+    text-align: left;
+    text-decoration: none;
+    letter-spacing: normal;
+    box-shadow: none;
+    cursor: pointer;
+    transition: background .2s ease;
+}
+#logoutBtn.account-item.logout .account-item-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 25px;
+    width: 25px;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    color: #c000ff;
+    font: inherit;
+    text-align: center;
+}
+#logoutBtn.account-item.logout:hover {
+    background: rgba(161, 0, 255, .09);
+    color: #ff3d5a;
+}
+#logoutBtn.account-item.logout:focus-visible {
+    outline: 2px solid #a100ff;
+    outline-offset: 2px;
+}
+body.light #logoutBtn.account-item.logout,
+body.light-theme #logoutBtn.account-item.logout {
+    border-top-color: rgba(20, 15, 30, .08);
+}

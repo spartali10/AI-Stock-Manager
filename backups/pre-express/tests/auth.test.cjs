@@ -1,0 +1,38 @@
+const fs = require('fs'), vm = require('vm'), assert = require('assert/strict');
+const { webcrypto } = require('crypto');
+const script = fs.readFileSync(require('path').join(__dirname, '../js/auth.js'), 'utf8');
+const db = new Map();
+const localStorage = { getItem: k => db.get(k) || null, setItem: (k, v) => db.set(k, v) };
+const window = { addEventListener() {} };
+vm.runInNewContext(script, { window, localStorage, crypto: webcrypto, TextEncoder, location: { pathname: '/login.html' }, document: { addEventListener() {} } });
+const A = window.StockAuth;
+(async () => {
+    assert(A.isSetup());
+    await assert.rejects(A.login('admin', 'short'));
+    await A.login('admin', 'test-only-password');
+    assert.equal(A.current().name, 'Admin'); assert(A.can('admin'));
+    assert(!db.get('aiStockUsers').includes('test-only-password'));
+    await A.saveUser({ name: 'Reader', email: '', username: 'reader', password: 'reader-password', role: 'viewer', store: 'A', status: 'active' });
+    const reader = A.listUsers().find(u => u.username === 'reader');
+    assert(!('passwordHash' in reader));
+    A.setPermissions(reader.id, ['stock', 'reports', 'admin']);
+    await A.login('reader', 'reader-password');
+    assert(A.can('reports')); assert(!A.can('admin')); assert(!A.can('transfers'));
+    assert.throws(() => A.listUsers());
+    await assert.rejects(A.saveUser({ name: 'X', username: 'x' }));
+    assert.throws(() => A.removeUser(1));
+    await A.login('admin', 'test-only-password');
+    assert.throws(() => A.removeUser(1));
+    await assert.rejects(A.saveUser({ ...A.current(), role: 'viewer', email: '', password: '' }, 1));
+    await assert.rejects(A.saveUser({ name: 'Duplicate', username: 'READER', password: 'test-password', role: 'viewer', status: 'active', email: '' }));
+    A.setPermissions(reader.id, []);
+    await A.login('reader', 'reader-password'); assert.equal(A.landing(), 'erisim-yok.html');
+    await A.login('admin', 'test-only-password'); A.removeUser(reader.id);
+    await assert.rejects(A.login('reader', 'reader-password'));
+    // Legacy Admin is renamed and its existing password remains usable, then is hashed.
+    db.set('aiStockUsers', JSON.stringify([{ id: 1, username: 'admin', name: 'Mehmet Admin', role: 'Sistem Yöneticisi', status: 'active', password: 'legacy' }]));
+    vm.runInNewContext(script, { window, localStorage, crypto: webcrypto, TextEncoder, location: { pathname: '/login.html' }, document: { addEventListener() {} } });
+    await window.StockAuth.login('admin', 'legacy'); assert.equal(window.StockAuth.current().name, 'Admin');
+    assert(!JSON.parse(db.get('aiStockUsers'))[0].password);
+    console.log('PASS: Admin setup/migration, hashed passwords, login, CRUD, permissions, privilege checks, duplicate names and protected Admin.');
+})();

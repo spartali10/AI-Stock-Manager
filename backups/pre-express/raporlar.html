@@ -1,0 +1,3529 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Raporlar | AI Stock Manager</title>
+
+    <style>
+        /* =========================================================
+   THEME VARIABLES
+========================================================= */
+
+        :root {
+            --bg: #050505;
+            --bg-secondary: #090909;
+            --sidebar-bg: #07070a;
+
+            --card: #0d0d0f;
+            --card-secondary: #111114;
+            --input: #090909;
+
+            --text: #ffffff;
+            --text-secondary: #aaa7b0;
+            --muted: #85818d;
+            --muted-2: #65616c;
+
+            --border: rgba(178, 0, 255, .25);
+            --border-light: rgba(255, 255, 255, .07);
+
+            --purple: #a100ff;
+            --purple-2: #c000ff;
+            --purple-3: #7000ff;
+
+            --green: #00e676;
+            --yellow: #ffd000;
+            --red: #ff3d5a;
+            --blue: #00a8ff;
+
+            --hover: rgba(161, 0, 255, .06);
+
+            --shadow:
+                0 10px 35px rgba(0, 0, 0, .28);
+
+            --glow:
+                0 0 8px rgba(170, 0, 255, .45),
+                0 0 25px rgba(170, 0, 255, .15);
+
+            --transition: .25s ease;
+        }
+
+
+        /* =========================================================
+   LIGHT THEME
+========================================================= */
+
+        body.light-theme {
+            --bg: #f4f5f9;
+            --bg-secondary: #ffffff;
+            --sidebar-bg: #ffffff;
+
+            --card: #ffffff;
+            --card-secondary: #f8f8fb;
+            --input: #f5f5f8;
+
+            --text: #18151d;
+            --text-secondary: #55515e;
+            --muted: #77727f;
+            --muted-2: #9994a1;
+
+            --border: rgba(125, 0, 190, .18);
+            --border-light: rgba(20, 15, 30, .08);
+
+            --hover: rgba(161, 0, 255, .055);
+
+            --shadow:
+                0 8px 30px rgba(40, 25, 60, .08);
+
+            --glow:
+                0 0 10px rgba(161, 0, 255, .18),
+                0 0 25px rgba(161, 0, 255, .08);
+        }
+
+
+        /* =========================================================
+   RESET
+========================================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+
+            background:
+                radial-gradient(circle at 80% 0%,
+                    rgba(140, 0, 255, .10),
+                    transparent 30%),
+                radial-gradient(circle at 15% 100%,
+                    rgba(120, 0, 255, .07),
+                    transparent 30%),
+                var(--bg);
+
+            color: var(--text);
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            transition:
+                background-color var(--transition),
+                color var(--transition);
+        }
+
+
+        /* =========================================================
+   SIDEBAR
+========================================================= */
+
+        .sidebar {
+            position: fixed;
+
+            left: 0;
+            top: 0;
+
+            width: 250px;
+            height: 100vh;
+
+            padding: 22px 14px;
+
+            background: var(--sidebar-bg);
+
+            border-right:
+                1px solid var(--border);
+
+            z-index: 1000;
+
+            overflow-y: auto;
+
+            box-shadow:
+                10px 0 40px rgba(0, 0, 0, .08);
+
+            transition:
+                background var(--transition),
+                border-color var(--transition);
+        }
+
+
+        /* =========================================================
+   LOGO
+========================================================= */
+
+        .logo {
+            height: 62px;
+
+            display: flex;
+            align-items: center;
+
+            gap: 12px;
+
+            padding: 0 10px 20px;
+
+            margin-bottom: 10px;
+
+            border-bottom:
+                1px solid var(--border-light);
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 13px;
+
+            background:
+                linear-gradient(135deg,
+                    #7000ff,
+                    #c000ff);
+
+            color: #fff;
+
+            font-size: 20px;
+
+            box-shadow:
+                0 0 15px rgba(170, 0, 255, .45);
+        }
+
+        .logo-text {
+            color: var(--text);
+
+            font-size: 16px;
+
+            font-weight: 800;
+
+            letter-spacing: .8px;
+
+            line-height: 1.1;
+        }
+
+        .logo-text span {
+            display: block;
+
+            margin-top: 5px;
+
+            color: var(--purple-2);
+
+            font-size: 9px;
+
+            letter-spacing: 4px;
+        }
+
+
+        /* =========================================================
+   MENU
+========================================================= */
+
+        .menu-title {
+            padding: 18px 12px 8px;
+
+            color: var(--muted-2);
+
+            font-size: 9px;
+
+            font-weight: 700;
+
+            letter-spacing: 1.8px;
+
+            text-transform: uppercase;
+        }
+
+        .menu-item {
+            position: relative;
+
+            display: flex;
+            align-items: center;
+
+            gap: 13px;
+
+            height: 46px;
+
+            margin: 4px 0;
+
+            padding: 0 13px;
+
+            border-radius: 10px;
+
+            color: var(--muted);
+
+            text-decoration: none;
+
+            font-size: 12px;
+
+            transition:
+                color .2s ease,
+                background .2s ease,
+                transform .2s ease;
+        }
+
+        .menu-icon {
+            width: 22px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: var(--muted);
+
+            font-size: 17px;
+
+            transition: .2s;
+        }
+
+        .menu-item:hover {
+            color: var(--text);
+
+            background:
+                linear-gradient(90deg,
+                    rgba(161, 0, 255, .14),
+                    rgba(161, 0, 255, .03));
+
+            transform: translateX(2px);
+        }
+
+        .menu-item:hover .menu-icon {
+            color: var(--purple-2);
+        }
+
+
+        /* =========================================================
+   ACTIVE MENU
+========================================================= */
+
+        .menu-item.active {
+            color: #fff;
+
+            background:
+                linear-gradient(90deg,
+                    rgba(161, 0, 255, .75),
+                    rgba(100, 0, 255, .18));
+
+            box-shadow:
+                0 5px 20px rgba(150, 0, 255, .18);
+        }
+
+        .menu-item.active::before {
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+
+            top: 8px;
+            bottom: 8px;
+
+            width: 3px;
+
+            border-radius:
+                0 4px 4px 0;
+
+            background:
+                linear-gradient(180deg,
+                    #d000ff,
+                    #7000ff);
+
+            box-shadow:
+                0 0 10px #a100ff;
+        }
+
+        .menu-item.active .menu-icon {
+            color: white;
+
+            filter:
+                drop-shadow(0 0 7px rgba(210, 0, 255, .8));
+        }
+
+
+        /* =========================================================
+   MAIN
+========================================================= */
+
+        .main {
+            margin-left: 250px;
+
+            padding: 25px 30px;
+
+            min-height: 100vh;
+        }
+
+
+        /* =========================================================
+   TOPBAR
+========================================================= */
+
+        .topbar {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            margin-bottom: 28px;
+        }
+
+        .search-wrapper {
+            position: relative;
+
+            width: 390px;
+        }
+
+        .search {
+            width: 100%;
+
+            padding:
+                13px 45px 13px 17px;
+
+            background: var(--input);
+
+            border:
+                1px solid var(--border-light);
+
+            border-radius: 9px;
+
+            color: var(--text);
+
+            outline: none;
+
+            font-size: 12px;
+
+            transition: .25s;
+        }
+
+        .search:focus {
+            border-color: var(--purple);
+
+            box-shadow: var(--glow);
+        }
+
+        .search::placeholder {
+            color: var(--muted-2);
+        }
+
+        .search-icon {
+            position: absolute;
+
+            right: 15px;
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            color: var(--purple-2);
+
+            font-size: 19px;
+        }
+
+        .profile-area {
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+        }
+
+        .theme-btn,
+        .notification {
+            width: 40px;
+            height: 40px;
+
+            border-radius: 10px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: var(--input);
+
+            border:
+                1px solid var(--border-light);
+
+            color: var(--text);
+
+            cursor: pointer;
+
+            transition: .25s;
+        }
+
+        .theme-btn:hover,
+        .notification:hover {
+            border-color: var(--purple);
+
+            box-shadow: var(--glow);
+
+            transform: translateY(-1px);
+        }
+
+        .notification {
+            position: relative;
+        }
+
+        .notification-number {
+            position: absolute;
+
+            top: -5px;
+            right: -5px;
+
+            width: 18px;
+            height: 18px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            background: var(--purple-2);
+
+            color: #fff;
+
+            font-size: 9px;
+
+            box-shadow: var(--glow);
+        }
+
+
+        /* =========================================================
+   USER AREA
+========================================================= */
+
+        .user-area {
+            position: relative;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            min-width: 190px;
+
+            padding: 5px 9px 5px 5px;
+
+            border: 1px solid var(--border-light);
+
+            border-radius: 12px;
+
+            background: var(--input);
+
+            cursor: pointer;
+
+            user-select: none;
+
+            outline: none;
+
+            transition:
+                background .2s ease,
+                border-color .2s ease,
+                box-shadow .2s ease;
+        }
+
+        .user-area:hover,
+        .user-area:focus-visible {
+            border-color: var(--purple);
+
+            background:
+                rgba(161, 0, 255, .06);
+
+            box-shadow:
+                0 0 0 1px rgba(161, 0, 255, .12);
+        }
+
+        .user-area .avatar {
+            width: 40px;
+            height: 40px;
+
+            flex-shrink: 0;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            background:
+                linear-gradient(135deg,
+                    #7000ff,
+                    #c000ff);
+
+            color: #fff;
+
+            font-weight: bold;
+
+            box-shadow:
+                0 0 15px rgba(170, 0, 255, .35);
+        }
+
+        .user-info {
+            min-width: 0;
+
+            flex: 1;
+        }
+
+        .user-name {
+            color: var(--text);
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            white-space: nowrap;
+        }
+
+        .user-status {
+            display: flex;
+
+            align-items: center;
+
+            gap: 5px;
+
+            margin-top: 4px;
+
+            color: var(--green);
+
+            font-size: 8px;
+
+            white-space: nowrap;
+        }
+
+        .online-dot {
+            width: 6px;
+            height: 6px;
+
+            border-radius: 50%;
+
+            background: var(--green);
+
+            box-shadow:
+                0 0 7px var(--green);
+        }
+
+        .online-time {
+            color: var(--muted-2);
+        }
+
+        .user-arrow {
+            color: var(--muted);
+
+            font-size: 13px;
+
+            transition:
+                transform .2s ease,
+                color .2s ease;
+        }
+
+        .user-area.open .user-arrow {
+            transform: rotate(180deg);
+
+            color: var(--purple-2);
+        }
+
+
+        /* =========================================================
+   ACCOUNT MENU
+========================================================= */
+
+        .account-menu {
+            position: absolute;
+
+            top: calc(100% + 10px);
+
+            right: 0;
+
+            width: 245px;
+
+            padding: 8px;
+
+            border-radius: 12px;
+
+            background: var(--card);
+
+            border:
+                1px solid var(--border);
+
+            box-shadow: var(--shadow);
+
+            opacity: 0;
+
+            visibility: hidden;
+
+            transform:
+                translateY(-8px);
+
+            transition: .2s;
+
+            z-index: 5000;
+        }
+
+        .user-area.open .account-menu {
+            opacity: 1;
+
+            visibility: visible;
+
+            transform:
+                translateY(0);
+        }
+
+        .account-header {
+            padding: 11px 10px 13px;
+
+            margin-bottom: 5px;
+
+            border-bottom:
+                1px solid var(--border-light);
+        }
+
+        .account-name {
+            color: var(--text);
+
+            font-size: 12px;
+
+            font-weight: 700;
+        }
+
+        .account-role {
+            margin-top: 4px;
+
+            color: var(--purple-2);
+
+            font-size: 9px;
+        }
+
+        .account-online {
+            margin-top: 7px;
+
+            color: var(--green);
+
+            font-size: 8px;
+        }
+
+        .account-item {
+            width: 100%;
+
+            min-height: 40px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            padding: 0 10px;
+
+            margin: 3px 0;
+
+            border-radius: 8px;
+
+            background: transparent;
+
+            color: var(--muted);
+
+            text-decoration: none;
+
+            font-size: 10px;
+
+            text-align: left;
+
+            cursor: pointer;
+        }
+
+        .account-item:hover {
+            color: var(--text);
+
+            background:
+                rgba(161, 0, 255, .09);
+        }
+
+        .account-item-icon {
+            width: 25px;
+
+            color: var(--purple-2);
+
+            text-align: center;
+        }
+
+        .account-item.logout {
+            margin-top: 6px;
+
+            border-top:
+                1px solid var(--border-light);
+
+            color: var(--red);
+        }
+
+        .account-item.logout .account-item-icon {
+            color: var(--red);
+        }
+
+        .account-item.logout:hover {
+            background:
+                rgba(255, 61, 90, .08);
+
+            color: var(--red);
+        }
+
+
+        /* =========================================================
+   PAGE HEADER
+========================================================= */
+
+        .page-header {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: flex-end;
+
+            gap: 20px;
+
+            margin-bottom: 25px;
+        }
+
+        .page-title h1 {
+            color: var(--text);
+
+            font-size: 29px;
+
+            letter-spacing: -.5px;
+        }
+
+        .page-title p {
+            margin-top: 7px;
+
+            color: var(--muted);
+
+            font-size: 12px;
+        }
+
+        .page-actions {
+            display: flex;
+
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 11px 16px;
+
+            border-radius: 8px;
+
+            border:
+                1px solid var(--border-light);
+
+            background: var(--card);
+
+            color: var(--text-secondary);
+
+            cursor: pointer;
+
+            font-size: 11px;
+
+            transition: .2s;
+        }
+
+        .btn:hover {
+            border-color: var(--purple);
+
+            color: var(--text);
+
+            box-shadow: var(--glow);
+        }
+
+        .btn-primary {
+            color: #fff;
+
+            border-color: var(--purple);
+
+            background:
+                linear-gradient(135deg,
+                    #a100ff,
+                    #6500ff);
+
+            box-shadow:
+                0 0 12px rgba(160, 0, 255, .25);
+        }
+
+        .btn-primary:hover {
+            filter: brightness(1.15);
+
+            transform:
+                translateY(-1px);
+        }
+
+
+        /* =========================================================
+   REPORT SUMMARY
+========================================================= */
+
+        .stats {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 16px;
+
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            position: relative;
+
+            overflow: hidden;
+
+            padding: 19px;
+
+            min-height: 125px;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(145deg,
+                    var(--card-secondary),
+                    var(--card));
+
+            border:
+                1px solid var(--border);
+
+            box-shadow: var(--shadow);
+
+            transition: .25s;
+        }
+
+        .stat-card::before {
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+            top: 0;
+
+            width: 100%;
+            height: 2px;
+
+            background:
+                linear-gradient(90deg,
+                    transparent,
+                    var(--purple-2),
+                    transparent);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+
+            border-color: var(--purple);
+
+            box-shadow: var(--glow);
+        }
+
+        .stat-top {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+        }
+
+        .stat-title {
+            color: var(--muted);
+
+            font-size: 10px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+        }
+
+        .stat-icon {
+            width: 35px;
+            height: 35px;
+
+            border-radius: 9px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            color: var(--purple-2);
+
+            background:
+                rgba(160, 0, 255, .08);
+
+            border:
+                1px solid rgba(160, 0, 255, .18);
+
+            font-size: 17px;
+        }
+
+        .stat-value {
+            margin-top: 14px;
+
+            color: var(--text);
+
+            font-size: 26px;
+
+            font-weight: 700;
+        }
+
+        .stat-description {
+            margin-top: 6px;
+
+            color: var(--muted-2);
+
+            font-size: 9px;
+        }
+
+        .green {
+            color: var(--green) !important;
+        }
+
+        .yellow {
+            color: var(--yellow) !important;
+        }
+
+        .red {
+            color: var(--red) !important;
+        }
+
+        .blue {
+            color: var(--blue) !important;
+        }
+
+
+        /* =========================================================
+   REPORT TOOLBAR
+========================================================= */
+
+        .toolbar {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            padding: 15px 18px;
+
+            margin-bottom: 20px;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(145deg,
+                    var(--card),
+                    var(--card-secondary));
+
+            border:
+                1px solid var(--border-light);
+
+            box-shadow: var(--shadow);
+        }
+
+        .toolbar-left {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            min-width: 150px;
+
+            padding: 10px 30px 10px 12px;
+
+            border-radius: 8px;
+
+            border:
+                1px solid var(--border-light);
+
+            background: var(--input);
+
+            color: var(--text-secondary);
+
+            outline: none;
+
+            font-size: 10px;
+
+            cursor: pointer;
+        }
+
+        .filter-select:focus {
+            border-color: var(--purple);
+
+            box-shadow: var(--glow);
+        }
+
+        .report-search {
+            width: 240px;
+
+            padding: 10px 13px;
+
+            border-radius: 8px;
+
+            border:
+                1px solid var(--border-light);
+
+            background: var(--input);
+
+            color: var(--text);
+
+            outline: none;
+
+            font-size: 10px;
+        }
+
+        .report-search:focus {
+            border-color: var(--purple);
+
+            box-shadow: var(--glow);
+        }
+
+        .report-search::placeholder {
+            color: var(--muted-2);
+        }
+
+
+        /* =========================================================
+   REPORT GRID
+========================================================= */
+
+        .report-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 20px;
+        }
+
+        .report-card {
+            position: relative;
+
+            overflow: hidden;
+
+            padding: 20px;
+
+            min-height: 190px;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(145deg,
+                    var(--card),
+                    var(--card-secondary));
+
+            border:
+                1px solid var(--border-light);
+
+            box-shadow: var(--shadow);
+
+            transition: .25s;
+        }
+
+        .report-card:hover {
+            transform: translateY(-4px);
+
+            border-color:
+                rgba(161, 0, 255, .55);
+
+            box-shadow: var(--glow);
+        }
+
+        .report-card::before {
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: 0;
+            right: 0;
+
+            height: 2px;
+
+            background:
+                linear-gradient(90deg,
+                    #7000ff,
+                    #c000ff);
+        }
+
+        .report-card-header {
+            display: flex;
+
+            align-items: flex-start;
+
+            justify-content: space-between;
+
+            gap: 12px;
+        }
+
+        .report-icon {
+            width: 43px;
+            height: 43px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 10px;
+
+            background:
+                rgba(161, 0, 255, .10);
+
+            border:
+                1px solid rgba(161, 0, 255, .20);
+
+            color: var(--purple-2);
+
+            font-size: 20px;
+
+            box-shadow:
+                0 0 12px rgba(170, 0, 255, .12);
+        }
+
+        .report-type {
+            padding: 5px 8px;
+
+            border-radius: 20px;
+
+            background:
+                rgba(161, 0, 255, .08);
+
+            border:
+                1px solid rgba(161, 0, 255, .15);
+
+            color: var(--purple-2);
+
+            font-size: 8px;
+
+            font-weight: 700;
+        }
+
+        .report-title {
+            margin-top: 17px;
+
+            color: var(--text);
+
+            font-size: 13px;
+
+            font-weight: 700;
+        }
+
+        .report-description {
+            margin-top: 7px;
+
+            color: var(--muted);
+
+            font-size: 9px;
+
+            line-height: 1.6;
+        }
+
+        .report-meta {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-top: 18px;
+
+            padding-top: 13px;
+
+            border-top:
+                1px solid var(--border-light);
+        }
+
+        .report-date {
+            color: var(--muted-2);
+
+            font-size: 8px;
+        }
+
+        .report-open {
+            border: none;
+
+            background: transparent;
+
+            color: var(--purple-2);
+
+            cursor: pointer;
+
+            font-size: 9px;
+
+            font-weight: 700;
+        }
+
+        .report-open:hover {
+            text-shadow:
+                0 0 8px rgba(190, 0, 255, .8);
+        }
+
+
+        /* =========================================================
+   TABLE
+========================================================= */
+
+        .report-table-card {
+            overflow: hidden;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(145deg,
+                    var(--card),
+                    var(--card-secondary));
+
+            border:
+                1px solid var(--border-light);
+
+            box-shadow: var(--shadow);
+
+            margin-bottom: 25px;
+        }
+
+        .table-header {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            padding: 17px 18px;
+
+            border-bottom:
+                1px solid var(--border-light);
+        }
+
+        .table-title {
+            color: var(--text);
+
+            font-size: 12px;
+
+            font-weight: 700;
+        }
+
+        .table-subtitle {
+            margin-top: 4px;
+
+            color: var(--muted);
+
+            font-size: 8px;
+        }
+
+        .table-wrapper {
+            width: 100%;
+
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+
+            border-collapse: collapse;
+
+            min-width: 700px;
+        }
+
+        thead {
+            background:
+                rgba(161, 0, 255, .04);
+        }
+
+        th {
+            padding: 13px 18px;
+
+            text-align: left;
+
+            color: var(--muted);
+
+            font-size: 8px;
+
+            font-weight: 700;
+
+            text-transform: uppercase;
+
+            letter-spacing: .7px;
+
+            border-bottom:
+                1px solid var(--border-light);
+        }
+
+        td {
+            padding: 14px 18px;
+
+            color: var(--text-secondary);
+
+            font-size: 9px;
+
+            border-bottom:
+                1px solid var(--border-light);
+        }
+
+        tbody tr {
+            transition: .2s;
+        }
+
+        tbody tr:hover {
+            background:
+                rgba(161, 0, 255, .045);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table-report-name {
+            color: var(--text);
+
+            font-weight: 700;
+        }
+
+        .table-status {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 5px;
+
+            padding: 5px 8px;
+
+            border-radius: 20px;
+
+            font-size: 7px;
+
+            font-weight: 700;
+        }
+
+        .table-status.completed {
+            color: var(--green);
+
+            background:
+                rgba(0, 230, 118, .06);
+
+            border:
+                1px solid rgba(0, 230, 118, .15);
+        }
+
+        .table-status.processing {
+            color: var(--yellow);
+
+            background:
+                rgba(255, 208, 0, .06);
+
+            border:
+                1px solid rgba(255, 208, 0, .15);
+        }
+
+        .table-status::before {
+            content: "";
+
+            width: 5px;
+            height: 5px;
+
+            border-radius: 50%;
+
+            background: currentColor;
+        }
+
+        .table-action {
+            border: none;
+
+            background: transparent;
+
+            color: var(--purple-2);
+
+            cursor: pointer;
+
+            font-size: 9px;
+
+            font-weight: 700;
+        }
+
+        .table-action:hover {
+            color: #fff;
+
+            text-shadow:
+                0 0 8px rgba(190, 0, 255, .8);
+        }
+
+
+        /* =========================================================
+   EMPTY STATE
+========================================================= */
+
+        .empty-state {
+            display: none;
+
+            padding: 60px 20px;
+
+            text-align: center;
+
+            border-radius: 12px;
+
+            background: var(--card);
+
+            border:
+                1px solid var(--border-light);
+        }
+
+        .empty-icon {
+            font-size: 38px;
+
+            color: var(--purple-2);
+
+            margin-bottom: 12px;
+        }
+
+        .empty-state h3 {
+            color: var(--text);
+
+            font-size: 15px;
+        }
+
+        .empty-state p {
+            margin-top: 7px;
+
+            color: var(--muted);
+
+            font-size: 10px;
+        }
+
+
+        /* =========================================================
+   FOOTER
+========================================================= */
+
+        .footer {
+            padding:
+                25px 0;
+
+            text-align: center;
+
+            color: var(--muted-2);
+
+            font-size: 9px;
+        }
+
+
+        /* =========================================================
+   TOAST
+========================================================= */
+
+        .toast {
+            position: fixed;
+
+            right: 25px;
+            bottom: 25px;
+
+            min-width: 260px;
+
+            padding: 14px 18px;
+
+            border-radius: 10px;
+
+            background: var(--card);
+
+            color: var(--text);
+
+            border:
+                1px solid var(--purple);
+
+            box-shadow: var(--glow);
+
+            font-size: 11px;
+
+            transform:
+                translateY(100px);
+
+            opacity: 0;
+
+            pointer-events: none;
+
+            transition: .3s;
+
+            z-index: 9999;
+        }
+
+        .toast.show {
+            transform:
+                translateY(0);
+
+            opacity: 1;
+        }
+
+
+        /* =========================================================
+   RESPONSIVE
+========================================================= */
+
+        @media(max-width:1200px) {
+
+            .stats {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .report-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+        }
+
+
+        @media(max-width:900px) {
+
+            .toolbar {
+                flex-direction: column;
+
+                align-items: stretch;
+            }
+
+            .toolbar-left {
+                width: 100%;
+            }
+
+            .report-search {
+                flex: 1;
+
+                min-width: 180px;
+            }
+        }
+
+
+        @media(max-width:800px) {
+
+            .sidebar {
+                width: 72px;
+
+                padding:
+                    18px 9px;
+            }
+
+            .logo {
+                justify-content: center;
+
+                padding-left: 0;
+                padding-right: 0;
+            }
+
+            .logo-text,
+            .menu-title,
+            .menu-text {
+                display: none;
+            }
+
+            .menu-item {
+                justify-content: center;
+
+                padding: 0;
+
+                height: 48px;
+            }
+
+            .menu-icon {
+                width: auto;
+            }
+
+            .main {
+                margin-left: 72px;
+
+                padding:
+                    18px 15px;
+            }
+
+            .search-wrapper {
+                width: 230px;
+            }
+
+            .user-info,
+            .user-arrow {
+                display: none;
+            }
+
+            .user-area {
+                min-width: auto;
+
+                padding: 0;
+            }
+
+            .account-menu {
+                right: 0;
+            }
+        }
+
+
+        @media(max-width:650px) {
+
+            .topbar {
+                flex-direction: column;
+
+                align-items: stretch;
+            }
+
+            .search-wrapper {
+                width: 100%;
+            }
+
+            .profile-area {
+                justify-content: flex-end;
+            }
+
+            .page-header {
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+
+            .page-actions {
+                width: 100%;
+            }
+
+            .page-actions .btn {
+                flex: 1;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .report-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .toolbar-left {
+                flex-direction: column;
+
+                align-items: stretch;
+            }
+
+            .report-search,
+            .filter-select {
+                width: 100%;
+            }
+
+            .account-menu {
+                position: fixed;
+
+                top: 76px;
+                right: 12px;
+
+                width: 245px;
+            }
+        }
+
+
+        @media(max-width:450px) {
+
+            .main {
+                padding: 15px 10px;
+            }
+
+            .stat-value {
+                font-size: 23px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="css/report-detail.css">
+    <script src="js/logout.js"></script>
+    <link rel="stylesheet" href="css/logout.css">
+    <script src="js/auth.js"></script>
+    <style>[hidden]{display:none!important}</style>
+<link rel="stylesheet" href="css/auth.css">
+</head>
+
+
+<body>
+
+
+    <!-- =======================================================
+     SIDEBAR
+======================================================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                ◈
+            </div>
+
+            <div class="logo-text">
+
+                AI STOCK
+
+                <span>
+                    MANAGER
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="menu-title">
+            Yönetim
+        </div>
+
+
+        <a href="anasayfa.html" class="menu-item">
+
+            <span class="menu-icon">
+                ⌂
+            </span>
+
+            <span class="menu-text">
+                Ana Sayfa
+            </span>
+
+        </a>
+
+
+        <a href="stok.html" class="menu-item">
+
+            <span class="menu-icon">
+                ◇
+            </span>
+
+            <span class="menu-text">
+                Stok Yönetimi
+            </span>
+
+        </a>
+
+
+        <a href="transferler.html" class="menu-item">
+
+            <span class="menu-icon">
+                ⇄
+            </span>
+
+            <span class="menu-text">
+                Transferler
+            </span>
+
+        </a>
+
+
+        <a href="ai-onerileri.html" class="menu-item">
+
+            <span class="menu-icon">
+                ✦
+            </span>
+
+            <span class="menu-text">
+                AI Önerileri
+            </span>
+
+        </a>
+
+
+        <a href="magazalar.html" class="menu-item">
+
+            <span class="menu-icon">
+                ▣
+            </span>
+
+            <span class="menu-text">
+                Mağazalar
+            </span>
+
+        </a>
+
+
+        <div class="menu-title">
+            Analiz
+        </div>
+
+
+        <a href="raporlar.html" class="menu-item active">
+
+            <span class="menu-icon">
+                ▥
+            </span>
+
+            <span class="menu-text">
+                Raporlar
+            </span>
+
+        </a>
+
+
+        <a href="satis-analizi.html" class="menu-item">
+
+            <span class="menu-icon">
+                ↗
+            </span>
+
+            <span class="menu-text">
+                Satış Analizi
+            </span>
+
+        </a>
+
+
+        <a href="bildirimler.html" class="menu-item">
+
+            <span class="menu-icon">
+                ♧
+            </span>
+
+            <span class="menu-text">
+                Bildirimler
+            </span>
+
+        </a>
+
+
+        <div class="menu-title">
+            Sistem
+        </div>
+
+
+        <a href="ayarlar.html" class="menu-item">
+
+            <span class="menu-icon">
+                ⚙
+            </span>
+
+            <span class="menu-text">
+                Ayarlar
+            </span>
+
+        </a>
+
+
+        <a href="kullanicilar.html" class="menu-item">
+
+            <span class="menu-icon">
+                ♙
+            </span>
+
+            <span class="menu-text">
+                Kullanıcılar
+            </span>
+
+        </a>
+
+
+        <a href="entegrasyon.html" class="menu-item">
+
+            <span class="menu-icon">
+                ⌘
+            </span>
+
+            <span class="menu-text">
+                Entegrasyon
+            </span>
+
+        </a>
+
+    </aside>
+
+
+
+    <!-- =======================================================
+     MAIN
+======================================================= -->
+
+    <main class="main">
+
+
+        <!-- ===================================================
+         TOPBAR
+    =================================================== -->
+
+        <div class="topbar">
+
+            <div class="search-wrapper">
+
+                <input type="search" id="globalSearch" class="search" placeholder="Ürün, kod veya mağaza ara...">
+
+                <span class="search-icon">
+                    ⌕
+                </span>
+
+            </div>
+
+
+            <div class="profile-area">
+
+                <button class="theme-btn" id="themeBtn" title="Tema değiştir">
+                    🌙
+                </button>
+
+                <button class="notification" id="notificationBtn" title="Bildirimler">
+                    ♧
+
+                    <span style="
+                        position:absolute;
+                        margin:-30px 0 0 25px;
+                        width:18px;
+                        height:18px;
+                        border-radius:50%;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        background:var(--purple-2);
+                        color:white;
+                        font-size:9px;
+                    " id="notificationCount">
+                        5
+                    </span>
+
+                </button>
+
+                <div class="user-area" id="userArea" tabindex="0">
+
+                    <div class="avatar" id="avatar">
+                        M
+                    </div>
+
+                    <div class="user-info">
+
+                        <div class="user-name" id="userName">
+                            Admin
+                        </div>
+
+                        <!-- DAKİKA SAYACI KALDIRILDI -->
+
+                        <div class="user-status">
+
+                            <span class="online-dot"></span>
+
+                            Çevrim içi
+
+                        </div>
+
+                    </div>
+
+                    <div class="user-arrow">
+                        ▾
+                    </div>
+
+
+                    <!-- ACCOUNT MENU -->
+
+                    <div class="account-menu" id="accountMenu">
+
+                        <div class="account-header">
+
+                            <div class="account-name" id="accountName">
+                                Admin
+                            </div>
+
+                            <div class="account-role">
+                                Sistem Yöneticisi
+                            </div>
+
+                            <!-- DAKİKA SAYACI KALDIRILDI -->
+
+                            <div class="account-online">
+                                ● Çevrim içi
+                            </div>
+
+                        </div>
+
+
+                        <a href="ayarlar.html" class="account-item">
+
+                            <span class="account-item-icon">
+                                ♙
+                            </span>
+
+                            Hesabım
+
+                        </a>
+
+
+                        <a href="ayarlar.html#guvenlik" class="account-item">
+
+                            <span class="account-item-icon">
+                                🔐
+                            </span>
+
+                            Giriş Güvenliği
+
+                        </a>
+
+
+                        <button class="account-item logout" id="logoutBtn" type="button">
+                            <span class="account-item-icon" aria-hidden="true">⇥</span>
+                            Güvenli Çıkış
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ===================================================
+         PAGE HEADER
+    =================================================== -->
+
+        <div class="page-header">
+
+            <div class="page-title">
+
+                <h1>
+                    Raporlar
+                </h1>
+
+                <p>
+                    Stok, satış, mağaza ve operasyon raporlarını yönetin ve inceleyin.
+                </p>
+
+            </div>
+
+
+            <div class="page-actions">
+
+                <button class="btn" id="refreshBtn" type="button">
+                    ↻ Yenile
+                </button>
+
+
+                <button class="btn btn-primary" id="createReportBtn" type="button">
+                    ＋ Rapor Oluştur
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ===================================================
+         SUMMARY
+    =================================================== -->
+
+        <section class="stats">
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Toplam Rapor
+                    </div>
+
+                    <div class="stat-icon">
+                        ▥
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    248
+                </div>
+
+                <div class="stat-description green">
+                    ↑ %12.4 geçen aya göre
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Bu Ay Oluşturulan
+                    </div>
+
+                    <div class="stat-icon">
+                        ✦
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    36
+                </div>
+
+                <div class="stat-description green">
+                    ↑ 8 yeni rapor
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Tamamlanan
+                    </div>
+
+                    <div class="stat-icon">
+                        ✓
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    231
+                </div>
+
+                <div class="stat-description green">
+                    %93.1 başarı oranı
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Bekleyen
+                    </div>
+
+                    <div class="stat-icon">
+                        ◷
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    17
+                </div>
+
+                <div class="stat-description yellow">
+                    İşlenmesi bekleniyor
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ===================================================
+         TOOLBAR
+    =================================================== -->
+
+        <div class="toolbar">
+
+            <div class="toolbar-left">
+
+                <input type="search" id="reportSearch" class="report-search" placeholder="Rapor adı ara...">
+
+
+                <select id="reportTypeFilter" class="filter-select">
+
+                    <option value="all">
+                        Tüm Raporlar
+                    </option>
+
+                    <option value="stok">
+                        Stok Raporları
+                    </option>
+
+                    <option value="satis">
+                        Satış Raporları
+                    </option>
+
+                    <option value="magaza">
+                        Mağaza Raporları
+                    </option>
+
+                    <option value="ai">
+                        AI Raporları
+                    </option>
+
+                </select>
+
+
+                <select id="periodFilter" class="filter-select">
+
+                    <option value="all">
+                        Tüm Dönemler
+                    </option>
+
+                    <option value="today">
+                        Bugün
+                    </option>
+
+                    <option value="week">
+                        Bu Hafta
+                    </option>
+
+                    <option value="month">
+                        Bu Ay
+                    </option>
+
+                    <option value="year">
+                        Bu Yıl
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ===================================================
+         REPORT CARDS
+    =================================================== -->
+
+        <section class="report-grid" id="reportGrid">
+
+
+            <!-- REPORT 1 -->
+
+            <article class="report-card" data-type="stok" data-period="month" data-name="Aylık Stok Durum Raporu">
+
+                <div class="report-card-header">
+
+                    <div class="report-icon">
+                        ◇
+                    </div>
+
+                    <span class="report-type">
+                        STOK
+                    </span>
+
+                </div>
+
+                <div class="report-title">
+                    Aylık Stok Durum Raporu
+                </div>
+
+                <div class="report-description">
+                    Mağazalardaki mevcut stok, düşük stok ve kritik stok durumlarını gösterir.
+                </div>
+
+                <div class="report-meta">
+
+                    <span class="report-date">
+                        31 Ağustos 2026
+                    </span>
+
+                    <button class="report-open" type="button" data-report="Aylık Stok Durum Raporu">
+                        Raporu Aç →
+                    </button>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- REPORT 2 -->
+
+            <article class="report-card" data-type="satis" data-period="month"
+                data-name="Aylık Satış Performans Raporu">
+
+                <div class="report-card-header">
+
+                    <div class="report-icon">
+                        ↗
+                    </div>
+
+                    <span class="report-type">
+                        SATIŞ
+                    </span>
+
+                </div>
+
+                <div class="report-title">
+                    Aylık Satış Performans Raporu
+                </div>
+
+                <div class="report-description">
+                    Mağaza ve ürün bazında satış performanslarını ve ciro değişimlerini analiz eder.
+                </div>
+
+                <div class="report-meta">
+
+                    <span class="report-date">
+                        31 Ağustos 2026
+                    </span>
+
+                    <button class="report-open" type="button" data-report="Aylık Satış Performans Raporu">
+                        Raporu Aç →
+                    </button>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- REPORT 3 -->
+
+            <article class="report-card" data-type="magaza" data-period="week" data-name="Mağaza Performans Raporu">
+
+                <div class="report-card-header">
+
+                    <div class="report-icon">
+                        ▣
+                    </div>
+
+                    <span class="report-type">
+                        MAĞAZA
+                    </span>
+
+                </div>
+
+                <div class="report-title">
+                    Mağaza Performans Raporu
+                </div>
+
+                <div class="report-description">
+                    Mağazaların stok, satış, kritik ürün ve operasyon performanslarını karşılaştırır.
+                </div>
+
+                <div class="report-meta">
+
+                    <span class="report-date">
+                        30 Ağustos 2026
+                    </span>
+
+                    <button class="report-open" type="button" data-report="Mağaza Performans Raporu">
+                        Raporu Aç →
+                    </button>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- REPORT 4 -->
+
+            <article class="report-card" data-type="ai" data-period="week" data-name="AI Stok Tahmin Raporu">
+
+                <div class="report-card-header">
+
+                    <div class="report-icon">
+                        ✦
+                    </div>
+
+                    <span class="report-type">
+                        AI
+                    </span>
+
+                </div>
+
+                <div class="report-title">
+                    AI Stok Tahmin Raporu
+                </div>
+
+                <div class="report-description">
+                    AI destekli talep tahmini, olası stok açıkları ve yeniden sipariş önerilerini içerir.
+                </div>
+
+                <div class="report-meta">
+
+                    <span class="report-date">
+                        29 Ağustos 2026
+                    </span>
+
+                    <button class="report-open" type="button" data-report="AI Stok Tahmin Raporu">
+                        Raporu Aç →
+                    </button>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- REPORT 5 -->
+
+            <article class="report-card" data-type="stok" data-period="today" data-name="Kritik Stok Raporu">
+
+                <div class="report-card-header">
+
+                    <div class="report-icon">
+                        ⚠
+                    </div>
+
+                    <span class="report-type">
+                        STOK
+                    </span>
+
+                </div>
+
+                <div class="report-title">
+                    Kritik Stok Raporu
+                </div>
+
+                <div class="report-description">
+                    Kritik seviyeye ulaşan ürünleri, mağazaları ve acil stok ihtiyaçlarını listeler.
+                </div>
+
+                <div class="report-meta">
+
+                    <span class="report-date">
+                        31 Ağustos 2026
+                    </span>
+
+                    <button class="report-open" type="button" data-report="Kritik Stok Raporu">
+                        Raporu Aç →
+                    </button>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- REPORT 6 -->
+
+            <article class="report-card" data-type="satis" data-period="week" data-name="Haftalık Satış Özeti">
+
+                <div class="report-card-header">
+
+                    <div class="report-icon">
+                        ₺
+                    </div>
+
+                    <span class="report-type">
+                        SATIŞ
+                    </span>
+
+                </div>
+
+                <div class="report-title">
+                    Haftalık Satış Özeti
+                </div>
+
+                <div class="report-description">
+                    Haftalık satış hacmini, toplam ciroyu ve önceki haftaya göre değişimleri gösterir.
+                </div>
+
+                <div class="report-meta">
+
+                    <span class="report-date">
+                        31 Ağustos 2026
+                    </span>
+
+                    <button class="report-open" type="button" data-report="Haftalık Satış Özeti">
+                        Raporu Aç →
+                    </button>
+
+                </div>
+
+            </article>
+
+        </section>
+
+
+
+        <!-- ===================================================
+         EMPTY STATE
+    =================================================== -->
+
+        <div class="empty-state" id="emptyState">
+
+            <div class="empty-icon">
+                ⌕
+            </div>
+
+            <h3>
+                Rapor bulunamadı
+            </h3>
+
+            <p>
+                Arama veya filtre kriterlerinizi değiştirerek tekrar deneyin.
+            </p>
+
+        </div>
+
+
+
+        <!-- ===================================================
+         RECENT REPORTS TABLE
+    =================================================== -->
+
+        <section class="report-table-card">
+
+            <div class="table-header">
+
+                <div>
+
+                    <div class="table-title">
+                        Son Oluşturulan Raporlar
+                    </div>
+
+                    <div class="table-subtitle">
+                        Sistem üzerinde son oluşturulan raporların özeti.
+                    </div>
+
+                </div>
+
+
+                <button class="btn" id="exportBtn" type="button">
+                    ↓ Dışa Aktar
+                </button>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Rapor
+                            </th>
+
+                            <th>
+                                Tür
+                            </th>
+
+                            <th>
+                                Oluşturan
+                            </th>
+
+                            <th>
+                                Tarih
+                            </th>
+
+                            <th>
+                                Durum
+                            </th>
+
+                            <th>
+                                İşlem
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <span class="table-report-name">
+                                    Aylık Stok Durum Raporu
+                                </span>
+                            </td>
+
+                            <td>
+                                Stok
+                            </td>
+
+                            <td>
+                                Admin
+                            </td>
+
+                            <td>
+                                31.08.2026
+                            </td>
+
+                            <td>
+
+                                <span class="table-status completed">
+                                    TAMAMLANDI
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <button class="table-action" type="button" data-table-report="Aylık Stok Durum Raporu">
+                                    Görüntüle
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                <span class="table-report-name">
+                                    Haftalık Satış Özeti
+                                </span>
+                            </td>
+
+                            <td>
+                                Satış
+                            </td>
+
+                            <td>
+                                Admin
+                            </td>
+
+                            <td>
+                                31.08.2026
+                            </td>
+
+                            <td>
+
+                                <span class="table-status completed">
+                                    TAMAMLANDI
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <button class="table-action" type="button" data-table-report="Haftalık Satış Özeti">
+                                    Görüntüle
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                <span class="table-report-name">
+                                    AI Stok Tahmin Raporu
+                                </span>
+                            </td>
+
+                            <td>
+                                AI
+                            </td>
+
+                            <td>
+                                Sistem
+                            </td>
+
+                            <td>
+                                31.08.2026
+                            </td>
+
+                            <td>
+
+                                <span class="table-status processing">
+                                    İŞLENİYOR
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <button class="table-action" type="button" data-table-report="AI Stok Tahmin Raporu">
+                                    Görüntüle
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                <span class="table-report-name">
+                                    Mağaza Performans Raporu
+                                </span>
+                            </td>
+
+                            <td>
+                                Mağaza
+                            </td>
+
+                            <td>
+                                Admin
+                            </td>
+
+                            <td>
+                                30.08.2026
+                            </td>
+
+                            <td>
+
+                                <span class="table-status completed">
+                                    TAMAMLANDI
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <button class="table-action" type="button" data-table-report="Mağaza Performans Raporu">
+                                    Görüntüle
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ===================================================
+         FOOTER
+    =================================================== -->
+
+        <div class="footer">
+
+            AI Stock Manager
+            •
+            Nebim V3 Entegrasyon Paneli
+
+        </div>
+
+    </main>
+
+
+
+    <!-- =======================================================
+     TOAST
+======================================================= -->
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+
+
+    <dialog id="reportDetail" class="rd-dialog" aria-labelledby="rdTitle" aria-describedby="rdDescription">
+        <header class="rd-header">
+            <button id="rdClose" class="rd-close" type="button" aria-label="Raporu kapat" autofocus>×</button>
+            <p class="rd-eyebrow">ANALİZ MERKEZİ / RAPOR DETAYI</p>
+            <h2 id="rdTitle"></h2>
+            <p id="rdDescription"></p>
+            <div class="rd-meta"><span id="rdType" class="rd-tag"></span><span id="rdPeriod"></span><span aria-hidden="true">·</span><span id="rdDate"></span><span class="rd-tag">Örnek veri</span></div>
+        </header>
+        <div class="rd-body">
+            <dl id="rdMetrics" class="rd-metrics"></dl>
+            <div class="rd-analysis">
+                <section class="rd-panel" aria-labelledby="rdChartTitle"><h3 id="rdChartTitle"></h3><div id="rdChart"></div></section>
+                <aside class="rd-panel rd-insight"><h3>✦ Rapor değerlendirmesi</h3><p id="rdNote"></p><small>Bu önizleme örnek veriler içerir. Seçili tarihe ait gerçek rapor sonuçlarını temsil etmez.</small></aside>
+            </div>
+            <h3 id="rdTableTitle">Detaylı döküm</h3>
+            <div class="rd-table-wrap"><table aria-labelledby="rdTableTitle"><thead><tr id="rdColumns"></tr></thead><tbody id="rdRows"></tbody></table></div>
+        </div>
+        <footer class="rd-footer"><p id="rdSource"></p><button id="rdDone" class="btn" type="button">Kapat</button></footer>
+    </dialog>
+    <script src="js/report-detail.js"></script>
+    <script src="js/nebim-adapter.js"></script>
+
+    <script>
+
+        /* =========================================================
+           THEME SYSTEM
+        ========================================================= */
+
+        (function () {
+
+            const savedTheme =
+                localStorage.getItem("aiStockTheme");
+
+            if (savedTheme === "light") {
+
+                document.body.classList.add(
+                    "light-theme"
+                );
+
+            }
+
+        })();
+
+
+        const themeBtn =
+            document.getElementById("themeBtn");
+
+
+        function updateThemeButton() {
+
+            const isLight =
+                document.body.classList.contains(
+                    "light-theme"
+                );
+
+            themeBtn.textContent =
+                isLight ? "☀️" : "🌙";
+
+            themeBtn.title =
+                isLight
+                    ? "Karanlık temaya geç"
+                    : "Açık temaya geç";
+
+            themeBtn.setAttribute(
+                "aria-label",
+                themeBtn.title
+            );
+
+        }
+
+
+        updateThemeButton();
+
+
+        themeBtn.addEventListener(
+            "click",
+            function () {
+
+                const isLight =
+                    document.body.classList.toggle(
+                        "light-theme"
+                    );
+
+                localStorage.setItem(
+                    "aiStockTheme",
+                    isLight
+                        ? "light"
+                        : "dark"
+                );
+
+                updateThemeButton();
+
+            }
+        );
+
+
+        /* =========================================================
+           USER AREA / ACCOUNT MENU
+        ========================================================= */
+
+        const userArea =
+            document.getElementById(
+                "userArea"
+            );
+
+        const accountMenu =
+            document.getElementById(
+                "accountMenu"
+            );
+
+
+        function setUserMenu(open) {
+
+            userArea.classList.toggle(
+                "open",
+                open
+            );
+
+            userArea.setAttribute(
+                "aria-expanded",
+                String(open)
+            );
+
+            accountMenu.setAttribute(
+                "aria-hidden",
+                String(!open)
+            );
+
+        }
+
+
+        userArea.addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    event.target.closest(
+                        ".account-menu"
+                    )
+                ) {
+                    return;
+                }
+
+                setUserMenu(
+                    !userArea.classList.contains(
+                        "open"
+                    )
+                );
+
+            }
+        );
+
+
+        userArea.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "Enter" ||
+                    event.key === " "
+                ) {
+
+                    if (
+                        event.target.closest(
+                            ".account-menu"
+                        )
+                    ) {
+                        return;
+                    }
+
+                    event.preventDefault();
+
+                    setUserMenu(
+                        !userArea.classList.contains(
+                            "open"
+                        )
+                    );
+
+                }
+
+
+                if (
+                    event.key === "Escape"
+                ) {
+
+                    setUserMenu(false);
+
+                    userArea.focus();
+
+                }
+
+            }
+        );
+
+
+        document.addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    !userArea.contains(event.target)
+                ) {
+
+                    setUserMenu(false);
+
+                }
+
+            }
+        );
+
+
+        /* =========================================================
+           ONLINE TIME
+        ========================================================= */
+
+        const onlineMinutes =
+            document.getElementById(
+                "onlineMinutes"
+            );
+
+        const accountOnlineMinutes =
+            document.getElementById(
+                "accountOnlineMinutes"
+            );
+
+
+        let onlineStart =
+            sessionStorage.getItem(
+                "aiStockOnlineStart"
+            );
+
+
+        if (!onlineStart) {
+
+            onlineStart =
+                String(Date.now());
+
+            sessionStorage.setItem(
+                "aiStockOnlineStart",
+                onlineStart
+            );
+
+        }
+
+
+        function updateOnlineTime() {
+
+            const start =
+                Number(onlineStart);
+
+            const elapsed =
+                Math.max(
+                    0,
+                    Date.now() - start
+                );
+
+            const minutes =
+                Math.floor(
+                    elapsed / 60000
+                );
+
+            onlineMinutes.textContent =
+                minutes;
+
+            accountOnlineMinutes.textContent =
+                minutes;
+
+        }
+
+
+        updateOnlineTime();
+
+
+        setInterval(
+            updateOnlineTime,
+            60000
+        );
+
+
+        /* =========================================================
+           LOGOUT
+        ========================================================= */
+
+        const logoutBtn =
+            document.getElementById(
+                "logoutBtn"
+            );
+
+
+        
+
+
+        /* =========================================================
+           NOTIFICATIONS
+        ========================================================= */
+
+        const notificationBtn =
+            document.getElementById(
+                "notificationBtn"
+            );
+
+
+        notificationBtn.addEventListener(
+            "click",
+            function () {
+
+                window.location.href =
+                    "bildirimler.html";
+
+            }
+        );
+
+
+        notificationBtn.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "Enter" ||
+                    event.key === " "
+                ) {
+
+                    event.preventDefault();
+
+                    window.location.href =
+                        "bildirimler.html";
+
+                }
+
+            }
+        );
+
+
+        /* =========================================================
+           GLOBAL SEARCH
+        ========================================================= */
+
+        const globalSearch =
+            document.getElementById(
+                "globalSearch"
+            );
+
+
+        globalSearch.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "Enter"
+                ) {
+
+                    const value =
+                        globalSearch.value.trim();
+
+                    if (!value) {
+
+                        showToast(
+                            "Aramak istediğiniz ürün, kod veya mağazayı yazın."
+                        );
+
+                        return;
+
+                    }
+
+                    reportSearch.value =
+                        value;
+
+                    filterReports();
+
+                }
+
+            }
+        );
+
+
+        /* =========================================================
+           REPORT FILTER
+        ========================================================= */
+
+        const reportSearch =
+            document.getElementById(
+                "reportSearch"
+            );
+
+        const reportTypeFilter =
+            document.getElementById(
+                "reportTypeFilter"
+            );
+
+        const periodFilter =
+            document.getElementById(
+                "periodFilter"
+            );
+
+        const reportGrid =
+            document.getElementById(
+                "reportGrid"
+            );
+
+        const emptyState =
+            document.getElementById(
+                "emptyState"
+            );
+
+
+        function filterReports() {
+
+            const searchValue =
+                reportSearch.value
+                    .trim()
+                    .toLocaleLowerCase("tr-TR");
+
+            const selectedType =
+                reportTypeFilter.value;
+
+            const selectedPeriod =
+                periodFilter.value;
+
+            const reports =
+                document.querySelectorAll(
+                    ".report-card"
+                );
+
+            let visibleCount = 0;
+
+
+            reports.forEach(
+                function (report) {
+
+                    const name =
+                        report.dataset.name
+                            .toLocaleLowerCase("tr-TR");
+
+                    const type =
+                        report.dataset.type;
+
+                    const period =
+                        report.dataset.period;
+
+
+                    const matchesSearch =
+                        !searchValue ||
+                        name.includes(
+                            searchValue
+                        );
+
+                    const matchesType =
+                        selectedType === "all" ||
+                        type === selectedType;
+
+                    const matchesPeriod =
+                        selectedPeriod === "all" ||
+                        period === selectedPeriod;
+
+
+                    if (
+                        matchesSearch &&
+                        matchesType &&
+                        matchesPeriod
+                    ) {
+
+                        report.style.display =
+                            "";
+
+                        visibleCount++;
+
+                    } else {
+
+                        report.style.display =
+                            "none";
+
+                    }
+
+                }
+            );
+
+
+            emptyState.style.display =
+                visibleCount === 0
+                    ? "block"
+                    : "none";
+
+        }
+
+
+        reportSearch.addEventListener(
+            "input",
+            filterReports
+        );
+
+        reportTypeFilter.addEventListener(
+            "change",
+            filterReports
+        );
+
+        periodFilter.addEventListener(
+            "change",
+            filterReports
+        );
+
+
+        /* =========================================================
+           REFRESH
+        ========================================================= */
+
+        document
+            .getElementById("refreshBtn")
+            .addEventListener(
+                "click",
+                function () {
+
+                    const button =
+                        this;
+
+                    button.innerHTML =
+                        "↻ Güncelleniyor...";
+
+                    button.disabled =
+                        true;
+
+
+                    setTimeout(
+                        function () {
+
+                            button.innerHTML =
+                                "↻ Yenile";
+
+                            button.disabled =
+                                false;
+
+                            showToast(
+                                "Rapor verileri güncellendi."
+                            );
+
+                        },
+                        900
+                    );
+
+                }
+            );
+
+
+        /* =========================================================
+           CREATE REPORT
+        ========================================================= */
+
+        document
+            .getElementById("createReportBtn")
+            .addEventListener(
+                "click",
+                function () {
+
+                    showToast(
+                        "Yeni rapor oluşturma ekranı açılıyor..."
+                    );
+
+                }
+            );
+
+
+        /* =========================================================
+           EXPORT
+        ========================================================= */
+
+        document
+            .getElementById("exportBtn")
+            .addEventListener(
+                "click",
+                function () {
+
+                    showToast(
+                        "Rapor listesi dışa aktarılmaya hazırlanıyor..."
+                    );
+
+                }
+            );
+
+
+        /* =========================================================
+           TOAST
+        ========================================================= */
+
+        let toastTimer;
+
+
+        function showToast(message) {
+
+            const toast =
+                document.getElementById(
+                    "toast"
+                );
+
+
+            toast.textContent =
+                message;
+
+
+            toast.classList.add(
+                "show"
+            );
+
+
+            clearTimeout(
+                toastTimer
+            );
+
+
+            toastTimer =
+                setTimeout(
+                    function () {
+
+                        toast.classList.remove(
+                            "show"
+                        );
+
+                    },
+                    2500
+                );
+
+        }
+
+
+        /* =========================================================
+           AUTOMATIC ACTIVE MENU
+        ========================================================= */
+
+        (function () {
+
+            const currentPage =
+                window.location.pathname
+                    .split("/")
+                    .pop()
+                    .toLowerCase();
+
+
+            document
+                .querySelectorAll(".menu-item")
+                .forEach(
+                    function (item) {
+
+                        const href =
+                            item
+                                .getAttribute("href")
+                                .split("/")
+                                .pop()
+                                .toLowerCase();
+
+
+                        if (
+                            currentPage === href
+                        ) {
+
+                            document
+                                .querySelectorAll(
+                                    ".menu-item"
+                                )
+                                .forEach(
+                                    menu =>
+                                        menu.classList
+                                            .remove(
+                                                "active"
+                                            )
+                                );
+
+
+                            item.classList.add(
+                                "active"
+                            );
+
+                        }
+
+                    }
+                );
+
+        })();
+
+
+        /* =========================================================
+           ESC KEY
+        ========================================================= */
+
+        document.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "Escape"
+                ) {
+
+                    setUserMenu(false);
+
+                }
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>

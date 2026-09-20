@@ -1,0 +1,4196 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ana Sayfa | AI Stock Manager</title>
+
+    <style>
+        /* =========================================================
+   ROOT
+========================================================= */
+
+        :root {
+            --bg: #050505;
+            --bg-secondary: #090909;
+            --sidebar-bg: #07070a;
+            --card: #0d0d0f;
+            --card-secondary: #111114;
+            --input: #090909;
+
+            --text: #fff;
+            --text-secondary: #aaa7b0;
+            --muted: #85818d;
+            --muted-2: #65616c;
+
+            --border: rgba(178, 0, 255, .25);
+            --border-light: rgba(255, 255, 255, .07);
+
+            --purple: #a100ff;
+            --purple-2: #c000ff;
+            --purple-3: #7000ff;
+
+            --green: #00e676;
+            --yellow: #ffd000;
+            --red: #ff3d5a;
+            --blue: #00a8ff;
+
+            --hover: rgba(161, 0, 255, .06);
+
+            --shadow: 0 10px 35px rgba(0, 0, 0, .28);
+
+            --glow:
+                0 0 8px rgba(170, 0, 255, .45),
+                0 0 25px rgba(170, 0, 255, .15);
+
+            --transition: .25s ease;
+        }
+
+        body.light-theme {
+            --bg: #f4f5f9;
+            --bg-secondary: #fff;
+            --sidebar-bg: #fff;
+            --card: #fff;
+            --card-secondary: #f8f8fb;
+            --input: #f5f5f8;
+
+            --text: #18151d;
+            --text-secondary: #55515e;
+            --muted: #77727f;
+            --muted-2: #9994a1;
+
+            --border: rgba(125, 0, 190, .18);
+            --border-light: rgba(20, 15, 30, .08);
+
+            --hover: rgba(161, 0, 255, .055);
+
+            --shadow: 0 8px 30px rgba(40, 25, 60, .08);
+
+            --glow:
+                0 0 10px rgba(161, 0, 255, .18),
+                0 0 25px rgba(161, 0, 255, .08);
+        }
+
+
+        /* =========================================================
+   RESET
+========================================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+
+            background:
+                radial-gradient(circle at 80% 0%,
+                    rgba(140, 0, 255, .10),
+                    transparent 30%),
+                radial-gradient(circle at 15% 100%,
+                    rgba(120, 0, 255, .07),
+                    transparent 30%),
+                var(--bg);
+
+            color: var(--text);
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            transition:
+                background-color var(--transition),
+                color var(--transition);
+        }
+
+        button,
+        input,
+        select {
+            font: inherit;
+        }
+
+        button {
+            border: 0;
+        }
+
+
+        /* =========================================================
+   SIDEBAR
+========================================================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+
+            width: 250px;
+            height: 100vh;
+
+            padding: 22px 14px;
+
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--border);
+
+            z-index: 1000;
+
+            overflow-y: auto;
+
+            box-shadow:
+                10px 0 40px rgba(0, 0, 0, .08);
+        }
+
+        .logo {
+            height: 62px;
+
+            display: flex;
+            align-items: center;
+
+            gap: 12px;
+
+            padding:
+                0 10px 20px;
+
+            margin-bottom: 10px;
+
+            border-bottom:
+                1px solid var(--border-light);
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 13px;
+
+            background:
+                linear-gradient(135deg,
+                    #7000ff,
+                    #c000ff);
+
+            color: #fff;
+
+            font-size: 20px;
+
+            box-shadow:
+                0 0 15px rgba(170, 0, 255, .45);
+        }
+
+        .logo-text {
+            color: var(--text);
+
+            font-size: 16px;
+            font-weight: 800;
+
+            letter-spacing: .8px;
+            line-height: 1.1;
+        }
+
+        .logo-text span {
+            display: block;
+
+            margin-top: 5px;
+
+            color: var(--purple-2);
+
+            font-size: 9px;
+            letter-spacing: 4px;
+        }
+
+        .menu-title {
+            padding:
+                18px 12px 8px;
+
+            color: var(--muted-2);
+
+            font-size: 9px;
+            font-weight: 700;
+
+            letter-spacing: 1.8px;
+
+            text-transform: uppercase;
+        }
+
+        .menu-item {
+            position: relative;
+
+            display: flex;
+            align-items: center;
+
+            gap: 13px;
+
+            height: 46px;
+
+            margin: 4px 0;
+
+            padding: 0 13px;
+
+            border-radius: 10px;
+
+            color: var(--muted);
+
+            text-decoration: none;
+
+            font-size: 12px;
+
+            transition:
+                color .2s ease,
+                background .2s ease,
+                transform .2s ease;
+        }
+
+        .menu-icon {
+            width: 22px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: var(--muted);
+
+            font-size: 17px;
+
+            transition: .2s;
+        }
+
+        .menu-item:hover {
+            color: var(--text);
+
+            background:
+                linear-gradient(90deg,
+                    rgba(161, 0, 255, .14),
+                    rgba(161, 0, 255, .03));
+
+            transform: translateX(2px);
+        }
+
+        .menu-item:hover .menu-icon {
+            color: var(--purple-2);
+        }
+
+        .menu-item.active {
+            color: #fff;
+
+            background:
+                linear-gradient(90deg,
+                    rgba(161, 0, 255, .75),
+                    rgba(100, 0, 255, .18));
+
+            box-shadow:
+                0 5px 20px rgba(150, 0, 255, .18);
+        }
+
+        .menu-item.active::before {
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+            top: 8px;
+            bottom: 8px;
+
+            width: 3px;
+
+            border-radius:
+                0 4px 4px 0;
+
+            background:
+                linear-gradient(180deg,
+                    #d000ff,
+                    #7000ff);
+
+            box-shadow:
+                0 0 10px #a100ff;
+        }
+
+        .menu-item.active .menu-icon {
+            color: #fff;
+
+            filter:
+                drop-shadow(0 0 7px rgba(210, 0, 255, .8));
+        }
+
+
+        /* =========================================================
+   MAIN
+========================================================= */
+
+        .main {
+            margin-left: 250px;
+
+            padding:
+                25px 30px;
+
+            min-height: 100vh;
+        }
+
+
+        /* =========================================================
+   TOPBAR
+========================================================= */
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 20px;
+
+            margin-bottom: 28px;
+        }
+
+        .search-wrapper {
+            position: relative;
+
+            width: 390px;
+        }
+
+        .search {
+            width: 100%;
+
+            padding:
+                13px 45px 13px 17px;
+
+            background: var(--input);
+
+            border:
+                1px solid var(--border-light);
+
+            border-radius: 9px;
+
+            color: var(--text);
+
+            outline: none;
+
+            font-size: 12px;
+
+            transition: .25s;
+        }
+
+        .search:focus {
+            border-color: var(--purple);
+            box-shadow: var(--glow);
+        }
+
+        .search::placeholder {
+            color: var(--muted-2);
+        }
+
+        .search-icon {
+            position: absolute;
+
+            right: 15px;
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            color: var(--purple-2);
+
+            font-size: 19px;
+        }
+
+        .profile-area {
+            display: flex;
+            align-items: center;
+
+            gap: 12px;
+        }
+
+
+        /* =========================================================
+   THEME + NOTIFICATION
+========================================================= */
+
+        .theme-btn,
+        .notification {
+            width: 40px;
+            height: 40px;
+
+            border-radius: 10px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: var(--input);
+
+            border:
+                1px solid var(--border-light);
+
+            color: var(--text);
+
+            cursor: pointer;
+
+            transition: .25s;
+        }
+
+        .theme-btn:hover,
+        .notification:hover {
+            border-color: var(--purple);
+
+            box-shadow: var(--glow);
+
+            transform:
+                translateY(-1px);
+        }
+
+        .notification {
+            position: relative;
+        }
+
+        .notification-number {
+            position: absolute;
+
+            top: -5px;
+            right: -5px;
+
+            width: 18px;
+            height: 18px;
+
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: var(--purple-2);
+
+            color: #fff;
+
+            font-size: 9px;
+
+            box-shadow: var(--glow);
+        }
+
+
+        /* =========================================================
+   USER
+========================================================= */
+
+        .user-area {
+            position: relative;
+
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+
+            min-width: 190px;
+
+            padding:
+                5px 9px 5px 5px;
+
+            border:
+                1px solid var(--border-light);
+
+            border-radius: 12px;
+
+            background: var(--input);
+
+            cursor: pointer;
+
+            transition: .25s;
+        }
+
+        .user-area:hover {
+            border-color: var(--purple);
+
+            background:
+                linear-gradient(135deg,
+                    rgba(161, 0, 255, .08),
+                    var(--input));
+
+            box-shadow: var(--glow);
+        }
+
+        .avatar {
+            width: 38px;
+            height: 38px;
+
+            flex-shrink: 0;
+
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background:
+                linear-gradient(135deg,
+                    #7000ff,
+                    #c000ff);
+
+            color: #fff;
+
+            font-weight: bold;
+
+            box-shadow:
+                0 0 15px rgba(170, 0, 255, .35);
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            min-width: 0;
+            flex: 1;
+        }
+
+        .user-name {
+            color: var(--text);
+
+            font-size: 11px;
+            font-weight: 700;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-status {
+            display: flex;
+            align-items: center;
+
+            gap: 5px;
+
+            margin-top: 4px;
+
+            color: var(--green);
+
+            font-size: 8px;
+
+            white-space: nowrap;
+        }
+
+        .online-dot {
+            width: 6px;
+            height: 6px;
+
+            border-radius: 50%;
+
+            background: var(--green);
+
+            box-shadow:
+                0 0 7px var(--green);
+        }
+
+        .online-time {
+            color: var(--muted-2);
+        }
+
+        .user-arrow {
+            color: var(--muted);
+
+            font-size: 12px;
+
+            transition: .2s;
+        }
+
+        .user-area.open .user-arrow {
+            transform:
+                rotate(180deg);
+
+            color: var(--purple-2);
+        }
+
+
+        /* =========================================================
+   ACCOUNT MENU
+========================================================= */
+
+        .account-menu {
+            position: absolute;
+
+            top: calc(100% + 10px);
+            right: 0;
+
+            width: 245px;
+
+            padding: 8px;
+
+            border-radius: 12px;
+
+            background: var(--card);
+
+            border:
+                1px solid var(--border);
+
+            box-shadow:
+                0 15px 45px rgba(0, 0, 0, .45),
+                var(--glow);
+
+            opacity: 0;
+            visibility: hidden;
+
+            transform:
+                translateY(-8px);
+
+            transition: .2s ease;
+
+            z-index: 5000;
+        }
+
+        .user-area.open .account-menu {
+            opacity: 1;
+            visibility: visible;
+
+            transform:
+                translateY(0);
+        }
+
+        .account-header {
+            padding:
+                11px 10px 13px;
+
+            margin-bottom: 5px;
+
+            border-bottom:
+                1px solid var(--border-light);
+        }
+
+        .account-name {
+            color: var(--text);
+
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .account-role {
+            margin-top: 4px;
+
+            color: var(--purple-2);
+
+            font-size: 9px;
+        }
+
+        .account-online {
+            margin-top: 7px;
+
+            color: var(--green);
+
+            font-size: 8px;
+        }
+
+        .account-item {
+            width: 100%;
+
+            min-height: 40px;
+
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+
+            padding: 0 10px;
+
+            margin: 3px 0;
+
+            border-radius: 8px;
+
+            background: transparent;
+
+            color: var(--text-secondary);
+
+            text-decoration: none;
+
+            font-size: 10px;
+
+            cursor: pointer;
+
+            text-align: left;
+
+            transition: .2s;
+        }
+
+        .account-item:hover {
+            color: var(--text);
+
+            background:
+                rgba(161, 0, 255, .09);
+        }
+
+        .account-item-icon {
+            width: 25px;
+
+            color: var(--purple-2);
+
+            font-size: 15px;
+
+            text-align: center;
+        }
+
+        .account-item.logout {
+            margin-top: 6px;
+
+            border-top:
+                1px solid var(--border-light);
+
+            border-radius:
+                0 0 8px 8px;
+
+            color: var(--red);
+        }
+
+        .account-item.logout .account-item-icon {
+            color: var(--red);
+        }
+
+
+        /* =========================================================
+   PAGE HEADER
+========================================================= */
+
+        .page-header {
+            display: flex;
+
+            justify-content: space-between;
+            align-items: flex-end;
+
+            gap: 20px;
+
+            margin-bottom: 25px;
+        }
+
+        .page-title h1 {
+            color: var(--text);
+
+            font-size: 29px;
+
+            letter-spacing: -.5px;
+        }
+
+        .page-title p {
+            margin-top: 7px;
+
+            color: var(--muted);
+
+            font-size: 12px;
+        }
+
+        .page-actions {
+            display: flex;
+
+            gap: 10px;
+        }
+
+        .btn {
+            padding:
+                11px 16px;
+
+            border-radius: 8px;
+
+            border:
+                1px solid var(--border-light);
+
+            background: var(--card);
+
+            color: var(--text-secondary);
+
+            cursor: pointer;
+
+            font-size: 11px;
+
+            transition: .2s;
+        }
+
+        .btn:hover {
+            border-color: var(--purple);
+
+            color: var(--text);
+
+            box-shadow: var(--glow);
+        }
+
+        .btn:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            color: #fff;
+
+            border-color: var(--purple);
+
+            background:
+                linear-gradient(135deg,
+                    #a100ff,
+                    #6500ff);
+
+            box-shadow:
+                0 0 12px rgba(160, 0, 255, .25);
+        }
+
+        .btn-primary:hover {
+            filter: brightness(1.15);
+
+            transform:
+                translateY(-1px);
+        }
+
+
+        /* =========================================================
+   STATS
+========================================================= */
+
+        .stats {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 16px;
+
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            position: relative;
+
+            overflow: hidden;
+
+            padding: 20px;
+
+            min-height: 135px;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(145deg,
+                    var(--card-secondary),
+                    var(--card));
+
+            border:
+                1px solid var(--border);
+
+            box-shadow: var(--shadow);
+
+            transition: .25s;
+        }
+
+        .stat-card::before {
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+            top: 0;
+
+            width: 100%;
+            height: 2px;
+
+            background:
+                linear-gradient(90deg,
+                    transparent,
+                    var(--purple-2),
+                    transparent);
+        }
+
+        .stat-card:hover {
+            transform:
+                translateY(-3px);
+
+            border-color: var(--purple);
+
+            box-shadow: var(--glow);
+        }
+
+        .stat-top {
+            display: flex;
+
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .stat-title {
+            color: var(--muted);
+
+            font-size: 10px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+        }
+
+        .stat-icon {
+            width: 36px;
+            height: 36px;
+
+            border-radius: 9px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: var(--purple-2);
+
+            background:
+                rgba(160, 0, 255, .08);
+
+            border:
+                1px solid rgba(160, 0, 255, .18);
+
+            font-size: 18px;
+        }
+
+        .stat-value {
+            margin-top: 15px;
+
+            color: var(--text);
+
+            font-size: 27px;
+
+            font-weight: 700;
+        }
+
+        .stat-description {
+            margin-top: 7px;
+
+            font-size: 10px;
+
+            color: var(--muted-2);
+        }
+
+        .stat-description.green {
+            color: var(--green);
+        }
+
+        .stat-description.yellow {
+            color: var(--yellow);
+        }
+
+        .stat-description.red {
+            color: var(--red);
+        }
+
+
+        /* =========================================================
+   DASHBOARD
+========================================================= */
+
+        .dashboard-grid {
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1.7fr) minmax(290px, .75fr);
+
+            gap: 20px;
+        }
+
+        .panel {
+            margin-bottom: 20px;
+
+            overflow: hidden;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(145deg,
+                    var(--card),
+                    var(--card-secondary));
+
+            border:
+                1px solid var(--border-light);
+
+            box-shadow: var(--shadow);
+        }
+
+        .panel-header {
+            min-height: 60px;
+
+            padding:
+                15px 18px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 15px;
+
+            border-bottom:
+                1px solid var(--border-light);
+        }
+
+        .panel-title {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            color: var(--text);
+
+            font-size: 14px;
+
+            font-weight: 700;
+        }
+
+        .panel-title-icon {
+            color: var(--purple-2);
+
+            filter:
+                drop-shadow(0 0 7px rgba(190, 0, 255, .7));
+        }
+
+
+        /* =========================================================
+   CHART
+========================================================= */
+
+        .chart-container {
+            padding: 20px;
+        }
+
+        .chart-top {
+            display: flex;
+
+            justify-content: space-between;
+            align-items: flex-start;
+
+            margin-bottom: 20px;
+        }
+
+        .chart-total {
+            color: var(--text);
+
+            font-size: 25px;
+
+            font-weight: 700;
+        }
+
+        .chart-subtitle {
+            margin-top: 5px;
+
+            color: var(--muted);
+
+            font-size: 10px;
+        }
+
+        .chart-change {
+            padding:
+                6px 9px;
+
+            border-radius: 20px;
+
+            color: var(--green);
+
+            background:
+                rgba(0, 230, 118, .06);
+
+            border:
+                1px solid rgba(0, 230, 118, .2);
+
+            font-size: 9px;
+        }
+
+        .chart {
+            position: relative;
+
+            height: 220px;
+
+            display: flex;
+
+            align-items: flex-end;
+
+            gap: 10px;
+
+            padding:
+                15px 5px 0;
+
+            border-bottom:
+                1px solid var(--border-light);
+        }
+
+        .chart-grid {
+            position: absolute;
+
+            left: 0;
+            right: 0;
+
+            top: 0;
+            bottom: 0;
+
+            pointer-events: none;
+        }
+
+        .chart-line {
+            position: absolute;
+
+            left: 0;
+            right: 0;
+
+            height: 1px;
+
+            background:
+                rgba(255, 255, 255, .045);
+        }
+
+        .chart-line:nth-child(1) {
+            top: 15%;
+        }
+
+        .chart-line:nth-child(2) {
+            top: 40%;
+        }
+
+        .chart-line:nth-child(3) {
+            top: 65%;
+        }
+
+        .chart-line:nth-child(4) {
+            top: 90%;
+        }
+
+        .bar-group {
+            position: relative;
+
+            flex: 1;
+
+            height: 100%;
+
+            display: flex;
+
+            align-items: flex-end;
+            justify-content: center;
+
+            gap: 3px;
+
+            z-index: 2;
+        }
+
+        .bar {
+            width: 35%;
+
+            min-height: 5px;
+
+            border-radius:
+                5px 5px 0 0;
+
+            background:
+                linear-gradient(180deg,
+                    #c000ff,
+                    #7000ff);
+
+            box-shadow:
+                0 0 12px rgba(170, 0, 255, .25);
+
+            transition:
+                height .45s ease,
+                filter .25s;
+        }
+
+        .bar.secondary {
+            background:
+                linear-gradient(180deg,
+                    rgba(100, 0, 255, .6),
+                    rgba(80, 0, 255, .22));
+
+            box-shadow: none;
+        }
+
+        .bar:hover {
+            filter: brightness(1.35);
+        }
+
+        .chart-labels {
+            display: flex;
+
+            gap: 10px;
+
+            padding:
+                8px 5px 0;
+        }
+
+        .chart-label {
+            flex: 1;
+
+            text-align: center;
+
+            color: var(--muted-2);
+
+            font-size: 8px;
+        }
+
+
+        /* =========================================================
+   ACTIVITY
+========================================================= */
+
+        .activity-list {
+            padding:
+                4px 18px 10px;
+        }
+
+        .activity {
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+
+            padding:
+                12px 0;
+
+            border-bottom:
+                1px solid var(--border-light);
+        }
+
+        .activity:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 36px;
+            height: 36px;
+
+            flex-shrink: 0;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 8px;
+
+            background:
+                rgba(161, 0, 255, .07);
+
+            border:
+                1px solid rgba(161, 0, 255, .15);
+
+            color: var(--purple-2);
+
+            font-size: 16px;
+        }
+
+        .activity-icon.green {
+            color: var(--green);
+
+            background:
+                rgba(0, 230, 118, .05);
+
+            border-color:
+                rgba(0, 230, 118, .15);
+        }
+
+        .activity-icon.yellow {
+            color: var(--yellow);
+
+            background:
+                rgba(255, 208, 0, .05);
+
+            border-color:
+                rgba(255, 208, 0, .15);
+        }
+
+        .activity-info {
+            flex: 1;
+        }
+
+        .activity-title {
+            color: var(--text);
+
+            font-size: 10px;
+
+            font-weight: 600;
+        }
+
+        .activity-description {
+            margin-top: 4px;
+
+            color: var(--muted-2);
+
+            font-size: 9px;
+        }
+
+        .activity-time {
+            color: var(--muted-2);
+
+            font-size: 8px;
+        }
+
+
+        /* =========================================================
+   QUICK ACTIONS
+========================================================= */
+
+        .quick-actions {
+            padding:
+                15px 18px 18px;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 9px;
+        }
+
+        .quick-action {
+            min-height: 78px;
+
+            padding: 12px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            gap: 7px;
+
+            border-radius: 9px;
+
+            background: var(--input);
+
+            border:
+                1px solid var(--border-light);
+
+            color: var(--text-secondary);
+
+            text-decoration: none;
+
+            transition: .2s;
+        }
+
+        .quick-action:hover {
+            color: var(--text);
+
+            border-color: var(--purple);
+
+            background:
+                rgba(161, 0, 255, .07);
+
+            box-shadow:
+                0 0 12px rgba(160, 0, 255, .12);
+
+            transform:
+                translateY(-2px);
+        }
+
+        .quick-icon {
+            color: var(--purple-2);
+
+            font-size: 18px;
+        }
+
+        .quick-title {
+            color: var(--text);
+
+            font-size: 9px;
+
+            font-weight: 700;
+        }
+
+        .quick-description {
+            color: var(--muted-2);
+
+            font-size: 8px;
+        }
+
+
+        /* =========================================================
+   STORE
+========================================================= */
+
+        .store-list {
+            padding:
+                4px 18px 10px;
+        }
+
+        .store-item {
+            padding:
+                12px 0;
+
+            border-bottom:
+                1px solid var(--border-light);
+        }
+
+        .store-item:last-child {
+            border-bottom: none;
+        }
+
+        .store-top {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 7px;
+        }
+
+        .store-name {
+            color: var(--text);
+
+            font-size: 10px;
+
+            font-weight: 600;
+        }
+
+        .store-percent {
+            color: var(--green);
+
+            font-size: 9px;
+
+            font-weight: bold;
+        }
+
+        .store-progress {
+            width: 100%;
+
+            height: 5px;
+
+            overflow: hidden;
+
+            border-radius: 10px;
+
+            background:
+                rgba(130, 120, 140, .15);
+        }
+
+        .store-progress-bar {
+            height: 100%;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(90deg,
+                    #7000ff,
+                    #c000ff);
+
+            box-shadow:
+                0 0 8px rgba(180, 0, 255, .35);
+
+            transition:
+                width .5s ease;
+        }
+
+        .store-info {
+            display: flex;
+
+            justify-content: space-between;
+
+            margin-top: 5px;
+
+            color: var(--muted-2);
+
+            font-size: 8px;
+        }
+
+
+        /* =========================================================
+   AI
+========================================================= */
+
+        .ai-insight {
+            padding: 17px;
+
+            background:
+                radial-gradient(circle at 0% 50%,
+                    rgba(160, 0, 255, .16),
+                    transparent 65%);
+        }
+
+        .ai-label {
+            color: var(--purple-2);
+
+            font-size: 10px;
+
+            font-weight: bold;
+
+            letter-spacing: .5px;
+
+            margin-bottom: 8px;
+        }
+
+        .ai-insight p {
+            color: var(--muted);
+
+            font-size: 10px;
+
+            line-height: 1.7;
+        }
+
+        .ai-insight strong {
+            color: var(--text);
+        }
+
+        .ai-action {
+            display: inline-flex;
+
+            margin-top: 12px;
+
+            padding:
+                7px 10px;
+
+            border-radius: 7px;
+
+            color: #fff;
+
+            background:
+                rgba(161, 0, 255, .18);
+
+            border:
+                1px solid rgba(161, 0, 255, .3);
+
+            font-size: 9px;
+
+            cursor: pointer;
+
+            transition: .2s;
+        }
+
+        .ai-action:hover {
+            background:
+                rgba(161, 0, 255, .3);
+
+            border-color: var(--purple);
+
+            box-shadow: var(--glow);
+        }
+
+
+        /* =========================================================
+   ALERTS
+========================================================= */
+
+        .alert-list {
+            padding:
+                5px 18px 12px;
+        }
+
+        .alert-item {
+            display: flex;
+
+            align-items: flex-start;
+
+            gap: 10px;
+
+            padding:
+                11px 0;
+
+            border-bottom:
+                1px solid var(--border-light);
+        }
+
+        .alert-item:last-child {
+            border-bottom: none;
+        }
+
+        .alert-icon {
+            width: 30px;
+            height: 30px;
+
+            flex-shrink: 0;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 7px;
+
+            color: var(--red);
+
+            background:
+                rgba(255, 61, 90, .06);
+
+            border:
+                1px solid rgba(255, 61, 90, .15);
+        }
+
+        .alert-text {
+            flex: 1;
+        }
+
+        .alert-title {
+            color: var(--text);
+
+            font-size: 9px;
+
+            font-weight: 600;
+        }
+
+        .alert-desc {
+            margin-top: 3px;
+
+            color: var(--muted-2);
+
+            font-size: 8px;
+
+            line-height: 1.4;
+        }
+
+
+        /* =========================================================
+   FOOTER
+========================================================= */
+
+        .footer {
+            padding:
+                15px 0 25px;
+
+            text-align: center;
+
+            color: var(--muted-2);
+
+            font-size: 9px;
+        }
+
+
+        /* =========================================================
+   TOAST
+========================================================= */
+
+        .toast {
+            position: fixed;
+
+            right: 25px;
+            bottom: 25px;
+
+            min-width: 260px;
+
+            max-width:
+                calc(100vw - 50px);
+
+            padding:
+                14px 18px;
+
+            border-radius: 10px;
+
+            background: var(--card);
+
+            color: var(--text);
+
+            border:
+                1px solid var(--purple);
+
+            box-shadow: var(--glow);
+
+            font-size: 11px;
+
+            transform:
+                translateY(100px);
+
+            opacity: 0;
+
+            pointer-events: none;
+
+            transition: .3s;
+
+            z-index: 9999;
+        }
+
+        .toast.show {
+            transform:
+                translateY(0);
+
+            opacity: 1;
+        }
+
+
+        /* =========================================================
+   LOADING
+========================================================= */
+
+        .is-loading {
+            opacity: .55;
+            pointer-events: none;
+        }
+
+
+        /* =========================================================
+   RESPONSIVE
+========================================================= */
+
+        @media(max-width:1200px) {
+
+            .stats {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media(max-width:800px) {
+
+            .sidebar {
+                width: 72px;
+
+                padding:
+                    18px 9px;
+            }
+
+            .logo {
+                justify-content: center;
+
+                padding-left: 0;
+                padding-right: 0;
+            }
+
+            .logo-text,
+            .menu-title,
+            .menu-text {
+                display: none;
+            }
+
+            .menu-item {
+                justify-content: center;
+
+                padding: 0;
+
+                height: 48px;
+            }
+
+            .menu-icon {
+                width: auto;
+            }
+
+            .main {
+                margin-left: 72px;
+
+                padding:
+                    18px 15px;
+            }
+
+            .search-wrapper {
+                width: 230px;
+            }
+
+            .user-area {
+                min-width: auto;
+            }
+
+            .user-info {
+                display: none;
+            }
+
+            .user-arrow {
+                display: none;
+            }
+        }
+
+        @media(max-width:600px) {
+
+            .topbar {
+                flex-direction: column;
+
+                align-items: stretch;
+            }
+
+            .search-wrapper {
+                width: 100%;
+            }
+
+            .profile-area {
+                justify-content: flex-end;
+            }
+
+            .page-header {
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+
+            .page-actions {
+                width: 100%;
+            }
+
+            .page-actions .btn {
+                flex: 1;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-actions {
+                grid-template-columns:
+                    1fr 1fr;
+            }
+
+            .user-area {
+                min-width: 175px;
+            }
+
+            .user-info {
+                display: flex;
+            }
+
+            .chart {
+                height: 180px;
+            }
+
+            .panel-header {
+                padding:
+                    13px 14px;
+            }
+
+            .chart-container {
+                padding: 15px;
+            }
+
+            .main {
+                padding:
+                    15px 10px;
+            }
+        }
+
+        @media(max-width:420px) {
+
+            .profile-area {
+                gap: 6px;
+            }
+
+            .theme-btn,
+            .notification {
+                width: 36px;
+                height: 36px;
+            }
+
+            .user-area {
+                min-width: 155px;
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-label {
+                font-size: 7px;
+            }
+        }
+    </style>
+    <script src="js/logout.js"></script>
+    <link rel="stylesheet" href="css/logout.css">
+    <script src="js/auth.js"></script>
+    <style>[hidden]{display:none!important}</style>
+<link rel="stylesheet" href="css/auth.css">
+</head>
+
+
+<body>
+
+
+    <!-- =========================================================
+     SIDEBAR
+========================================================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                ◈
+            </div>
+
+            <div class="logo-text">
+                AI STOCK
+                <span>MANAGER</span>
+            </div>
+
+        </div>
+
+
+        <div class="menu-title">
+            Yönetim
+        </div>
+
+
+        <a href="anasayfa.html" class="menu-item">
+            <span class="menu-icon">⌂</span>
+            <span class="menu-text">Ana Sayfa</span>
+        </a>
+
+        <a href="stok.html" class="menu-item">
+            <span class="menu-icon">◇</span>
+            <span class="menu-text">Stok Yönetimi</span>
+        </a>
+
+        <a href="transferler.html" class="menu-item">
+            <span class="menu-icon">⇄</span>
+            <span class="menu-text">Transferler</span>
+        </a>
+
+        <a href="ai-onerileri.html" class="menu-item">
+            <span class="menu-icon">✦</span>
+            <span class="menu-text">AI Önerileri</span>
+        </a>
+
+        <a href="magazalar.html" class="menu-item">
+            <span class="menu-icon">▣</span>
+            <span class="menu-text">Mağazalar</span>
+        </a>
+
+
+        <div class="menu-title">
+            Analiz
+        </div>
+
+        <a href="raporlar.html" class="menu-item">
+            <span class="menu-icon">▥</span>
+            <span class="menu-text">Raporlar</span>
+        </a>
+
+        <a href="satis-analizi.html" class="menu-item">
+            <span class="menu-icon">↗</span>
+            <span class="menu-text">Satış Analizi</span>
+        </a>
+
+        <a href="bildirimler.html" class="menu-item">
+            <span class="menu-icon">♧</span>
+            <span class="menu-text">Bildirimler</span>
+        </a>
+
+
+        <div class="menu-title">
+            Sistem
+        </div>
+
+        <a href="ayarlar.html" class="menu-item">
+            <span class="menu-icon">⚙</span>
+            <span class="menu-text">Ayarlar</span>
+        </a>
+
+        <a href="kullanicilar.html" class="menu-item">
+            <span class="menu-icon">♙</span>
+            <span class="menu-text">Kullanıcılar</span>
+        </a>
+
+        <a href="entegrasyon.html" class="menu-item">
+            <span class="menu-icon">⌘</span>
+            <span class="menu-text">Entegrasyon</span>
+        </a>
+
+    </aside>
+
+
+    <!-- =========================================================
+     MAIN
+========================================================= -->
+
+    <main class="main">
+
+
+        <!-- TOPBAR -->
+
+        <div class="topbar">
+
+            <div class="search-wrapper">
+
+                <input type="search" id="globalSearch" class="search" placeholder="Ürün, kod veya mağaza ara..."
+                    autocomplete="off">
+
+                <span class="search-icon">
+                    ⌕
+                </span>
+
+            </div>
+
+
+            <div class="profile-area">
+
+                <button class="theme-btn" id="themeBtn" title="Tema değiştir">
+                    🌙
+                </button>
+
+                <button class="notification" id="notificationBtn" title="Bildirimler">
+                    ♧
+
+                    <span style="
+                        position:absolute;
+                        margin:-30px 0 0 25px;
+                        width:18px;
+                        height:18px;
+                        border-radius:50%;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        background:var(--purple-2);
+                        color:white;
+                        font-size:9px;
+                    " id="notificationCount">
+                        5
+                    </span>
+
+                </button>
+
+                <div class="user-area" id="userArea" tabindex="0">
+
+                    <div class="avatar" id="avatar">
+                        M
+                    </div>
+
+                    <div class="user-info">
+
+                        <div class="user-name" id="userName">
+                            Admin
+                        </div>
+
+                        <!-- DAKİKA SAYACI KALDIRILDI -->
+
+                        <div class="user-status">
+
+                            <span class="online-dot"></span>
+
+                            Çevrim içi
+
+                        </div>
+
+                    </div>
+
+                    <div class="user-arrow">
+                        ▾
+                    </div>
+
+
+                    <!-- ACCOUNT MENU -->
+
+                    <div class="account-menu" id="accountMenu">
+
+                        <div class="account-header">
+
+                            <div class="account-name" id="accountName">
+                                Admin
+                            </div>
+
+                            <div class="account-role">
+                                Sistem Yöneticisi
+                            </div>
+
+                            <!-- DAKİKA SAYACI KALDIRILDI -->
+
+                            <div class="account-online">
+                                ● Çevrim içi
+                            </div>
+
+                        </div>
+
+
+                        <a href="ayarlar.html" class="account-item">
+
+                            <span class="account-item-icon">
+                                ♙
+                            </span>
+
+                            Hesabım
+
+                        </a>
+
+
+                        <a href="ayarlar.html#guvenlik" class="account-item">
+
+                            <span class="account-item-icon">
+                                🔐
+                            </span>
+
+                            Giriş Güvenliği
+
+                        </a>
+
+
+                        <button class="account-item logout" id="logoutBtn" type="button">
+                            <span class="account-item-icon" aria-hidden="true">⇥</span>
+                            Güvenli Çıkış
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PAGE HEADER -->
+
+        <div class="page-header">
+
+            <div class="page-title">
+
+                <h1>
+                    Ana Sayfa
+                </h1>
+
+                <p>
+                    AI Stock Manager genel bakış ve operasyon merkezi.
+                </p>
+
+            </div>
+
+
+            <div class="page-actions">
+
+                <button class="btn" id="refreshBtn" type="button">
+                    ↻ Yenile
+                </button>
+
+                <button class="btn btn-primary" id="quickStockBtn" type="button">
+                    ＋ Stok İşlemi
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- STATS -->
+
+        <section class="stats" id="statsContainer"></section>
+
+
+        <!-- DASHBOARD -->
+
+        <div class="dashboard-grid">
+
+
+            <!-- LEFT -->
+
+            <div>
+
+
+                <!-- CHART -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ↗
+                            </span>
+
+                            SATIŞ PERFORMANSI
+
+                        </div>
+
+
+                        <select id="chartPeriod" class="btn" aria-label="Grafik dönemi" style="
+                            padding:7px 10px;
+                            font-size:9px;
+                            background:var(--input);
+                            color:var(--text-secondary);
+                            outline:none;
+                        ">
+
+                            <option value="7">
+                                Son 7 Gün
+                            </option>
+
+                            <option value="30">
+                                Son 30 Gün
+                            </option>
+
+                            <option value="90">
+                                Son 3 Ay
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="chart-container">
+
+                        <div class="chart-top">
+
+                            <div>
+
+                                <div class="chart-total" id="chartTotal">
+                                    ₺ 486.240
+                                </div>
+
+                                <div class="chart-subtitle" id="chartSubtitle">
+                                    Bu haftanın toplam satış cirosu
+                                </div>
+
+                            </div>
+
+                            <div class="chart-change" id="chartChange">
+                                ↑ %18.6
+                            </div>
+
+                        </div>
+
+
+                        <div class="chart" id="salesChart">
+
+                            <div class="chart-grid">
+
+                                <div class="chart-line"></div>
+                                <div class="chart-line"></div>
+                                <div class="chart-line"></div>
+                                <div class="chart-line"></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="chart-labels" id="chartLabels"></div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ACTIVITY -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ◉
+                            </span>
+
+                            SON AKTİVİTELER
+
+                        </div>
+
+                        <a href="bildirimler.html" style="
+                            color:var(--purple-2);
+                            font-size:9px;
+                            text-decoration:none;
+                        ">
+                            Tümünü Gör
+                        </a>
+
+                    </div>
+
+
+                    <div class="activity-list" id="activityList"></div>
+
+                </div>
+
+
+                <!-- AI -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ✦
+                            </span>
+
+                            AI ÖNERİSİ
+
+                        </div>
+
+                        <span style="
+                            color:var(--green);
+                            font-size:9px;
+                        ">
+                            ● ANALİZ HAZIR
+                        </span>
+
+                    </div>
+
+
+                    <div class="ai-insight">
+
+                        <div class="ai-label">
+                            ✦ YAPAY ZEKA ANALİZİ
+                        </div>
+
+                        <p id="aiInsightText"></p>
+
+                        <button class="ai-action" id="aiActionBtn" type="button">
+                            ✦ Öneriyi İncele
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RIGHT -->
+
+            <div>
+
+
+                <!-- QUICK ACTIONS -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ✦
+                            </span>
+
+                            HIZLI İŞLEMLER
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="quick-actions">
+
+                        <a href="stok.html" class="quick-action">
+
+                            <div class="quick-icon">
+                                ◇
+                            </div>
+
+                            <div class="quick-title">
+                                Stok Yönetimi
+                            </div>
+
+                            <div class="quick-description">
+                                Ürün stoklarını yönet
+                            </div>
+
+                        </a>
+
+
+                        <a href="transferler.html" class="quick-action">
+
+                            <div class="quick-icon">
+                                ⇄
+                            </div>
+
+                            <div class="quick-title">
+                                Transfer
+                            </div>
+
+                            <div class="quick-description">
+                                Yeni transfer oluştur
+                            </div>
+
+                        </a>
+
+
+                        <a href="raporlar.html" class="quick-action">
+
+                            <div class="quick-icon">
+                                ▥
+                            </div>
+
+                            <div class="quick-title">
+                                Raporlar
+                            </div>
+
+                            <div class="quick-description">
+                                Raporları görüntüle
+                            </div>
+
+                        </a>
+
+
+                        <a href="ai-onerileri.html" class="quick-action">
+
+                            <div class="quick-icon">
+                                ✦
+                            </div>
+
+                            <div class="quick-title">
+                                AI Önerileri
+                            </div>
+
+                            <div class="quick-description">
+                                Akıllı önerileri gör
+                            </div>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <!-- STORES -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ▣
+                            </span>
+
+                            MAĞAZA PERFORMANSI
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="store-list" id="storeList"></div>
+
+                </div>
+
+
+                <!-- ALERTS -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon" style="color:var(--red)">
+                                ⚠
+                            </span>
+
+                            ÖNEMLİ UYARILAR
+
+                        </div>
+
+                        <span id="alertCount" style="
+                            color:var(--red);
+                            font-size:9px;
+                        ">
+                            3 UYARI
+                        </span>
+
+                    </div>
+
+
+                    <div class="alert-list" id="alertList"></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer">
+            AI Stock Manager
+            •
+            Nebim V3 Entegrasyon Paneli
+        </div>
+
+    </main>
+
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+
+    <script>
+
+        /* =========================================================
+           CONFIG
+        ========================================================= */
+
+        const CONFIG = {
+
+            loginTimeKey:
+                "aiStockLoginTime",
+
+            userKey:
+                "aiStockUser",
+
+            themeKey:
+                "aiStockTheme",
+
+            dashboardKey:
+                "aiStockDashboardData"
+
+        };
+
+
+        /* =========================================================
+           DEMO DATA
+        ========================================================= */
+
+        const DEFAULT_DATA = {
+
+            stats: [
+
+                {
+                    title: "Toplam Stok",
+                    value: "125.420",
+                    icon: "◇",
+                    description: "↑ %4.8 geçen aya göre",
+                    type: "green"
+                },
+
+                {
+                    title: "Bugünkü Satış",
+                    value: "2.486",
+                    icon: "↗",
+                    description: "↑ %12.4 dünkü satışa göre",
+                    type: "green"
+                },
+
+                {
+                    title: "Düşük Stok",
+                    value: "342",
+                    icon: "!",
+                    description: "Kontrol edilmesi gereken ürün",
+                    type: "yellow"
+                },
+
+                {
+                    title: "Kritik Stok",
+                    value: "87",
+                    icon: "⚠",
+                    description: "Acil aksiyon gerekli",
+                    type: "red"
+                }
+
+            ],
+
+
+            charts: {
+
+                "7": {
+
+                    total: "₺ 486.240",
+
+                    subtitle:
+                        "Bu haftanın toplam satış cirosu",
+
+                    change: "↑ %18.6",
+
+                    labels: [
+                        "Pzt",
+                        "Sal",
+                        "Çar",
+                        "Per",
+                        "Cum",
+                        "Cmt",
+                        "Paz"
+                    ],
+
+                    primary: [
+                        65,
+                        72,
+                        59,
+                        82,
+                        76,
+                        91,
+                        84
+                    ],
+
+                    secondary: [
+                        48,
+                        55,
+                        44,
+                        67,
+                        58,
+                        71,
+                        62
+                    ]
+
+                },
+
+
+                "30": {
+
+                    total: "₺ 1.842.620",
+
+                    subtitle:
+                        "Son 30 günlük toplam satış cirosu",
+
+                    change: "↑ %14.2",
+
+                    labels: [
+                        "1. Hafta",
+                        "2. Hafta",
+                        "3. Hafta",
+                        "4. Hafta"
+                    ],
+
+                    primary: [
+                        68,
+                        79,
+                        88,
+                        94
+                    ],
+
+                    secondary: [
+                        52,
+                        61,
+                        69,
+                        74
+                    ]
+
+                },
+
+
+                "90": {
+
+                    total: "₺ 5.486.240",
+
+                    subtitle:
+                        "Son 3 aylık toplam satış cirosu",
+
+                    change: "↑ %21.8",
+
+                    labels: [
+                        "Nisan",
+                        "Mayıs",
+                        "Haziran",
+                        "Temmuz",
+                        "Ağustos"
+                    ],
+
+                    primary: [
+                        57,
+                        69,
+                        74,
+                        87,
+                        94
+                    ],
+
+                    secondary: [
+                        43,
+                        52,
+                        59,
+                        67,
+                        76
+                    ]
+
+                }
+
+            },
+
+
+            activities: [
+
+                {
+                    icon: "✓",
+                    type: "green",
+                    title: "Stok transferi tamamlandı",
+                    description:
+                        "Ankara Mağaza 01 → İzmir Mağaza 01",
+                    time: "5 dk"
+                },
+
+                {
+                    icon: "◇",
+                    type: "",
+                    title: "Yeni stok girişi yapıldı",
+                    description:
+                        "480 adet Nike T-Shirt 1023",
+                    time: "18 dk"
+                },
+
+                {
+                    icon: "!",
+                    type: "yellow",
+                    title: "Düşük stok uyarısı",
+                    description:
+                        "Pantolon 2045 minimum seviyeye yaklaştı",
+                    time: "32 dk"
+                },
+
+                {
+                    icon: "✓",
+                    type: "green",
+                    title: "Nebim V3 senkronizasyonu tamamlandı",
+                    description:
+                        "1.248 ürün başarıyla güncellendi",
+                    time: "1 sa"
+                },
+
+                {
+                    icon: "✦",
+                    type: "",
+                    title: "AI stok analizi oluşturuldu",
+                    description:
+                        "14 yeni transfer önerisi hazırlandı",
+                    time: "2 sa"
+                }
+
+            ],
+
+
+            stores: [
+
+                {
+                    name: "İstanbul Mağaza 01",
+                    percent: 94,
+                    stock: "24.820 stok",
+                    sales: "₺ 128.400 satış",
+                    type: "normal"
+                },
+
+                {
+                    name: "Ankara Mağaza 01",
+                    percent: 88,
+                    stock: "21.640 stok",
+                    sales: "₺ 104.820 satış",
+                    type: "normal"
+                },
+
+                {
+                    name: "İzmir Mağaza 01",
+                    percent: 76,
+                    stock: "18.420 stok",
+                    sales: "₺ 86.240 satış",
+                    type: "warning"
+                },
+
+                {
+                    name: "Bursa Mağaza 01",
+                    percent: 71,
+                    stock: "15.680 stok",
+                    sales: "₺ 74.520 satış",
+                    type: "warning"
+                },
+
+                {
+                    name: "İstanbul Mağaza 02",
+                    percent: 83,
+                    stock: "17.340 stok",
+                    sales: "₺ 92.260 satış",
+                    type: "normal"
+                }
+
+            ],
+
+
+            alerts: [
+
+                {
+                    icon: "⚠",
+                    title: "Kritik stok seviyesi",
+                    description:
+                        "Sweatshirt 3021 — İzmir Mağaza 01",
+                    type: "red"
+                },
+
+                {
+                    icon: "!",
+                    title: "342 ürün düşük stokta",
+                    description:
+                        "Stok yönetimi ekranından kontrol edin.",
+                    type: "red"
+                },
+
+                {
+                    icon: "◌",
+                    title: "Senkronizasyon bekliyor",
+                    description:
+                        "Nebim V3 ile son senkronizasyon 2 saat önce.",
+                    type: "yellow"
+                }
+
+            ]
+
+        };
+
+
+        /* =========================================================
+           STATE
+        ========================================================= */
+
+        let dashboardData =
+            loadDashboardData();
+
+        let onlineTimer =
+            null;
+
+        let toastTimer =
+            null;
+
+
+        /* =========================================================
+           DOM
+        ========================================================= */
+
+        const $ = selector =>
+            document.querySelector(selector);
+
+        const $$ = selector =>
+            document.querySelectorAll(selector);
+
+
+        /* =========================================================
+           LOGIN / SESSION
+        ========================================================= */
+
+        function checkSession() {
+
+            const loginTime =
+                parseInt(
+                    localStorage.getItem(
+                        CONFIG.loginTimeKey
+                    ),
+                    10
+                );
+
+
+            /*
+             * Login zamanı yoksa dashboard'a
+             * erişim verilmez.
+             */
+            if (
+                !Number.isFinite(loginTime) ||
+                loginTime <= 0
+            ) {
+
+                window.location.replace(
+                    "login.html"
+                );
+
+                return false;
+
+            }
+
+
+            return true;
+        }
+
+
+        if (!checkSession()) {
+
+            throw new Error(
+                "Geçerli oturum bulunamadı."
+            );
+
+        }
+
+
+        /* =========================================================
+           USER
+        ========================================================= */
+
+        function loadUser() {
+
+            const savedUser =
+                localStorage.getItem(
+                    CONFIG.userKey
+                );
+
+
+            if (!savedUser) {
+                return;
+            }
+
+
+            try {
+
+                const user =
+                    JSON.parse(savedUser);
+
+
+                if (!user) {
+                    return;
+                }
+
+
+                const userName =
+                    user.name ||
+                    user.username ||
+                    "Admin";
+
+
+                const firstLetter =
+                    userName
+                        .trim()
+                        .charAt(0)
+                        .toUpperCase();
+
+
+                const userNameElement =
+                    $("#userName");
+
+                const accountNameElement =
+                    $("#accountName");
+
+                const avatarElement =
+                    $("#avatar");
+
+
+                if (userNameElement) {
+
+                    userNameElement.textContent =
+                        userName;
+
+                }
+
+
+                if (accountNameElement) {
+
+                    accountNameElement.textContent =
+                        userName;
+
+                }
+
+
+                if (avatarElement) {
+
+                    avatarElement.textContent =
+                        firstLetter || "M";
+
+                }
+
+            } catch (error) {
+
+                console.warn(
+                    "Kullanıcı bilgisi okunamadı."
+                );
+
+            }
+
+        }
+
+
+        loadUser();
+
+
+        /* =========================================================
+           ONLINE TIME
+        ========================================================= */
+
+        function updateOnlineTime() {
+
+            const loginTime =
+                parseInt(
+                    localStorage.getItem(
+                        CONFIG.loginTimeKey
+                    ),
+                    10
+                );
+
+
+            if (
+                !Number.isFinite(loginTime) ||
+                loginTime <= 0
+            ) {
+
+                if (onlineTimer) {
+
+                    clearInterval(
+                        onlineTimer
+                    );
+
+                }
+
+
+                window.location.replace(
+                    "login.html"
+                );
+
+                return;
+
+            }
+
+
+            let elapsed =
+                Date.now() -
+                loginTime;
+
+
+            if (elapsed < 0) {
+
+                elapsed = 0;
+
+            }
+
+
+            const minutes =
+                Math.floor(
+                    elapsed / 60000
+                );
+
+
+            const onlineMinutes =
+                $("#onlineMinutes");
+
+            const accountOnlineMinutes =
+                $("#accountOnlineMinutes");
+
+
+            if (onlineMinutes) {
+
+                onlineMinutes.textContent =
+                    minutes;
+
+            }
+
+
+            if (accountOnlineMinutes) {
+
+                accountOnlineMinutes.textContent =
+                    minutes;
+
+            }
+
+        }
+
+
+        updateOnlineTime();
+
+
+        onlineTimer =
+            setInterval(
+                updateOnlineTime,
+                1000
+            );
+
+
+        /* =========================================================
+           STORAGE EVENTS
+        ========================================================= */
+
+        window.addEventListener(
+            "storage",
+            function (event) {
+
+                if (
+                    event.key ===
+                    CONFIG.loginTimeKey
+                ) {
+
+                    if (!event.newValue) {
+
+                        if (onlineTimer) {
+
+                            clearInterval(
+                                onlineTimer
+                            );
+
+                        }
+
+
+                        window.location.replace(
+                            "login.html"
+                        );
+
+                        return;
+
+                    }
+
+
+                    updateOnlineTime();
+
+                }
+
+
+                if (
+                    event.key ===
+                    CONFIG.userKey
+                ) {
+
+                    loadUser();
+
+                }
+
+
+                if (
+                    event.key ===
+                    CONFIG.themeKey
+                ) {
+
+                    applyTheme(
+                        event.newValue ||
+                        "dark"
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* =========================================================
+           THEME
+        ========================================================= */
+
+        function applyTheme(theme) {
+
+            const isLight =
+                theme === "light";
+
+
+            document.body.classList.toggle(
+                "light-theme",
+                isLight
+            );
+
+
+            const themeButton =
+                $("#themeBtn");
+
+
+            if (!themeButton) {
+                return;
+            }
+
+
+            themeButton.textContent =
+                isLight
+                    ? "☀️"
+                    : "🌙";
+
+
+            themeButton.title =
+                isLight
+                    ? "Karanlık temaya geç"
+                    : "Açık temaya geç";
+
+        }
+
+
+        const savedTheme =
+            localStorage.getItem(
+                CONFIG.themeKey
+            ) || "dark";
+
+
+        applyTheme(savedTheme);
+
+
+        $("#themeBtn").addEventListener(
+            "click",
+            function () {
+
+                const isLight =
+                    document.body.classList.contains(
+                        "light-theme"
+                    );
+
+
+                const newTheme =
+                    isLight
+                        ? "dark"
+                        : "light";
+
+
+                localStorage.setItem(
+                    CONFIG.themeKey,
+                    newTheme
+                );
+
+
+                applyTheme(newTheme);
+
+            }
+        );
+
+
+        /* =========================================================
+           USER MENU
+        ========================================================= */
+
+        const userArea =
+            $("#userArea");
+
+
+        function closeUserMenu() {
+
+            userArea.classList.remove(
+                "open"
+            );
+
+            userArea.setAttribute(
+                "aria-expanded",
+                "false"
+            );
+
+        }
+
+
+        function toggleUserMenu() {
+
+            const isOpen =
+                userArea.classList.toggle(
+                    "open"
+                );
+
+
+            userArea.setAttribute(
+                "aria-expanded",
+                String(isOpen)
+            );
+
+        }
+
+
+        userArea.addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    event.target.closest(
+                        ".account-menu"
+                    )
+                ) {
+
+                    return;
+
+                }
+
+
+                toggleUserMenu();
+
+            }
+        );
+
+
+        userArea.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "Enter" ||
+                    event.key === " "
+                ) {
+
+                    event.preventDefault();
+
+                    toggleUserMenu();
+
+                }
+
+
+                if (
+                    event.key === "Escape"
+                ) {
+
+                    closeUserMenu();
+
+                }
+
+            }
+        );
+
+
+        document.addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    !userArea.contains(
+                        event.target
+                    )
+                ) {
+
+                    closeUserMenu();
+
+                }
+
+            }
+        );
+
+
+        /* =========================================================
+           NOTIFICATION
+        ========================================================= */
+
+        $("#notificationBtn").addEventListener(
+            "click",
+            function () {
+
+                window.location.href =
+                    "bildirimler.html";
+
+            }
+        );
+
+
+        /* =========================================================
+           DASHBOARD DATA
+        ========================================================= */
+
+        function loadDashboardData() {
+
+            const saved =
+                localStorage.getItem(
+                    CONFIG.dashboardKey
+                );
+
+
+            if (!saved) {
+
+                return structuredClone(
+                    DEFAULT_DATA
+                );
+
+            }
+
+
+            try {
+
+                return JSON.parse(saved);
+
+            } catch (error) {
+
+                console.warn(
+                    "Dashboard verisi okunamadı."
+                );
+
+
+                return structuredClone(
+                    DEFAULT_DATA
+                );
+
+            }
+
+        }
+
+
+        function saveDashboardData() {
+
+            localStorage.setItem(
+                CONFIG.dashboardKey,
+                JSON.stringify(
+                    dashboardData
+                )
+            );
+
+        }
+
+
+        /* =========================================================
+           STATS RENDER
+        ========================================================= */
+
+        function renderStats() {
+
+            const container =
+                $("#statsContainer");
+
+
+            container.innerHTML =
+                dashboardData.stats
+                    .map(function (stat) {
+
+                        return `
+                    <div class="stat-card">
+
+                        <div class="stat-top">
+
+                            <div class="stat-title">
+                                ${escapeHTML(stat.title)}
+                            </div>
+
+                            <div class="stat-icon">
+                                ${escapeHTML(stat.icon)}
+                            </div>
+
+                        </div>
+
+                        <div class="stat-value">
+                            ${escapeHTML(stat.value)}
+                        </div>
+
+                        <div class="stat-description ${escapeHTML(stat.type)}">
+                            ${escapeHTML(stat.description)}
+                        </div>
+
+                    </div>
+                `;
+
+                    })
+                    .join("");
+
+        }
+
+
+        /* =========================================================
+           CHART RENDER
+        ========================================================= */
+
+        function renderChart(period = "7") {
+
+            const chart =
+                dashboardData.charts[period];
+
+
+            if (!chart) {
+                return;
+            }
+
+
+            $("#chartTotal").textContent =
+                chart.total;
+
+
+            $("#chartSubtitle").textContent =
+                chart.subtitle;
+
+
+            $("#chartChange").textContent =
+                chart.change;
+
+
+            const chartElement =
+                $("#salesChart");
+
+
+            chartElement
+                .querySelectorAll(
+                    ".bar-group"
+                )
+                .forEach(
+                    element =>
+                        element.remove()
+                );
+
+
+            chart.labels.forEach(
+                function (label, index) {
+
+                    const group =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    group.className =
+                        "bar-group";
+
+
+                    const secondary =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    secondary.className =
+                        "bar secondary";
+
+
+                    secondary.style.height =
+                        chart.secondary[index] +
+                        "%";
+
+
+                    const primary =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    primary.className =
+                        "bar";
+
+
+                    primary.style.height =
+                        chart.primary[index] +
+                        "%";
+
+
+                    group.appendChild(
+                        secondary
+                    );
+
+
+                    group.appendChild(
+                        primary
+                    );
+
+
+                    chartElement.appendChild(
+                        group
+                    );
+
+                }
+            );
+
+
+            const labels =
+                $("#chartLabels");
+
+
+            labels.innerHTML =
+                chart.labels
+                    .map(
+                        label =>
+                            `<div class="chart-label">
+                        ${escapeHTML(label)}
+                    </div>`
+                    )
+                    .join("");
+
+        }
+
+
+        $("#chartPeriod").addEventListener(
+            "change",
+            function () {
+
+                renderChart(
+                    this.value
+                );
+
+
+                const text =
+                    this.options[
+                        this.selectedIndex
+                    ].text;
+
+
+                showToast(
+                    `${text} satış verileri görüntüleniyor.`
+                );
+
+            }
+        );
+
+
+        /* =========================================================
+           ACTIVITY RENDER
+        ========================================================= */
+
+        function renderActivities() {
+
+            const container =
+                $("#activityList");
+
+
+            container.innerHTML =
+                dashboardData.activities
+                    .map(function (item) {
+
+                        return `
+                    <div class="activity">
+
+                        <div class="activity-icon ${escapeHTML(item.type)}">
+                            ${escapeHTML(item.icon)}
+                        </div>
+
+                        <div class="activity-info">
+
+                            <div class="activity-title">
+                                ${escapeHTML(item.title)}
+                            </div>
+
+                            <div class="activity-description">
+                                ${escapeHTML(item.description)}
+                            </div>
+
+                        </div>
+
+                        <div class="activity-time">
+                            ${escapeHTML(item.time)}
+                        </div>
+
+                    </div>
+                `;
+
+                    })
+                    .join("");
+
+        }
+
+
+        /* =========================================================
+           STORE RENDER
+        ========================================================= */
+
+        function renderStores() {
+
+            const container =
+                $("#storeList");
+
+
+            container.innerHTML =
+                dashboardData.stores
+                    .map(function (store) {
+
+                        const warning =
+                            store.type === "warning";
+
+
+                        return `
+                    <div class="store-item">
+
+                        <div class="store-top">
+
+                            <div class="store-name">
+                                ${escapeHTML(store.name)}
+                            </div>
+
+                            <div
+                                class="store-percent"
+                                style="
+                                    color:
+                                    ${warning
+                                ? "var(--yellow)"
+                                : "var(--green)"};
+                                "
+                            >
+                                %${store.percent}
+                            </div>
+
+                        </div>
+
+                        <div class="store-progress">
+
+                            <div
+                                class="store-progress-bar"
+                                style="
+                                    width:${store.percent}%;
+                                    ${warning
+                                ? `
+                                            background:
+                                            linear-gradient(
+                                                90deg,
+                                                #d89d00,
+                                                #ffd000
+                                            );
+                                        `
+                                : ""}
+                                "
+                            ></div>
+
+                        </div>
+
+                        <div class="store-info">
+
+                            <span>
+                                ${escapeHTML(store.stock)}
+                            </span>
+
+                            <span>
+                                ${escapeHTML(store.sales)}
+                            </span>
+
+                        </div>
+
+                    </div>
+                `;
+
+                    })
+                    .join("");
+
+        }
+
+
+        /* =========================================================
+           ALERT RENDER
+        ========================================================= */
+
+        function renderAlerts() {
+
+            const container =
+                $("#alertList");
+
+
+            const alerts =
+                dashboardData.alerts;
+
+
+            container.innerHTML =
+                alerts
+                    .map(function (alert) {
+
+                        const yellow =
+                            alert.type === "yellow";
+
+
+                        return `
+                    <div class="alert-item">
+
+                        <div
+                            class="alert-icon"
+                            style="
+                                ${yellow
+                                ? `
+                                        color:var(--yellow);
+                                        background:rgba(255,208,0,.05);
+                                        border-color:rgba(255,208,0,.15);
+                                    `
+                                : ""}
+                            "
+                        >
+                            ${escapeHTML(alert.icon)}
+                        </div>
+
+                        <div class="alert-text">
+
+                            <div class="alert-title">
+                                ${escapeHTML(alert.title)}
+                            </div>
+
+                            <div class="alert-desc">
+                                ${escapeHTML(alert.description)}
+                            </div>
+
+                        </div>
+
+                    </div>
+                `;
+
+                    })
+                    .join("");
+
+
+            $("#alertCount").textContent =
+                `${alerts.length} UYARI`;
+
+        }
+
+
+        /* =========================================================
+           AI INSIGHT
+        ========================================================= */
+
+        function renderAI() {
+
+            $("#aiInsightText").innerHTML = `
+        Son 14 günlük satış verilerine göre
+        <strong>İzmir Mağaza 01</strong>
+        için stok riski artıyor.
+
+        <br><br>
+
+        Özellikle
+        <strong>Sweatshirt 3021</strong>
+        ürününde yaklaşık 3 günlük stok kaldığı
+        tahmin ediliyor.
+
+        <br><br>
+
+        AI sistemi,
+        <strong>Ankara Mağaza 01 → İzmir Mağaza 01</strong>
+        yönünde stok transferi öneriyor.
+    `;
+
+        }
+
+
+        /* =========================================================
+           DASHBOARD RENDER
+        ========================================================= */
+
+        function renderDashboard() {
+
+            renderStats();
+
+            renderChart(
+                $("#chartPeriod").value
+            );
+
+            renderActivities();
+
+            renderStores();
+
+            renderAlerts();
+
+            renderAI();
+
+        }
+
+
+        /* =========================================================
+           SEARCH
+        ========================================================= */
+
+        const globalSearch =
+            $("#globalSearch");
+
+
+        globalSearch.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key !== "Enter"
+                ) {
+
+                    return;
+
+                }
+
+
+                const value =
+                    globalSearch.value.trim();
+
+
+                if (!value) {
+
+                    showToast(
+                        "Aramak istediğiniz ürün, kod veya mağazayı yazın."
+                    );
+
+                    return;
+
+                }
+
+
+                window.location.href =
+                    "stok.html?search=" +
+                    encodeURIComponent(
+                        value
+                    );
+
+            }
+        );
+
+
+        /* =========================================================
+           QUICK STOCK
+        ========================================================= */
+
+        $("#quickStockBtn").addEventListener(
+            "click",
+            function () {
+
+                showToast(
+                    "Stok işlemi ekranı açılıyor..."
+                );
+
+
+                setTimeout(
+                    function () {
+
+                        window.location.href =
+                            "stok.html";
+
+                    },
+                    500
+                );
+
+            }
+        );
+
+
+        /* =========================================================
+           REFRESH
+        ========================================================= */
+
+        $("#refreshBtn").addEventListener(
+            "click",
+            function () {
+
+                const button =
+                    this;
+
+
+                button.disabled =
+                    true;
+
+
+                button.textContent =
+                    "↻ Güncelleniyor...";
+
+
+                document
+                    .querySelector(".main")
+                    .classList.add(
+                        "is-loading"
+                    );
+
+
+                setTimeout(
+                    function () {
+
+                        /*
+                         * Gerçek API bağlandığında
+                         * bu bölüm fetch/API çağrısı
+                         * ile değiştirilebilir.
+                         */
+                        dashboardData =
+                            generateFreshDemoData();
+
+
+                        saveDashboardData();
+
+                        renderDashboard();
+
+
+                        button.disabled =
+                            false;
+
+
+                        button.textContent =
+                            "↻ Yenile";
+
+
+                        document
+                            .querySelector(".main")
+                            .classList.remove(
+                                "is-loading"
+                            );
+
+
+                        showToast(
+                            "Dashboard verileri güncellendi."
+                        );
+
+                    },
+                    900
+                );
+
+            }
+        );
+
+
+        /* =========================================================
+           FRESH DEMO DATA
+        ========================================================= */
+
+        function generateFreshDemoData() {
+
+            const data =
+                structuredClone(
+                    DEFAULT_DATA
+                );
+
+
+            const randomChange =
+                Math.floor(
+                    Math.random() * 5000
+                );
+
+
+            const totalStock =
+                125420 +
+                randomChange;
+
+
+            const todaySales =
+                2486 +
+                Math.floor(
+                    Math.random() * 150
+                );
+
+
+            const lowStock =
+                342 +
+                Math.floor(
+                    Math.random() * 10
+                );
+
+
+            const criticalStock =
+                87 +
+                Math.floor(
+                    Math.random() * 5
+                );
+
+
+            data.stats[0].value =
+                totalStock
+                    .toLocaleString("tr-TR");
+
+
+            data.stats[1].value =
+                todaySales
+                    .toLocaleString("tr-TR");
+
+
+            data.stats[2].value =
+                lowStock
+                    .toLocaleString("tr-TR");
+
+
+            data.stats[3].value =
+                criticalStock
+                    .toLocaleString("tr-TR");
+
+
+            data.charts["7"].primary =
+                data.charts["7"].primary
+                    .map(
+                        value =>
+                            Math.max(
+                                20,
+                                Math.min(
+                                    98,
+                                    value +
+                                    Math.floor(
+                                        Math.random() * 11
+                                    ) - 5
+                                )
+                            )
+                    );
+
+
+            return data;
+
+        }
+
+
+        /* =========================================================
+           AI ACTION
+        ========================================================= */
+
+        $("#aiActionBtn").addEventListener(
+            "click",
+            function () {
+
+                showToast(
+                    "AI önerileri ekranına yönlendiriliyorsunuz..."
+                );
+
+
+                setTimeout(
+                    function () {
+
+                        window.location.href =
+                            "ai-onerileri.html";
+
+                    },
+                    500
+                );
+
+            }
+        );
+
+
+        /* =========================================================
+           LOGOUT
+        ========================================================= */
+
+        
+
+
+        /* =========================================================
+           TOAST
+        ========================================================= */
+
+        function showToast(message) {
+
+            const toast =
+                $("#toast");
+
+
+            toast.textContent =
+                message;
+
+
+            toast.classList.add(
+                "show"
+            );
+
+
+            clearTimeout(
+                toastTimer
+            );
+
+
+            toastTimer =
+                setTimeout(
+                    function () {
+
+                        toast.classList.remove(
+                            "show"
+                        );
+
+                    },
+                    2500
+                );
+
+        }
+
+
+        /* =========================================================
+           ACTIVE MENU
+        ========================================================= */
+
+        function setActiveMenu() {
+
+            const currentPage =
+                window.location.pathname
+                    .split("/")
+                    .pop()
+                    .toLowerCase();
+
+
+            $$(".menu-item")
+                .forEach(function (item) {
+
+                    const href =
+                        item
+                            .getAttribute("href")
+                            .split("/")
+                            .pop()
+                            .toLowerCase();
+
+
+                    item.classList.toggle(
+                        "active",
+                        currentPage === href ||
+                        (
+                            currentPage === "" &&
+                            href === "untitled-1.html"
+                        )
+                    );
+
+                });
+
+        }
+
+
+        setActiveMenu();
+
+
+        /* =========================================================
+           ESCAPE HTML
+        ========================================================= */
+
+        function escapeHTML(value) {
+
+            return String(value)
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+
+        }
+
+
+        /* =========================================================
+           INITIAL RENDER
+        ========================================================= */
+
+        renderDashboard();
+
+
+        /* =========================================================
+           PAGE VISIBILITY
+        ========================================================= */
+
+        document.addEventListener(
+            "visibilitychange",
+            function () {
+
+                if (
+                    !document.hidden
+                ) {
+
+                    updateOnlineTime();
+
+                }
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>

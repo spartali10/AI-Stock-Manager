@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Entegrasyon | AI Stock Manager</title>
+
+    <link rel="stylesheet" href="/css/pages/entegrasyon-1.css">
+    <script src="/js/logout.js"></script>
+    <link rel="stylesheet" href="/css/logout.css">
+    <script src="/js/auth.js"></script>
+    <link rel="stylesheet" href="/css/pages/entegrasyon-2.css">
+<link rel="stylesheet" href="/css/auth.css">
+</head>
+
+
+<body>
+
+
+    <!-- =======================================================
+     SIDEBAR
+======================================================= -->
+
+    <%- include('partials/sidebar-shared-1.html', { active: '/Entegrasyon' }) %>
+
+
+    <!-- =======================================================
+     MAIN
+======================================================= -->
+
+    <main class="main">
+
+
+        <!-- =====================================================
+         TOPBAR
+    ===================================================== -->
+
+        <div class="topbar">
+
+            <div class="search-wrapper">
+
+                <input type="search" id="globalSearch" class="search" placeholder="Ürün, kod veya mağaza ara..."
+                    autocomplete="off">
+
+                <span class="search-icon">
+                    ⌕
+                </span>
+
+            </div>
+
+
+            <div class="profile-area">
+
+                <button class="theme-btn" id="themeBtn" title="Tema değiştir">
+                    🌙
+                </button>
+
+                <button class="notification" id="notificationBtn" title="Bildirimler">
+                    ♧
+
+                    <span style="
+                        position:absolute;
+                        margin:-30px 0 0 25px;
+                        width:18px;
+                        height:18px;
+                        border-radius:50%;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        background:var(--purple-2);
+                        color:white;
+                        font-size:9px;
+                    " id="notificationCount">
+                        5
+                    </span>
+
+                </button>
+
+                <div class="user-area" id="userArea" tabindex="0">
+
+                    <div class="avatar" id="avatar">
+                        M
+                    </div>
+
+                    <div class="user-info">
+
+                        <div class="user-name" id="userName">
+                            Admin
+                        </div>
+
+                        <!-- DAKİKA SAYACI KALDIRILDI -->
+
+                        <div class="user-status">
+
+                            <span class="online-dot"></span>
+
+                            Çevrim içi
+
+                        </div>
+
+                    </div>
+
+                    <div class="user-arrow">
+                        ▾
+                    </div>
+
+
+                    <!-- ACCOUNT MENU -->
+
+                    <div class="account-menu" id="accountMenu">
+
+                        <div class="account-header">
+
+                            <div class="account-name" id="accountName">
+                                Admin
+                            </div>
+
+                            <div class="account-role">
+                                Sistem Yöneticisi
+                            </div>
+
+                            <!-- DAKİKA SAYACI KALDIRILDI -->
+
+                            <div class="account-online">
+                                ● Çevrim içi
+                            </div>
+
+                        </div>
+
+
+                        <a href="/Ayarlar" class="account-item">
+
+                            <span class="account-item-icon">
+                                ♙
+                            </span>
+
+                            Hesabım
+
+                        </a>
+
+
+                        <a href="/Ayarlar#guvenlik" class="account-item">
+
+                            <span class="account-item-icon">
+                                🔐
+                            </span>
+
+                            Giriş Güvenliği
+
+                        </a>
+
+
+                        <button class="account-item logout" id="logoutBtn" type="button">
+                            <span class="account-item-icon" aria-hidden="true">⇥</span>
+                            Güvenli Çıkış
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+         PAGE HEADER
+    ===================================================== -->
+
+        <div class="page-header">
+
+            <div class="page-title">
+
+                <h1>
+                    Entegrasyon
+                </h1>
+
+                <p>
+                    Nebim V3 ve diğer sistem bağlantılarınızı yönetin.
+                </p>
+
+            </div>
+
+
+            <div class="page-actions">
+
+                <button class="btn" id="refreshBtn" type="button">
+                    ↻ Yenile
+                </button>
+
+                <button class="btn btn-primary" id="testAllBtn" type="button">
+                    ⌘ Tüm Bağlantıları Test Et
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+         HERO
+    ===================================================== -->
+
+        <section class="integration-hero">
+
+            <div class="hero-content">
+
+                <div class="hero-left">
+
+                    <div class="hero-icon">
+                        ⌘
+                    </div>
+
+                    <div>
+
+                        <h2 class="hero-title">
+                            Sistem Entegrasyon Merkezi
+                        </h2>
+
+                        <p class="hero-description">
+                            AI Stock Manager uygulamanızı Nebim V3,
+                            API servisleri ve diğer kurumsal sistemlerle
+                            güvenli şekilde bağlayın. Veri senkronizasyonu,
+                            bağlantı durumu ve entegrasyon ayarlarını
+                            tek merkezden yönetin.
+                        </p>
+
+                        <div class="connection-status">
+
+                            <span class="connection-dot"></span>
+
+                            TÜM ANA SİSTEMLER AKTİF
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         INTEGRATIONS
+    ===================================================== -->
+
+        <section class="integration-grid">
+
+
+            <!-- NEBIM -->
+
+            <div class="integration-card">
+
+                <div class="integration-card-top">
+
+                    <div class="integration-logo">
+                        N
+                    </div>
+
+                    <div class="integration-status connected">
+
+                        <span class="status-small-dot"></span>
+
+                        Bağlı
+
+                    </div>
+
+                </div>
+
+
+                <div class="integration-name">
+                    Nebim V3
+                </div>
+
+                <div class="integration-description">
+                    ERP ve mağaza stok verilerinin
+                    AI Stock Manager ile senkronizasyonu.
+                </div>
+
+
+                <div class="integration-footer">
+
+                    <div class="integration-info">
+                        Son senkronizasyon: 2 dk önce
+                    </div>
+
+                    <button class="small-btn integration-test" data-system="Nebim V3" type="button">
+                        Test Et
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- API -->
+
+            <div class="integration-card">
+
+                <div class="integration-card-top">
+
+                    <div class="integration-logo blue">
+                        API
+                    </div>
+
+                    <div class="integration-status connected">
+
+                        <span class="status-small-dot"></span>
+
+                        Aktif
+
+                    </div>
+
+                </div>
+
+
+                <div class="integration-name">
+                    REST API
+                </div>
+
+                <div class="integration-description">
+                    Harici uygulamalar ve servislerle
+                    güvenli API iletişimi.
+                </div>
+
+
+                <div class="integration-footer">
+
+                    <div class="integration-info">
+                        API v2.4
+                    </div>
+
+                    <button class="small-btn integration-test" data-system="REST API" type="button">
+                        Test Et
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- DATABASE -->
+
+            <div class="integration-card">
+
+                <div class="integration-card-top">
+
+                    <div class="integration-logo green">
+                        DB
+                    </div>
+
+                    <div class="integration-status connected">
+
+                        <span class="status-small-dot"></span>
+
+                        Bağlı
+
+                    </div>
+
+                </div>
+
+
+                <div class="integration-name">
+                    Merkezi Veritabanı
+                </div>
+
+                <div class="integration-description">
+                    Stok, satış, mağaza ve kullanıcı
+                    verilerinin merkezi veri kaynağı.
+                </div>
+
+
+                <div class="integration-footer">
+
+                    <div class="integration-info">
+                        Bağlantı: Güvenli
+                    </div>
+
+                    <button class="small-btn integration-test" data-system="Merkezi Veritabanı" type="button">
+                        Test Et
+                    </button>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- =====================================================
+         CONTENT
+    ===================================================== -->
+
+        <div class="content-grid">
+
+
+            <!-- =================================================
+             LEFT
+        ================================================= -->
+
+            <div>
+
+
+                <!-- NEBIM SETTINGS -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                N
+                            </span>
+
+                            NEBİM V3 BAĞLANTI AYARLARI
+
+                        </div>
+
+                        <span style="
+                            color:var(--green);
+                            font-size:8px;
+                        ">
+                            ● BAĞLI
+                        </span>
+
+                    </div>
+
+
+                    <div class="settings-body">
+
+                        <div class="field-grid">
+
+
+                            <div class="field">
+
+                                <label for="server">
+                                    Sunucu Adresi
+                                </label>
+
+                                <input id="server" type="text" value="192.168.1.100" placeholder="Sunucu adresi">
+
+                                <span class="input-help">
+                                    Nebim V3 sunucu IP veya hostname bilgisi.
+                                </span>
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label for="port">
+                                    Port
+                                </label>
+
+                                <input id="port" type="number" value="1433" placeholder="Port">
+
+                                <span class="input-help">
+                                    SQL Server bağlantı portu.
+                                </span>
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label for="database">
+                                    Veritabanı
+                                </label>
+
+                                <input id="database" type="text" value="NebimV3" placeholder="Veritabanı adı">
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label for="company">
+                                    Firma
+                                </label>
+
+                                <select id="company">
+
+                                    <option>
+                                        001 - Ana Firma
+                                    </option>
+
+                                    <option>
+                                        002 - İstanbul Operasyon
+                                    </option>
+
+                                    <option>
+                                        003 - Ankara Operasyon
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label for="username">
+                                    Kullanıcı Adı
+                                </label>
+
+                                <input id="username" type="text" value="ai_stock" placeholder="Kullanıcı adı"
+                                    autocomplete="off">
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label for="password">
+                                    Şifre
+                                </label>
+
+                                <input id="password" type="password" value="********" placeholder="Şifre"
+                                    autocomplete="new-password">
+
+                            </div>
+
+
+                            <div class="field full">
+
+                                <label for="apiUrl">
+                                    API Endpoint
+                                </label>
+
+                                <input id="apiUrl" type="text" value="https://nebim.local/api/v3"
+                                    placeholder="API endpoint">
+
+                                <span class="input-help">
+                                    Nebim V3 servislerinin erişim adresi.
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- TEST -->
+
+                        <div class="test-box">
+
+                            <div class="test-header">
+
+                                <div class="test-title">
+                                    Bağlantı Durumu
+                                </div>
+
+                                <div class="test-result">
+
+                                    <span class="test-result-dot"></span>
+
+                                    Bağlantı başarılı
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="test-log" id="testLog">
+
+                                [12:42:01] Sunucuya bağlanılıyor...<br>
+                                [12:42:02] Kimlik doğrulama başarılı.<br>
+                                [12:42:02] Nebim V3 API erişimi doğrulandı.<br>
+                                [12:42:03] Veritabanı bağlantısı aktif.<br>
+                                [12:42:03] Bağlantı testi tamamlandı.
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ACTIONS -->
+
+                        <div class="settings-actions">
+
+                            <button class="btn" id="resetSettingsBtn" type="button">
+                                ↺ Varsayılanlara Dön
+                            </button>
+
+                            <button class="btn" id="testConnectionBtn" type="button">
+                                ◉ Bağlantıyı Test Et
+                            </button>
+
+                            <button class="btn btn-primary" id="saveSettingsBtn" type="button">
+                                ✓ Ayarları Kaydet
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SYNC HISTORY -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ⇄
+                            </span>
+
+                            SENKRONİZASYON GEÇMİŞİ
+
+                        </div>
+
+                        <span style="
+                            color:var(--muted);
+                            font-size:8px;
+                        ">
+                            SON 24 SAAT
+                        </span>
+
+                    </div>
+
+
+                    <div class="sync-list">
+
+
+                        <div class="sync-item">
+
+                            <div class="sync-icon">
+                                ⇄
+                            </div>
+
+                            <div class="sync-info">
+
+                                <div class="sync-name">
+                                    Stok Senkronizasyonu
+                                </div>
+
+                                <div class="sync-date">
+                                    Bugün, 12:42
+                                </div>
+
+                            </div>
+
+                            <div class="sync-state success">
+                                Başarılı
+                            </div>
+
+                        </div>
+
+
+                        <div class="sync-item">
+
+                            <div class="sync-icon">
+                                ₺
+                            </div>
+
+                            <div class="sync-info">
+
+                                <div class="sync-name">
+                                    Satış Verileri
+                                </div>
+
+                                <div class="sync-date">
+                                    Bugün, 12:30
+                                </div>
+
+                            </div>
+
+                            <div class="sync-state success">
+                                Başarılı
+                            </div>
+
+                        </div>
+
+
+                        <div class="sync-item">
+
+                            <div class="sync-icon">
+                                ▣
+                            </div>
+
+                            <div class="sync-info">
+
+                                <div class="sync-name">
+                                    Mağaza Verileri
+                                </div>
+
+                                <div class="sync-date">
+                                    Bugün, 12:15
+                                </div>
+
+                            </div>
+
+                            <div class="sync-state success">
+                                Başarılı
+                            </div>
+
+                        </div>
+
+
+                        <div class="sync-item">
+
+                            <div class="sync-icon">
+                                ✦
+                            </div>
+
+                            <div class="sync-info">
+
+                                <div class="sync-name">
+                                    AI Veri Güncellemesi
+                                </div>
+
+                                <div class="sync-date">
+                                    Bugün, 11:58
+                                </div>
+
+                            </div>
+
+                            <div class="sync-state warning">
+                                İşleniyor
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+             RIGHT
+        ================================================= -->
+
+            <div>
+
+
+                <!-- API STATUS -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ◎
+                            </span>
+
+                            API DURUMU
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="api-body">
+
+
+                        <div class="api-row">
+
+                            <div class="api-label">
+                                API Durumu
+                            </div>
+
+                            <div class="api-value green">
+                                ● Aktif
+                            </div>
+
+                        </div>
+
+
+                        <div class="api-row">
+
+                            <div class="api-label">
+                                API Versiyonu
+                            </div>
+
+                            <div class="api-value">
+                                v2.4.0
+                            </div>
+
+                        </div>
+
+
+                        <div class="api-row">
+
+                            <div class="api-label">
+                                Yanıt Süresi
+                            </div>
+
+                            <div class="api-value green">
+                                42 ms
+                            </div>
+
+                        </div>
+
+
+                        <div class="api-row">
+
+                            <div class="api-label">
+                                Son İstek
+                            </div>
+
+                            <div class="api-value">
+                                12:42:03
+                            </div>
+
+                        </div>
+
+
+                        <div class="api-row">
+
+                            <div class="api-label">
+                                Günlük İstek
+                            </div>
+
+                            <div class="api-value">
+                                18.429
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+                <!-- QUICK ACTIONS -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ✦
+                            </span>
+
+                            HIZLI İŞLEMLER
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="quick-actions">
+
+
+                        <button class="quick-btn" type="button" data-quick="Stok senkronizasyonu">
+
+                            <div class="quick-btn-icon">
+                                ⇄
+                            </div>
+
+                            <div class="quick-btn-title">
+                                Stok Senkronize Et
+                            </div>
+
+                            <div class="quick-btn-desc">
+                                Güncel stokları çek
+                            </div>
+
+                        </button>
+
+
+                        <button class="quick-btn" type="button" data-quick="Satış senkronizasyonu">
+
+                            <div class="quick-btn-icon">
+                                ↗
+                            </div>
+
+                            <div class="quick-btn-title">
+                                Satışları Güncelle
+                            </div>
+
+                            <div class="quick-btn-desc">
+                                Son satış verilerini çek
+                            </div>
+
+                        </button>
+
+
+                        <button class="quick-btn" type="button" data-quick="Mağaza senkronizasyonu">
+
+                            <div class="quick-btn-icon">
+                                ▣
+                            </div>
+
+                            <div class="quick-btn-title">
+                                Mağazaları Güncelle
+                            </div>
+
+                            <div class="quick-btn-desc">
+                                Mağaza bilgilerini yenile
+                            </div>
+
+                        </button>
+
+
+                        <button class="quick-btn" type="button" data-quick="AI veri güncellemesi">
+
+                            <div class="quick-btn-icon">
+                                ✦
+                            </div>
+
+                            <div class="quick-btn-title">
+                                AI Verilerini Güncelle
+                            </div>
+
+                            <div class="quick-btn-desc">
+                                AI analiz verilerini yenile
+                            </div>
+
+                        </button>
+
+
+                    </div>
+
+                </div>
+
+
+                <!-- SYSTEM INFO -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ⌘
+                            </span>
+
+                            SİSTEM BİLGİSİ
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="api-body">
+
+
+                        <div class="api-row">
+
+                            <div class="api-label">
+                                Entegrasyon
+                            </div>
+
+                            <div class="api-value">
+                                Nebim V3
+                            </div>
+
+                        </div>
+
+
+                        <div class="api-row">
+
+                            <div class="api-label">
+                                Durum
+                            </div>
+
+                            <div class="api-value green">
+                                Aktif
+                            </div>
+
+                        </div>
+
+
+                        <div class="api-row">
+
+                            <div class="api-label">
+                                Otomatik Sync
+                            </div>
+
+                            <div class="api-value">
+                                15 dk
+                            </div>
+
+                        </div>
+
+
+                        <div class="api-row">
+
+                            <div class="api-label">
+                                Şifreleme
+                            </div>
+
+                            <div class="api-value green">
+                                AES-256
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+         FOOTER
+    ===================================================== -->
+
+        <div class="footer">
+
+            AI Stock Manager
+            •
+            Nebim V3 Entegrasyon Paneli
+
+        </div>
+
+    </main>
+
+
+    <!-- =======================================================
+     TOAST
+======================================================= -->
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+
+    <script src="/js/pages/entegrasyon-1.js"></script>
+
+</body>
+
+</html>

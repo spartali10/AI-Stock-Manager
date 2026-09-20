@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mağazalar | AI Stock Manager</title>
+
+    <link rel="stylesheet" href="/css/pages/magazalar-1.css">
+    <script src="/js/logout.js"></script>
+    <link rel="stylesheet" href="/css/logout.css">
+    <script src="/js/auth.js"></script>
+    <link rel="stylesheet" href="/css/pages/magazalar-2.css">
+<link rel="stylesheet" href="/css/auth.css">
+</head>
+
+
+<body>
+
+
+    <!-- =======================================================
+     SIDEBAR
+======================================================= -->
+
+    <%- include('partials/sidebar-shared-1.html', { active: '/Magazalar' }) %>
+
+
+
+    <!-- =======================================================
+     MAIN
+======================================================= -->
+
+    <main class="main">
+
+
+        <!-- ===================================================
+         TOPBAR
+    =================================================== -->
+
+        <div class="topbar">
+
+            <div class="search-wrapper">
+
+                <input type="search" id="globalSearch" class="search" placeholder="Ürün, kod veya mağaza ara...">
+
+                <span class="search-icon">
+                    ⌕
+                </span>
+
+            </div>
+
+
+            <div class="profile-area">
+
+                <button class="theme-btn" id="themeBtn" title="Tema değiştir">
+                    🌙
+                </button>
+
+                <button class="notification" id="notificationBtn" title="Bildirimler">
+                    ♧
+
+                    <span style="
+                        position:absolute;
+                        margin:-30px 0 0 25px;
+                        width:18px;
+                        height:18px;
+                        border-radius:50%;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        background:var(--purple-2);
+                        color:white;
+                        font-size:9px;
+                    " id="notificationCount">
+                        5
+                    </span>
+
+                </button>
+
+                <div class="user-area" id="userArea" tabindex="0">
+
+                    <div class="avatar" id="avatar">
+                        M
+                    </div>
+
+                    <div class="user-info">
+
+                        <div class="user-name" id="userName">
+                            Admin
+                        </div>
+
+                        <!-- DAKİKA SAYACI KALDIRILDI -->
+
+                        <div class="user-status">
+
+                            <span class="online-dot"></span>
+
+                            Çevrim içi
+
+                        </div>
+
+                    </div>
+
+                    <div class="user-arrow">
+                        ▾
+                    </div>
+
+
+                    <!-- ACCOUNT MENU -->
+
+                    <div class="account-menu" id="accountMenu">
+
+                        <div class="account-header">
+
+                            <div class="account-name" id="accountName">
+                                Admin
+                            </div>
+
+                            <div class="account-role">
+                                Sistem Yöneticisi
+                            </div>
+
+                            <!-- DAKİKA SAYACI KALDIRILDI -->
+
+                            <div class="account-online">
+                                ● Çevrim içi
+                            </div>
+
+                        </div>
+
+
+                        <a href="/Ayarlar" class="account-item">
+
+                            <span class="account-item-icon">
+                                ♙
+                            </span>
+
+                            Hesabım
+
+                        </a>
+
+
+                        <a href="/Ayarlar#guvenlik" class="account-item">
+
+                            <span class="account-item-icon">
+                                🔐
+                            </span>
+
+                            Giriş Güvenliği
+
+                        </a>
+
+
+                        <button class="account-item logout" id="logoutBtn" type="button">
+                            <span class="account-item-icon" aria-hidden="true">⇥</span>
+                            Güvenli Çıkış
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ===================================================
+         PAGE HEADER
+    =================================================== -->
+
+        <div class="page-header">
+
+            <div class="page-title">
+
+                <h1>
+                    Mağazalar
+                </h1>
+
+                <p>
+                    Mağazalarınızı, stok durumlarını ve performanslarını yönetin.
+                </p>
+
+            </div>
+
+
+            <div class="page-actions">
+
+                <button class="btn" id="refreshBtn" type="button">
+                    ↻ Yenile
+                </button>
+
+
+                <button class="btn btn-primary" id="newStoreBtn" type="button">
+                    ＋ Yeni Mağaza
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ===================================================
+         SUMMARY
+    =================================================== -->
+
+        <section class="stats">
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Toplam Mağaza
+                    </div>
+
+                    <div class="stat-icon">
+                        ▣
+                    </div>
+
+                </div>
+
+                <div class="stat-value" id="totalStoreCount">
+                    12
+                </div>
+
+                <div class="stat-description green">
+                    ● 11 mağaza aktif
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Toplam Stok
+                    </div>
+
+                    <div class="stat-icon">
+                        ◇
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    125.420
+                </div>
+
+                <div class="stat-description green">
+                    ↑ %4.8 geçen aya göre
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Aktif Satış
+                    </div>
+
+                    <div class="stat-icon">
+                        ↗
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    ₺486K
+                </div>
+
+                <div class="stat-description green">
+                    ↑ %18.6 bu hafta
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Kritik Mağaza
+                    </div>
+
+                    <div class="stat-icon">
+                        ⚠
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    2
+                </div>
+
+                <div class="stat-description red">
+                    Acil stok kontrolü gerekli
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ===================================================
+         TOOLBAR
+    =================================================== -->
+
+        <div class="toolbar">
+
+            <div class="toolbar-left">
+
+                <input type="search" id="storeSearch" class="store-search" aria-label="Mağaza adı, şehir veya ilçe ara" aria-controls="storeGrid" placeholder="Mağaza adı veya şehir ara...">
+
+
+                <select id="cityFilter" class="filter-select" aria-label="Şehre göre filtrele" aria-controls="storeGrid">
+
+                    <option value="all">
+                        Tüm Şehirler
+                    </option>
+
+                    <option value="istanbul">
+                        İstanbul
+                    </option>
+
+                    <option value="ankara">
+                        Ankara
+                    </option>
+
+                    <option value="izmir">
+                        İzmir
+                    </option>
+
+                    <option value="bursa">
+                        Bursa
+                    </option>
+
+                </select>
+
+
+                <select id="statusFilter" class="filter-select" aria-label="Duruma göre filtrele" aria-controls="storeGrid">
+
+                    <option value="all">
+                        Tüm Durumlar
+                    </option>
+
+                    <option value="online">
+                        Aktif
+                    </option>
+
+                    <option value="warning">
+                        Dikkat Gerekiyor
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="view-buttons">
+
+                <button class="view-btn active" id="gridView" type="button" aria-label="Kart görünümü" aria-pressed="true" aria-controls="storeGrid" title="Kart görünümü">
+                    ▦
+                </button>
+
+                <button class="view-btn" id="listView" type="button" aria-label="Liste görünümü" aria-pressed="false" aria-controls="storeGrid" title="Liste görünümü">
+                    ☰
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ===================================================
+         STORE GRID
+    =================================================== -->
+
+        <div class="store-filter-summary">
+            <p id="storeFilterCount" role="status" aria-live="polite" aria-atomic="true"></p>
+            <button type="button" id="clearStoreFilters" disabled>Filtreleri temizle ×</button>
+        </div>
+        <section class="store-grid" id="storeGrid">
+
+
+            <!-- ISTANBUL 01 -->
+
+            <article class="store-card" data-city="istanbul" data-status="online" data-name="İstanbul Mağaza 01">
+
+                <div class="store-card-header">
+
+                    <div class="store-title-area">
+
+                        <div class="store-icon">
+                            ▣
+                        </div>
+
+                        <div>
+
+                            <div class="store-name">
+                                İstanbul Mağaza 01
+                            </div>
+
+                            <div class="store-location">
+                                İstanbul • Kadıköy
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <span class="status online">
+                        AKTİF
+                    </span>
+
+                </div>
+
+
+                <div class="store-card-body">
+
+                    <div class="performance">
+
+                        <span class="performance-label">
+                            Stok performansı
+                        </span>
+
+                        <span class="performance-value">
+                            %94
+                        </span>
+
+                    </div>
+
+
+                    <div class="progress">
+
+                        <div class="progress-bar" style="width:94%"></div>
+
+                    </div>
+
+
+                    <div class="store-metrics">
+
+                        <div class="metric">
+
+                            <div class="metric-label">
+                                Mevcut Stok
+                            </div>
+
+                            <div class="metric-value">
+                                24.820
+                            </div>
+
+                        </div>
+
+
+                        <div class="metric">
+
+                            <div class="metric-label">
+                                Satış
+                            </div>
+
+                            <div class="metric-value green">
+                                ₺128.400
+                            </div>
+
+                        </div>
+
+
+                        <div class="metric">
+
+                            <div class="metric-label">
+                                Düşük Stok
+                            </div>
+
+                            <div class="metric-value yellow">
+                                48
+                            </div>
+
+                        </div>
+
+
+                        <div class="metric">
+
+                            <div class="metric-label">
+                                Kritik
+                            </div>
+
+                            <div class="metric-value">
+                                8
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="store-card-footer">
+
+                    <span class="last-sync">
+                        Son senkronizasyon: 5 dk önce
+                    </span>
+
+                    <button class="detail-btn" type="button" data-store="İstanbul Mağaza 01">
+                        Detayları Gör →
+                    </button>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- ANKARA 01 -->
+
+            <article class="store-card" data-city="ankara" data-status="online" data-name="Ankara Mağaza 01">
+
+                <div class="store-card-header">
+
+                    <div class="store-title-area">
+
+                        <div class="store-icon">
+                            ▣
+                        </div>
+
+                        <div>
+
+                            <div class="store-name">
+                                Ankara Mağaza 01
+                            </div>
+
+                            <div class="store-location">
+                                Ankara • Çankaya
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <span class="status online">
+                        AKTİF
+                    </span>
+
+                </div>
+
+
+                <div class="store-card-body">
+
+                    <div class="performance">
+
+                        <span class="performance-label">
+                            Stok performansı
+                        </span>
+
+                        <span class="performance-value">
+                            %88
+                        </span>
+
+                    </div>
+
+
+                    <div class="progress">
+
+                        <div class="progress-bar" style="width:88%"></div>
+
+                    </div>
+
+
+                    <div class="store-metrics">
+
+                        <div class="metric">
+
+                            <div class="metric-label">
+                                Mevcut Stok
+                            </div>
+
+                            <div class="metric-value">
+                                21.640
+                            </div>
+
+                        </div>
+
+
+                        <div class="metric">
+
+                            <div class="metric-label">
+                                Satış
+                            </div>
+
+                            <div class="metric-value green">
+                                ₺104.820
+                            </div>
+
+                        </div>
+
+
+                        <div class="metric">
+
+                            <div class="metric-label">
+                                Düşük Stok
+                            </div>
+
+                            <div class="metric-value yellow">
+                                61
+                            </div>
+
+                        </div>
+
+
+                        <div class="metric">
+
+                            <div class="metric-label">
+                                Kritik
+                            </div>
+
+                            <div class="metric-value">
+                                12
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="store-card-footer">
+
+                    <span class="last-sync">
+                        Son senkronizasyon: 8 dk önce
+                    </span>
+
+                    <button class="detail-btn" type="button" data-store="Ankara Mağaza 01">
+                        Detayları Gör →
+                    </button>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- IZMIR 01 -->
+
+            <article class="store-card" data-city="izmir" data-status="warning" data-name="İzmir Mağaza 01">
+
+                <div class="store-card-header">
+
+                    <div class="store-title-area">
+
+                        <div class="store-icon">
+                            ▣
+                        </div>
+
+                        <div>
+
+                            <div class="store-name">
+                                İzmir Mağaza 01
+                            </div>
+
+                            <div class="store-location">
+                                İzmir • Konak
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <span class="status warning">
+                        DİKKAT
+                    </span>
+
+                </div>
+
+
+                <div class="store-card-body">
+
+                    <div class="performance">
+
+                        <span class="performance-label">
+                            Stok performansı
+                        </span>
+
+                        <span class="performance-value" style="color:var(--yellow)">
+                            %76
+                        </span>
+
+                    </div>
+
+
+                    <div class="progress">
+
+                        <div class="progress-bar" style="
+                            width:76%;
+                            background:
+                            linear-gradient(
+                                90deg,
+                                #d89d00,
+                                #ffd000
+                            );
+                        "></div>
+
+                    </div>
+
+
+                    <div class="store-metrics">
+
+                        <div class="metric">
+
+                            <div class="metric-label">
+                                Mevcut Stok
+                            </div>
+
+                            <div class="metric-value">
+                                18.420
+                            </div>
+
+                        </div>
+
+
+                        <div class="metric">
+
+                            <div class="metric-label">
+                                Satış
+                            </div>
+
+                            <div class="metric-value green">
+                                ₺86.240
+                            </div>
+
+                        </div>
+
+
+                        <div class="metric">
+
+                            <div class="metric-label">
+                                Düşük Stok
+                            </div>
+
+                            <div class="metric-value yellow">
+                                94
+                            </div>
+
+                        </div>
+
+
+                        <div class="metric">
+
+                            <div class="metric-label">
+                                Kritik
+                            </div>
+
+                            <div class="metric-value" style="color:var(--red)">
+                                21
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="store-card-footer">
+
+                    <span class="last-sync">
+                        Son senkronizasyon: 12 dk önce
+                    </span>
+
+                    <button class="detail-btn" type="button" data-store="İzmir Mağaza 01">
+                        Detayları Gör →
+                    </button>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- BURSA 01 -->
+
+            <article class="store-card" data-city="bursa" data-status="warning" data-name="Bursa Mağaza 01">
+
+                <div class="store-card-header">
+
+                    <div class="store-title-area">
+
+                        <div class="store-icon">
+                            ▣
+                        </div>
+
+                        <div>
+
+                            <div class="store-name">
+                                Bursa Mağaza 01
+                            </div>
+
+                            <div class="store-location">
+                                Bursa • Nilüfer
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <span class="status warning">
+                        DİKKAT
+                    </span>
+
+                </div>
+
+
+                <div class="store-card-body">
+
+                    <div class="performance">
+
+                        <span class="performance-label">
+                            Stok performansı
+                        </span>
+
+                        <span class="performance-value" style="color:var(--yellow)">
+                            %71
+                        </span>
+
+                    </div>
+
+
+                    <div class="progress">
+
+                        <div class="progress-bar" style="
+                            width:71%;
+                            background:
+                            linear-gradient(
+                                90deg,
+                                #d89d00,
+                                #ffd000
+                            );
+                        "></div>
+
+                    </div>
+
+
+                    <div class="store-metrics">
+
+                        <div class="metric">
+
+                            <div class="metric-label">
+                                Mevcut Stok
+                            </div>
+
+                            <div class="metric-value">
+                                15.680
+                            </div>
+
+                        </div>
+
+
+                        <div class="metric">
+
+                            <div class="metric-label">
+                                Satış
+                            </div>
+
+                            <div class="metric-value green">
+                                ₺74.520
+                            </div>
+
+                        </div>
+
+
+                        <div class="metric">
+
+                            <div class="metric-label">
+                                Düşük Stok
+                            </div>
+
+                            <div class="metric-value yellow">
+                                87
+                            </div>
+
+                        </div>
+
+
+                        <div class="metric">
+
+                            <div class="metric-label">
+                                Kritik
+                            </div>
+
+                            <div class="metric-value" style="color:var(--red)">
+                                18
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="store-card-footer">
+
+                    <span class="last-sync">
+                        Son senkronizasyon: 17 dk önce
+                    </span>
+
+                    <button class="detail-btn" type="button" data-store="Bursa Mağaza 01">
+                        Detayları Gör →
+                    </button>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- ISTANBUL 02 -->
+
+            <article class="store-card" data-city="istanbul" data-status="online" data-name="İstanbul Mağaza 02">
+
+                <div class="store-card-header">
+
+                    <div class="store-title-area">
+
+                        <div class="store-icon">
+                            ▣
+                        </div>
+
+                        <div>
+
+                            <div class="store-name">
+                                İstanbul Mağaza 02
+                            </div>
+
+                            <div class="store-location">
+                                İstanbul • Beşiktaş
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <span class="status online">
+                        AKTİF
+                    </span>
+
+                </div>
+
+
+                <div class="store-card-body">
+
+                    <div class="performance">
+
+                        <span class="performance-label">
+                            Stok performansı
+                        </span>
+
+                        <span class="performance-value">
+                            %83
+                        </span>
+
+                    </div>
+
+
+                    <div class="progress">
+
+                        <div class="progress-bar" style="width:83%"></div>
+
+                    </div>
+
+
+                    <div class="store-metrics">
+
+                        <div class="metric">
+
+                            <div class="metric-label">
+                                Mevcut Stok
+                            </div>
+
+                            <div class="metric-value">
+                                17.340
+                            </div>
+
+                        </div>
+
+
+                        <div class="metric">
+
+                            <div class="metric-label">
+                                Satış
+                            </div>
+
+                            <div class="metric-value green">
+                                ₺92.260
+                            </div>
+
+                        </div>
+
+
+                        <div class="metric">
+
+                            <div class="metric-label">
+                                Düşük Stok
+                            </div>
+
+                            <div class="metric-value yellow">
+                                52
+                            </div>
+
+                        </div>
+
+
+                        <div class="metric">
+
+                            <div class="metric-label">
+                                Kritik
+                            </div>
+
+                            <div class="metric-value">
+                                9
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="store-card-footer">
+
+                    <span class="last-sync">
+                        Son senkronizasyon: 21 dk önce
+                    </span>
+
+                    <button class="detail-btn" type="button" data-store="İstanbul Mağaza 02">
+                        Detayları Gör →
+                    </button>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- ANKARA 02 -->
+
+            <article class="store-card" data-city="ankara" data-status="online" data-name="Ankara Mağaza 02">
+
+                <div class="store-card-header">
+
+                    <div class="store-title-area">
+
+                        <div class="store-icon">
+                            ▣
+                        </div>
+
+                        <div>
+
+                            <div class="store-name">
+                                Ankara Mağaza 02
+                            </div>
+
+                            <div class="store-location">
+                                Ankara • Keçiören
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <span class="status online">
+                        AKTİF
+                    </span>
+
+                </div>
+
+
+                <div class="store-card-body">
+
+                    <div class="performance">
+
+                        <span class="performance-label">
+                            Stok performansı
+                        </span>
+
+                        <span class="performance-value">
+                            %86
+                        </span>
+
+                    </div>
+
+
+                    <div class="progress">
+
+                        <div class="progress-bar" style="width:86%"></div>
+
+                    </div>
+
+
+                    <div class="store-metrics">
+
+                        <div class="metric">
+
+                            <div class="metric-label">
+                                Mevcut Stok
+                            </div>
+
+                            <div class="metric-value">
+                                14.850
+                            </div>
+
+                        </div>
+
+
+                        <div class="metric">
+
+                            <div class="metric-label">
+                                Satış
+                            </div>
+
+                            <div class="metric-value green">
+                                ₺68.940
+                            </div>
+
+                        </div>
+
+
+                        <div class="metric">
+
+                            <div class="metric-label">
+                                Düşük Stok
+                            </div>
+
+                            <div class="metric-value yellow">
+                                43
+                            </div>
+
+                        </div>
+
+
+                        <div class="metric">
+
+                            <div class="metric-label">
+                                Kritik
+                            </div>
+
+                            <div class="metric-value">
+                                7
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="store-card-footer">
+
+                    <span class="last-sync">
+                        Son senkronizasyon: 25 dk önce
+                    </span>
+
+                    <button class="detail-btn" type="button" data-store="Ankara Mağaza 02">
+                        Detayları Gör →
+                    </button>
+
+                </div>
+
+            </article>
+
+
+        </section>
+
+
+
+        <!-- ===================================================
+         EMPTY
+    =================================================== -->
+
+        <div class="empty-state" id="emptyState">
+
+            <div class="empty-icon">
+                ⌕
+            </div>
+
+            <h3>
+                Mağaza bulunamadı
+            </h3>
+
+            <p>
+                Arama veya filtre kriterlerinizi değiştirerek tekrar deneyin.
+            </p>
+
+        </div>
+
+
+
+        <!-- ===================================================
+         FOOTER
+    =================================================== -->
+
+        <div class="footer">
+
+            AI Stock Manager
+            •
+            Nebim V3 Entegrasyon Paneli
+
+        </div>
+
+    </main>
+
+
+
+    <!-- =======================================================
+     TOAST
+======================================================= -->
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+
+
+    <dialog id="storeDetailDialog" class="store-detail" aria-labelledby="detailTitle">
+        <header class="detail-header">
+            <button type="button" class="detail-close" id="detailClose" aria-label="Mağaza detaylarını kapat" autofocus>×</button>
+            <p class="detail-eyebrow">MAĞAZA DETAYLARI</p>
+            <div class="detail-heading">
+                <div class="store-icon" aria-hidden="true">▣</div>
+                <div><h2 id="detailTitle"></h2><p id="detailLocation"></p></div>
+            </div>
+            <div class="detail-status-row"><span id="detailStatus" class="status"></span><span id="detailSync" class="detail-sync"></span></div>
+        </header>
+        <div class="detail-content">
+            <h3 class="detail-section-heading">Mağazaya genel bakış</h3>
+            <dl class="detail-metrics">
+                <div class="detail-stat"><dt>Mevcut stok</dt><dd id="detailStock"></dd><small>Toplam stok adedi</small></div>
+                <div class="detail-stat"><dt>Satış</dt><dd id="detailSales" class="green"></dd><small>Karttaki satış tutarı</small></div>
+                <div class="detail-stat"><dt>Düşük stok</dt><dd id="detailLow" class="yellow"></dd><small>Takip gerektiren</small></div>
+                <div class="detail-stat"><dt>Kritik stok</dt><dd id="detailCritical" class="red"></dd><small>Öncelikli kontrol</small></div>
+            </dl>
+            <div class="detail-overview">
+                <section class="detail-panel">
+                    <h3>Stok performansı</h3>
+                    <div class="detail-performance"><strong id="detailPerformance"></strong><span>100 üzerinden</span></div>
+                    <div id="detailProgress" class="progress" role="progressbar" aria-label="Stok performansı" aria-valuemin="0" aria-valuemax="100"><div id="detailProgressBar" class="progress-bar"></div></div>
+                    <p>Mağazanın mevcut stok performansının genel görünümü.</p>
+                </section>
+                <section class="detail-panel detail-notice">
+                    <h3>◉ Stok kontrol özeti</h3>
+                    <p id="detailSummary"></p>
+                </section>
+            </div>
+        </div>
+        <footer class="detail-footer"><p>Bilgiler seçili mağazanın kartından alınır.<br>Son senkronizasyon durumunu yukarıdan takip edebilirsiniz.</p><button class="btn" id="detailDone" type="button">Kapat</button></footer>
+    </dialog>
+    <script src="/js/pages/magazalar-1.js"></script>
+    <dialog id="newStoreDialog" class="store-detail new-store-dialog" aria-labelledby="newStoreTitle">
+        <form id="newStoreForm">
+            <header class="detail-header">
+                <button type="button" id="newStoreClose" class="detail-close" aria-label="Yeni mağaza formunu kapat">×</button>
+                <p class="detail-eyebrow">MAĞAZA YÖNETİMİ</p>
+                <h2 id="newStoreTitle">Yeni mağaza ekle</h2>
+                <p class="new-store-intro">Mağaza bilgilerini girerek mağaza listene ekle.</p>
+            </header>
+            <div class="detail-content new-store-fields">
+                <label for="newStoreName">Mağaza adı <span>*</span><input id="newStoreName" name="name" placeholder="Örn. İstanbul Mağaza 03" required maxlength="80" autocomplete="off" autofocus></label>
+                <div class="new-store-row">
+                    <label for="newStoreCity">Şehir <span>*</span><select id="newStoreCity" name="city" required><option value="">Şehir seçin</option value="istanbul">İstanbul</option><option value="ankara">Ankara</option><option value="izmir">İzmir</option><option value="bursa">Bursa</option></select></label>
+                    <label for="newStoreDistrict">İlçe <span>*</span><input id="newStoreDistrict" name="district" placeholder="Örn. Kadıköy" required maxlength="80" autocomplete="off"></label>
+                </div>
+                <p class="new-store-hint">Mağaza aktif olarak oluşturulur. Stok ve satış değerleri sıfırdan başlar. Kayıt bu tarayıcıda saklanır.</p>
+                <p id="newStoreError" role="alert"></p>
+            </div>
+            <footer class="detail-footer"><button type="button" id="newStoreCancel" class="btn">Vazgeç</button><button type="submit" id="newStoreSave" class="btn btn-primary">Mağazayı Ekle</button></footer>
+        </form>
+    </dialog>
+    <script src="/js/nebim-adapter.js"></script>
+    <link rel="stylesheet" href="/css/warehouse-details.css">
+    <script src="/js/stock-size-view.js"></script>
+    <script src="/js/warehouse-details.js"></script>
+    <script src="/js/store-controls.js"></script>
+
+    <script src="/js/pages/magazalar-2.js"></script>
+
+</body>
+
+</html>

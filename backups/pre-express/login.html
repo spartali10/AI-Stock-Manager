@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Giriş | AI Stock Manager</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background:
+                radial-gradient(circle at 50% 0%,
+                    rgba(161, 0, 255, .20),
+                    transparent 35%),
+                #050505;
+
+            color: #fff;
+
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .login-box {
+            width: 400px;
+            max-width: 95%;
+
+            padding: 35px;
+
+            border: 1px solid rgba(161, 0, 255, .3);
+
+            border-radius: 16px;
+
+            background: #0d0d10;
+
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, .5),
+                0 0 30px rgba(161, 0, 255, .08);
+        }
+
+        .logo {
+            text-align: center;
+
+            margin-bottom: 30px;
+        }
+
+        .logo-icon {
+            width: 65px;
+            height: 65px;
+
+            margin: auto;
+            margin-bottom: 15px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 18px;
+
+            background:
+                linear-gradient(135deg,
+                    #7000ff,
+                    #c000ff);
+
+            font-size: 30px;
+
+            box-shadow:
+                0 0 25px rgba(170, 0, 255, .45);
+        }
+
+        .logo h1 {
+            font-size: 22px;
+        }
+
+        .logo span {
+            display: block;
+
+            margin-top: 7px;
+
+            color: #c000ff;
+
+            font-size: 9px;
+
+            letter-spacing: 4px;
+        }
+
+        h2 {
+            margin-bottom: 8px;
+
+            font-size: 19px;
+        }
+
+        .description {
+            margin-bottom: 25px;
+
+            color: #85818d;
+
+            font-size: 11px;
+
+            line-height: 1.6;
+        }
+
+        label {
+            display: block;
+
+            margin-bottom: 7px;
+
+            color: #aaa7b0;
+
+            font-size: 10px;
+        }
+
+        input {
+            width: 100%;
+
+            padding: 13px;
+
+            margin-bottom: 16px;
+
+            border: 1px solid rgba(255, 255, 255, .08);
+
+            border-radius: 8px;
+
+            background: #090909;
+
+            color: #fff;
+
+            outline: none;
+
+            font-size: 11px;
+        }
+
+        input:focus {
+            border-color: #a100ff;
+
+            box-shadow:
+                0 0 15px rgba(161, 0, 255, .15);
+        }
+
+        button {
+            width: 100%;
+
+            padding: 13px;
+
+            border: 0;
+
+            border-radius: 8px;
+
+            background:
+                linear-gradient(135deg,
+                    #a100ff,
+                    #6500ff);
+
+            color: #fff;
+
+            font-size: 11px;
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        button:hover {
+            filter: brightness(1.15);
+        }
+
+        .error {
+            display: none;
+
+            margin-bottom: 15px;
+
+            padding: 10px;
+
+            border-radius: 7px;
+
+            background: rgba(255, 61, 90, .08);
+
+            color: #ff3d5a;
+
+            font-size: 10px;
+        }
+
+        .error.show {
+            display: block;
+        }
+
+        .demo {
+            margin-top: 18px;
+
+            padding: 12px;
+
+            border-radius: 8px;
+
+            background: rgba(161, 0, 255, .05);
+
+            color: #85818d;
+
+            font-size: 9px;
+
+            line-height: 1.7;
+        }
+
+        .demo strong {
+            color: #fff;
+        }
+    </style>
+    <script src="js/auth.js"></script>
+    <style>[hidden]{display:none!important}</style>
+<link rel="stylesheet" href="css/auth.css">
+</head>
+
+<body>
+
+    <div class="login-box">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                ◈
+            </div>
+
+            <h1>
+                AI STOCK MANAGER
+            </h1>
+
+            <span>
+                ADMIN PANEL
+            </span>
+
+        </div>
+
+        <h2>
+            Yönetici Girişi
+        </h2>
+
+        <p class="description">
+            Yönetim paneline erişmek için
+            kullanıcı bilgilerinizle giriş yapın.
+        </p>
+
+        <div id="error" class="error"></div>
+
+        <form id="loginForm">
+
+            <label>
+                Kullanıcı Adı
+            </label>
+
+            <input type="text" id="username" placeholder="Kullanıcı adı" required>
+
+            <label>
+                Şifre
+            </label>
+
+            <input type="password" id="password" placeholder="Şifre" required>
+
+            <button type="submit">
+                GÜVENLİ GİRİŞ
+            </button>
+
+        </form>
+
+        <div class="demo">
+
+            Demo Admin:
+            <br>
+
+            Kullanıcı:
+            <strong>admin</strong>
+
+            <br>
+
+            Şifre:
+            <strong>123456</strong>
+
+        </div>
+
+    </div>
+
+
+    
+
+<script src="js/login.js"></script>
+</body>
+
+</html>

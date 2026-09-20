@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Satış Analizi | AI Stock Manager</title>
+
+
+    <link rel="stylesheet" href="/css/pages/satis-analizi-1.css">
+
+    <script src="/js/logout.js"></script>
+    <link rel="stylesheet" href="/css/logout.css">
+    <script src="/js/auth.js"></script>
+    <link rel="stylesheet" href="/css/pages/satis-analizi-2.css">
+<link rel="stylesheet" href="/css/auth.css">
+</head>
+
+
+<body>
+
+
+    <!-- =======================================================
+     SIDEBAR
+======================================================= -->
+
+    <%- include('partials/sidebar-shared-1.html', { active: '/SatisAnalizi' }) %>
+
+
+
+    <!-- =======================================================
+     MAIN
+======================================================= -->
+
+    <main class="main">
+
+
+        <!-- ===================================================
+         TOPBAR
+    =================================================== -->
+
+        <div class="topbar">
+
+
+            <div class="search-wrapper">
+
+                <input type="search" id="globalSearch" class="search" placeholder="Ürün, kod veya mağaza ara...">
+
+                <span class="search-icon">
+                    ⌕
+                </span>
+
+            </div>
+
+
+            <div class="profile-area">
+
+                <button class="theme-btn" id="themeBtn" title="Tema değiştir">
+                    🌙
+                </button>
+
+                <button class="notification" id="notificationBtn" title="Bildirimler">
+                    ♧
+
+                    <span style="
+                        position:absolute;
+                        margin:-30px 0 0 25px;
+                        width:18px;
+                        height:18px;
+                        border-radius:50%;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        background:var(--purple-2);
+                        color:white;
+                        font-size:9px;
+                    " id="notificationCount">
+                        5
+                    </span>
+
+                </button>
+
+                <div class="user-area" id="userArea" tabindex="0">
+
+                    <div class="avatar" id="avatar">
+                        M
+                    </div>
+
+                    <div class="user-info">
+
+                        <div class="user-name" id="userName">
+                            Admin
+                        </div>
+
+                        <!-- DAKİKA SAYACI KALDIRILDI -->
+
+                        <div class="user-status">
+
+                            <span class="online-dot"></span>
+
+                            Çevrim içi
+
+                        </div>
+
+                    </div>
+
+                    <div class="user-arrow">
+                        ▾
+                    </div>
+
+
+                    <!-- ACCOUNT MENU -->
+
+                    <div class="account-menu" id="accountMenu">
+
+                        <div class="account-header">
+
+                            <div class="account-name" id="accountName">
+                                Admin
+                            </div>
+
+                            <div class="account-role">
+                                Sistem Yöneticisi
+                            </div>
+
+                            <!-- DAKİKA SAYACI KALDIRILDI -->
+
+                            <div class="account-online">
+                                ● Çevrim içi
+                            </div>
+
+                        </div>
+
+
+                        <a href="/Ayarlar" class="account-item">
+
+                            <span class="account-item-icon">
+                                ♙
+                            </span>
+
+                            Hesabım
+
+                        </a>
+
+
+                        <a href="/Ayarlar#guvenlik" class="account-item">
+
+                            <span class="account-item-icon">
+                                🔐
+                            </span>
+
+                            Giriş Güvenliği
+
+                        </a>
+
+
+                        <button class="account-item logout" id="logoutBtn" type="button">
+                            <span class="account-item-icon" aria-hidden="true">⇥</span>
+                            Güvenli Çıkış
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ===================================================
+         PAGE HEADER
+    =================================================== -->
+
+        <div class="page-header">
+
+
+            <div class="page-title">
+
+                <h1>
+                    Satış Analizi
+                </h1>
+
+                <p>
+                    Stok ürünlerinizin satış performansını,
+                    trendlerini ve mağaza bazlı satış
+                    hareketlerini analiz edin.
+                </p>
+
+            </div>
+
+
+            <div class="page-actions">
+
+                <button class="btn" id="exportBtn" type="button">
+                    ⇩ Dışa Aktar
+                </button>
+
+
+                <button class="btn btn-primary" id="reportBtn" type="button">
+                    ＋ Satış Raporu
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ===================================================
+         STATISTICS
+    =================================================== -->
+
+        <section class="stats">
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Toplam Satış
+                    </div>
+
+                    <div class="stat-icon">
+                        ↗
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    18.426
+                </div>
+
+                <div class="stat-description green">
+                    ↑ %12.8 geçen aya göre
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Satış Geliri
+                    </div>
+
+                    <div class="stat-icon">
+                        ₺
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    ₺4.82M
+                </div>
+
+                <div class="stat-description green">
+                    ↑ %9.4 geçen aya göre
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Ortalama Sepet
+                    </div>
+
+                    <div class="stat-icon">
+                        ◉
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    ₺261
+                </div>
+
+                <div class="stat-description blue">
+                    1.8 ürün / işlem
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Satış Büyümesi
+                    </div>
+
+                    <div class="stat-icon">
+                        %
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    +12.8%
+                </div>
+
+                <div class="stat-description green">
+                    Pozitif trend
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ===================================================
+         CONTENT GRID
+    =================================================== -->
+
+        <div class="content-grid">
+
+
+            <!-- =================================================
+             LEFT COLUMN
+        ================================================= -->
+
+            <div>
+
+
+                <!-- SALES CHART -->
+
+                <div class="panel chart-panel">
+
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ↗
+                            </span>
+
+                            SATIŞ TRENDİ
+
+                        </div>
+
+
+                        <div class="legend">
+
+                            <div class="legend-item">
+
+                                <span class="legend-dot purple"></span>
+
+                                Satış Adedi
+
+                            </div>
+
+
+                            <div class="legend-item">
+
+                                <span class="legend-dot green"></span>
+
+                                Hedef
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="filters">
+
+
+                        <input class="filter-input" id="chartSearch" placeholder="Ürün veya mağaza ara...">
+
+
+                        <select class="filter-select" id="chartStore">
+
+                            <option value="">
+                                Tüm Mağazalar
+                            </option>
+
+                            <option>
+                                İstanbul Mağaza 01
+                            </option>
+
+                            <option>
+                                İstanbul Mağaza 02
+                            </option>
+
+                            <option>
+                                Ankara Mağaza 01
+                            </option>
+
+                            <option>
+                                İzmir Mağaza 01
+                            </option>
+
+                            <option>
+                                Bursa Mağaza 01
+                            </option>
+
+                        </select>
+
+
+                        <select class="filter-select" id="chartCategory">
+
+                            <option value="">
+                                Tüm Kategoriler
+                            </option>
+
+                            <option>
+                                T-Shirt
+                            </option>
+
+                            <option>
+                                Pantolon
+                            </option>
+
+                            <option>
+                                Ayakkabı
+                            </option>
+
+                            <option>
+                                Aksesuar
+                            </option>
+
+                        </select>
+
+
+                        <select class="filter-select" id="chartPeriod">
+
+                            <option value="7">
+                                Son 7 Gün
+                            </option>
+
+                            <option value="30" selected>
+                                Son 30 Gün
+                            </option>
+
+                            <option value="365">Son 1 Yıl</option>
+                            <option value="90">
+                                Son 90 Gün
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="chart-container">
+
+
+                        <div class="y-labels">
+
+                            <span class="y-label">
+                                800
+                            </span>
+
+                            <span class="y-label">
+                                600
+                            </span>
+
+                            <span class="y-label">
+                                400
+                            </span>
+
+                            <span class="y-label">
+                                200
+                            </span>
+
+                            <span class="y-label">
+                                0
+                            </span>
+
+                        </div>
+
+
+                        <div class="chart-grid">
+
+                            <span class="grid-line"></span>
+                            <span class="grid-line"></span>
+                            <span class="grid-line"></span>
+                            <span class="grid-line"></span>
+                            <span class="grid-line"></span>
+
+                        </div>
+
+
+                        <div class="chart-area">
+
+                            <svg class="chart-svg" viewBox="0 0 700 250" preserveAspectRatio="none">
+
+                                <defs>
+
+                                    <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+
+                                        <stop offset="0%" stop-color="#c000ff" stop-opacity=".45" />
+
+                                        <stop offset="100%" stop-color="#7000ff" stop-opacity="0" />
+
+                                    </linearGradient>
+
+                                </defs>
+
+
+                                <path class="chart-area-fill" d="
+                                    M0,195
+                                    L70,165
+                                    L140,180
+                                    L210,120
+                                    L280,135
+                                    L350,95
+                                    L420,110
+                                    L490,68
+                                    L560,85
+                                    L630,40
+                                    L700,55
+                                    L700,250
+                                    L0,250
+                                    Z
+                                " />
+
+
+                                <path class="chart-line" d="
+                                    M0,195
+                                    L70,165
+                                    L140,180
+                                    L210,120
+                                    L280,135
+                                    L350,95
+                                    L420,110
+                                    L490,68
+                                    L560,85
+                                    L630,40
+                                    L700,55
+                                " />
+
+
+                                <circle class="chart-point" cx="0" cy="195" r="5" />
+
+                                <circle class="chart-point" cx="140" cy="180" r="5" />
+
+                                <circle class="chart-point" cx="280" cy="135" r="5" />
+
+                                <circle class="chart-point" cx="420" cy="110" r="5" />
+
+                                <circle class="chart-point" cx="560" cy="85" r="5" />
+
+                                <circle class="chart-point" cx="700" cy="55" r="5" />
+
+                            </svg>
+
+                        </div>
+
+
+                        <div class="chart-labels">
+
+                            <span class="chart-label">
+                                01 Ağu
+                            </span>
+
+                            <span class="chart-label">
+                                05 Ağu
+                            </span>
+
+                            <span class="chart-label">
+                                10 Ağu
+                            </span>
+
+                            <span class="chart-label">
+                                15 Ağu
+                            </span>
+
+                            <span class="chart-label">
+                                20 Ağu
+                            </span>
+
+                            <span class="chart-label">
+                                25 Ağu
+                            </span>
+
+                            <span class="chart-label">
+                                30 Ağu
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- PRODUCT SALES TABLE -->
+
+                <div class="panel">
+
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ◇
+                            </span>
+
+                            ÜRÜN SATIŞ PERFORMANSI
+
+                        </div>
+
+
+                        <span id="productCount" style="
+                            color:var(--muted-2);
+                            font-size:9px;
+                        ">
+                            5 ürün
+                        </span>
+
+                    </div>
+
+
+                    <div class="table-wrapper">
+
+
+                        <table id="salesTable">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>#</th>
+                                    <th>ÜRÜN</th>
+                                    <th>MAĞAZA</th>
+                                    <th>MEVCUT STOK</th>
+                                    <th>SATILAN</th>
+                                    <th>GELİR</th>
+                                    <th>TREND</th>
+                                    <th>PERFORMANS</th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+<tr><td colspan="8">Stok verileri yükleniyor…</td></tr>
+</tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                 AI ANALYSIS
+            ================================================= -->
+
+                <div class="panel">
+
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ✦
+                            </span>
+
+                            AI SATIŞ ANALİZİ
+
+                        </div>
+
+
+                        <span style="
+                            color:var(--green);
+                            font-size:9px;
+                        ">
+                            ● ANALİZ HAZIR
+                        </span>
+
+                    </div>
+
+
+                    <div class="ai-insight">
+
+
+                        <div class="ai-label">
+                            ✦ YAPAY ZEKA ÖNERİSİ
+                        </div>
+
+
+                        <p>
+
+                            Stok verileri ve satış hareketleri
+                            birlikte değerlendirildiğinde
+                            <strong>Nike T-Shirt 1023</strong>
+                            en güçlü satış performansını gösteriyor.
+
+                            <br><br>
+
+                            Ürünün
+                            <strong>İstanbul Mağaza 01</strong>
+                            satışları son dönemde
+                            <strong>%18.4</strong>
+                            artmış durumda.
+
+                            <br><br>
+
+                            Buna karşılık
+                            <strong>Sweatshirt 3021</strong>
+                            ürününde satışlar
+                            <strong>%3.2</strong>
+                            gerilemiş ve stok seviyesi de kritik
+                            durumda.
+
+                            <br><br>
+
+                            <strong>Önerilen aksiyon:</strong>
+                            Nike T-Shirt 1023 için stok seviyesini
+                            artırın; Sweatshirt 3021 için ise
+                            İzmir Mağaza 01 satış kampanyası veya
+                            mağazalar arası stok transferi değerlendirin.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+             RIGHT COLUMN
+        ================================================= -->
+
+            <div>
+
+
+                <!-- PERIOD -->
+
+                <div class="panel">
+
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ◷
+                            </span>
+
+                            ANALİZ DÖNEMİ
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="period-box">
+
+                        <div class="period-grid">
+
+
+                            <button class="period-btn" data-period="7" type="button">
+                                Son 7 Gün
+                            </button>
+
+
+                            <button class="period-btn active" data-period="30" type="button">
+                                Son 30 Gün
+                            </button>
+
+
+                            <button class="period-btn" data-period="90" type="button">
+                                Son 90 Gün
+                            </button>
+
+
+                            <button class="period-btn" data-period="365" type="button">
+                                Son 1 Yıl
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- SALES SUMMARY -->
+
+                <div class="panel">
+
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ◉
+                            </span>
+
+                            SATIŞ ÖZETİ
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="summary-list">
+
+
+                        <div class="summary-row">
+
+                            <span class="summary-label">
+                                Toplam işlem
+                            </span>
+
+                            <span class="summary-value">
+                                10.238
+                            </span>
+
+                        </div>
+
+
+                        <div class="summary-row">
+
+                            <span class="summary-label">
+                                Satılan ürün
+                            </span>
+
+                            <span class="summary-value">
+                                18.426
+                            </span>
+
+                        </div>
+
+
+                        <div class="summary-row">
+
+                            <span class="summary-label">
+                                Toplam gelir
+                            </span>
+
+                            <span class="summary-value purple">
+                                ₺4.82M
+                            </span>
+
+                        </div>
+
+
+                        <div class="summary-row">
+
+                            <span class="summary-label">
+                                Ortalama sepet
+                            </span>
+
+                            <span class="summary-value">
+                                ₺261
+                            </span>
+
+                        </div>
+
+
+                        <div class="summary-row">
+
+                            <span class="summary-label">
+                                Büyüme
+                            </span>
+
+                            <span class="summary-value green">
+                                +12.8%
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- TOP PRODUCTS -->
+
+                <div class="panel">
+
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ★
+                            </span>
+
+                            EN ÇOK SATANLAR
+
+                        </div>
+
+
+                        <span style="
+                            color:var(--purple-2);
+                            font-size:9px;
+                        ">
+                            TOP 5
+                        </span>
+
+                    </div>
+
+
+                    <div class="top-products">
+
+
+                        <div class="top-product">
+
+                            <div class="rank">
+                                01
+                            </div>
+
+                            <div class="top-product-info">
+
+                                <div class="top-product-name">
+                                    Nike T-Shirt 1023
+                                </div>
+
+                                <div class="top-product-code">
+                                    NT1023
+                                </div>
+
+                            </div>
+
+                            <div class="top-product-value">
+
+                                <strong>
+                                    1.248
+                                </strong>
+
+                                <span>
+                                    +18.4%
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="top-product">
+
+                            <div class="rank">
+                                02
+                            </div>
+
+                            <div class="top-product-info">
+
+                                <div class="top-product-name">
+                                    Pantolon 2045
+                                </div>
+
+                                <div class="top-product-code">
+                                    PN2045
+                                </div>
+
+                            </div>
+
+                            <div class="top-product-value">
+
+                                <strong>
+                                    986
+                                </strong>
+
+                                <span>
+                                    +14.2%
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="top-product">
+
+                            <div class="rank">
+                                03
+                            </div>
+
+                            <div class="top-product-info">
+
+                                <div class="top-product-name">
+                                    Ayakkabı 4012
+                                </div>
+
+                                <div class="top-product-code">
+                                    AY4012
+                                </div>
+
+                            </div>
+
+                            <div class="top-product-value">
+
+                                <strong>
+                                    864
+                                </strong>
+
+                                <span>
+                                    +11.7%
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="top-product">
+
+                            <div class="rank">
+                                04
+                            </div>
+
+                            <div class="top-product-info">
+
+                                <div class="top-product-name">
+                                    Çanta 5015
+                                </div>
+
+                                <div class="top-product-code">
+                                    CN5015
+                                </div>
+
+                            </div>
+
+                            <div class="top-product-value">
+
+                                <strong>
+                                    642
+                                </strong>
+
+                                <span>
+                                    +8.6%
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="top-product">
+
+                            <div class="rank">
+                                05
+                            </div>
+
+                            <div class="top-product-info">
+
+                                <div class="top-product-name">
+                                    Sweatshirt 3021
+                                </div>
+
+                                <div class="top-product-code">
+                                    SW3021
+                                </div>
+
+                            </div>
+
+                            <div class="top-product-value">
+
+                                <strong>
+                                    518
+                                </strong>
+
+                                <span style="color:var(--red)">
+                                    -3.2%
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- CATEGORY ANALYSIS -->
+
+                <div class="panel">
+
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ◇
+                            </span>
+
+                            KATEGORİ DAĞILIMI
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="category-list">
+
+
+                        <div class="category-row">
+
+                            <div class="category-top">
+
+                                <span class="category-name">
+                                    T-Shirt
+                                </span>
+
+                                <span class="category-percent">
+                                    34%
+                                </span>
+
+                            </div>
+
+
+                            <div class="category-progress">
+
+                                <span style="width:34%"></span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="category-row">
+
+                            <div class="category-top">
+
+                                <span class="category-name">
+                                    Pantolon
+                                </span>
+
+                                <span class="category-percent">
+                                    27%
+                                </span>
+
+                            </div>
+
+
+                            <div class="category-progress">
+
+                                <span style="width:27%"></span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="category-row">
+
+                            <div class="category-top">
+
+                                <span class="category-name">
+                                    Ayakkabı
+                                </span>
+
+                                <span class="category-percent">
+                                    23%
+                                </span>
+
+                            </div>
+
+
+                            <div class="category-progress">
+
+                                <span style="width:23%"></span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="category-row">
+
+                            <div class="category-top">
+
+                                <span class="category-name">
+                                    Aksesuar
+                                </span>
+
+                                <span class="category-percent">
+                                    16%
+                                </span>
+
+                            </div>
+
+
+                            <div class="category-progress">
+
+                                <span style="width:16%"></span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- FOOTER -->
+
+        <div class="footer">
+
+            AI Stock Manager
+
+            •
+
+            Nebim V3 Entegrasyon Paneli
+
+        </div>
+
+    </main>
+
+
+
+    <!-- =======================================================
+     TOAST
+======================================================= -->
+
+    <div id="toast" class="toast"></div>
+
+
+
+    <script src="/js/nebim-adapter.js"></script>
+
+    <script src="/js/stock-size-view.js"></script>
+    <script src="/js/sales-performance.js"></script>
+    <script src="/js/pages/satis-analizi-1.js"></script>
+
+
+</body>
+
+</html>

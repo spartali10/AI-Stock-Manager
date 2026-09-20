@@ -1,0 +1,3500 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stok Yönetimi | AI Stock Manager</title>
+
+    <style>
+        /* =========================================================
+   THEME VARIABLES
+========================================================= */
+
+        :root {
+            --bg: #050505;
+            --bg-secondary: #090909;
+            --sidebar-bg: #07070a;
+
+            --card: #0d0d0f;
+            --card-secondary: #111114;
+            --input: #090909;
+
+            --text: #ffffff;
+            --text-secondary: #aaa7b0;
+            --muted: #85818d;
+            --muted-2: #65616c;
+
+            --border: rgba(178, 0, 255, .25);
+            --border-light: rgba(255, 255, 255, .07);
+
+            --purple: #a100ff;
+            --purple-2: #c000ff;
+            --purple-3: #7000ff;
+
+            --green: #00e676;
+            --yellow: #ffd000;
+            --red: #ff3d5a;
+
+            --hover: rgba(161, 0, 255, .06);
+
+            --shadow:
+                0 10px 35px rgba(0, 0, 0, .28);
+
+            --glow:
+                0 0 8px rgba(170, 0, 255, .45),
+                0 0 25px rgba(170, 0, 255, .15);
+
+            --transition: .25s ease;
+        }
+
+
+        /* =========================================================
+   LIGHT THEME
+========================================================= */
+
+        body.light-theme {
+
+            --bg: #f4f5f9;
+            --bg-secondary: #ffffff;
+            --sidebar-bg: #ffffff;
+
+            --card: #ffffff;
+            --card-secondary: #f8f8fb;
+            --input: #f5f5f8;
+
+            --text: #18151d;
+            --text-secondary: #55515e;
+            --muted: #77727f;
+            --muted-2: #9994a1;
+
+            --border: rgba(125, 0, 190, .18);
+            --border-light: rgba(20, 15, 30, .08);
+
+            --hover: rgba(161, 0, 255, .055);
+
+            --shadow:
+                0 8px 30px rgba(40, 25, 60, .08);
+
+            --glow:
+                0 0 10px rgba(161, 0, 255, .18),
+                0 0 25px rgba(161, 0, 255, .08);
+        }
+
+
+        /* =========================================================
+   RESET
+========================================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+
+            background:
+                radial-gradient(circle at 80% 0%,
+                    rgba(140, 0, 255, .10),
+                    transparent 30%),
+                radial-gradient(circle at 15% 100%,
+                    rgba(120, 0, 255, .07),
+                    transparent 30%),
+                var(--bg);
+
+            color: var(--text);
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            transition:
+                background-color var(--transition),
+                color var(--transition);
+        }
+
+
+        /* =========================================================
+   SIDEBAR
+========================================================= */
+
+        .sidebar {
+            position: fixed;
+
+            left: 0;
+            top: 0;
+
+            width: 250px;
+            height: 100vh;
+
+            padding: 22px 14px;
+
+            background: var(--sidebar-bg);
+
+            border-right:
+                1px solid var(--border);
+
+            z-index: 1000;
+
+            overflow-y: auto;
+
+            box-shadow:
+                10px 0 40px rgba(0, 0, 0, .08);
+
+            transition:
+                background var(--transition),
+                border-color var(--transition);
+        }
+
+
+        /* =========================================================
+   LOGO
+========================================================= */
+
+        .logo {
+            height: 62px;
+
+            display: flex;
+            align-items: center;
+
+            gap: 12px;
+
+            padding: 0 10px 20px;
+
+            margin-bottom: 10px;
+
+            border-bottom:
+                1px solid var(--border-light);
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 13px;
+
+            background:
+                linear-gradient(135deg,
+                    #7000ff,
+                    #c000ff);
+
+            color: #fff;
+
+            font-size: 20px;
+
+            box-shadow:
+                0 0 15px rgba(170, 0, 255, .45);
+        }
+
+        .logo-text {
+            color: var(--text);
+
+            font-size: 16px;
+
+            font-weight: 800;
+
+            letter-spacing: .8px;
+
+            line-height: 1.1;
+        }
+
+        .logo-text span {
+            display: block;
+
+            margin-top: 5px;
+
+            color: var(--purple-2);
+
+            font-size: 9px;
+
+            letter-spacing: 4px;
+        }
+
+
+        /* =========================================================
+   MENU
+========================================================= */
+
+        .menu-title {
+            padding: 18px 12px 8px;
+
+            color: var(--muted-2);
+
+            font-size: 9px;
+
+            font-weight: 700;
+
+            letter-spacing: 1.8px;
+
+            text-transform: uppercase;
+        }
+
+        .menu-item {
+            position: relative;
+
+            display: flex;
+            align-items: center;
+
+            gap: 13px;
+
+            height: 46px;
+
+            margin: 4px 0;
+
+            padding: 0 13px;
+
+            border-radius: 10px;
+
+            color: var(--muted);
+
+            text-decoration: none;
+
+            font-size: 12px;
+
+            transition:
+                color .2s ease,
+                background .2s ease,
+                transform .2s ease;
+        }
+
+        .menu-icon {
+            width: 22px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: var(--muted);
+
+            font-size: 17px;
+
+            transition: .2s;
+        }
+
+        .menu-item:hover {
+            color: var(--text);
+
+            background:
+                linear-gradient(90deg,
+                    rgba(161, 0, 255, .14),
+                    rgba(161, 0, 255, .03));
+
+            transform: translateX(2px);
+        }
+
+        .menu-item:hover .menu-icon {
+            color: var(--purple-2);
+        }
+
+
+        /* ACTIVE */
+
+        .menu-item.active {
+            color: #fff;
+
+            background:
+                linear-gradient(90deg,
+                    rgba(161, 0, 255, .75),
+                    rgba(100, 0, 255, .18));
+
+            box-shadow:
+                0 5px 20px rgba(150, 0, 255, .18);
+        }
+
+        body.light-theme .menu-item.active {
+            color: #fff;
+        }
+
+        .menu-item.active::before {
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+
+            top: 8px;
+            bottom: 8px;
+
+            width: 3px;
+
+            border-radius:
+                0 4px 4px 0;
+
+            background:
+                linear-gradient(180deg,
+                    #d000ff,
+                    #7000ff);
+
+            box-shadow:
+                0 0 10px #a100ff;
+        }
+
+        .menu-item.active .menu-icon {
+            color: white;
+
+            filter:
+                drop-shadow(0 0 7px rgba(210, 0, 255, .8));
+        }
+
+
+        /* =========================================================
+   MAIN
+========================================================= */
+
+        .main {
+            margin-left: 250px;
+
+            padding: 25px 30px;
+
+            min-height: 100vh;
+        }
+
+
+        /* =========================================================
+   TOPBAR
+========================================================= */
+
+        .topbar {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            margin-bottom: 28px;
+        }
+
+        .search-wrapper {
+            position: relative;
+
+            width: 390px;
+        }
+
+        .search {
+            width: 100%;
+
+            padding:
+                13px 45px 13px 17px;
+
+            background: var(--input);
+
+            border:
+                1px solid var(--border-light);
+
+            border-radius: 9px;
+
+            color: var(--text);
+
+            outline: none;
+
+            font-size: 12px;
+
+            transition: .25s;
+        }
+
+        .search:focus {
+            border-color: var(--purple);
+
+            box-shadow: var(--glow);
+        }
+
+        .search::placeholder {
+            color: var(--muted-2);
+        }
+
+        .search-icon {
+            position: absolute;
+
+            right: 15px;
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            color: var(--purple-2);
+
+            font-size: 19px;
+        }
+
+        .profile-area {
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+        }
+
+        .theme-btn,
+        .notification {
+            width: 40px;
+            height: 40px;
+
+            border-radius: 10px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: var(--input);
+
+            border:
+                1px solid var(--border-light);
+
+            color: var(--text);
+
+            cursor: pointer;
+
+            transition: .25s;
+        }
+
+        .theme-btn:hover,
+        .notification:hover {
+            border-color: var(--purple);
+
+            box-shadow: var(--glow);
+
+            transform: translateY(-1px);
+        }
+
+        .notification {
+            position: relative;
+        }
+
+        .notification-number {
+            position: absolute;
+
+            top: -5px;
+            right: -5px;
+
+            width: 18px;
+            height: 18px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            background: var(--purple-2);
+
+            color: #fff;
+
+            font-size: 9px;
+
+            box-shadow: var(--glow);
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            background:
+                linear-gradient(135deg,
+                    #7000ff,
+                    #c000ff);
+
+            color: #fff;
+
+            font-weight: bold;
+
+            box-shadow:
+                0 0 15px rgba(170, 0, 255, .35);
+        }
+
+        /* USER AREA */
+
+        .user-area {
+            position: relative;
+            min-width: 190px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 5px 9px 5px 5px;
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            background: var(--input);
+            cursor: pointer;
+        }
+
+        .user-area:hover {
+            border-color: var(--purple);
+        }
+
+        .user-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .user-name {
+            color: var(--text);
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .user-status {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 4px;
+            color: var(--green);
+            font-size: 8px;
+        }
+
+        .online-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 7px var(--green);
+        }
+
+        .user-arrow {
+            color: var(--muted);
+        }
+
+        .user-area.open .user-arrow {
+            transform: rotate(180deg);
+        }
+
+        /* ACCOUNT MENU */
+
+        .account-menu {
+            position: absolute;
+            right: 0;
+            top: calc(100% + 10px);
+            width: 245px;
+            padding: 8px;
+            border-radius: 12px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-8px);
+            transition: .2s;
+            z-index: 5000;
+        }
+
+        .user-area.open .account-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .account-header {
+            padding: 11px 10px 13px;
+            margin-bottom: 5px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .account-name {
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .account-role {
+            margin-top: 4px;
+            color: var(--purple-2);
+            font-size: 9px;
+        }
+
+        .account-online {
+            margin-top: 7px;
+            color: var(--green);
+            font-size: 8px;
+        }
+
+        .account-item {
+            width: 100%;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 10px;
+            margin: 3px 0;
+            border-radius: 8px;
+            background: transparent;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 10px;
+            text-align: left;
+        }
+
+        .account-item:hover {
+            color: var(--text);
+            background: rgba(161, 0, 255, .09);
+        }
+
+        .account-item-icon {
+            width: 25px;
+            color: var(--purple-2);
+            text-align: center;
+        }
+
+        .account-item.logout {
+            margin-top: 6px;
+            border-top: 1px solid var(--border-light);
+            color: var(--red);
+        }
+
+
+        /* =========================================================
+   PAGE HEADER
+========================================================= */
+
+        .page-header {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: flex-end;
+
+            gap: 20px;
+
+            margin-bottom: 25px;
+        }
+
+        .page-title h1 {
+            color: var(--text);
+
+            font-size: 29px;
+
+            letter-spacing: -.5px;
+        }
+
+        .page-title p {
+            margin-top: 7px;
+
+            color: var(--muted);
+
+            font-size: 12px;
+        }
+
+        .page-actions {
+            display: flex;
+
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 11px 16px;
+
+            border-radius: 8px;
+
+            border:
+                1px solid var(--border-light);
+
+            background: var(--card);
+
+            color: var(--text-secondary);
+
+            cursor: pointer;
+
+            font-size: 11px;
+
+            transition: .2s;
+        }
+
+        .btn:hover {
+            border-color: var(--purple);
+
+            color: var(--text);
+
+            box-shadow: var(--glow);
+        }
+
+        .btn-primary {
+            color: #fff;
+
+            border-color: var(--purple);
+
+            background:
+                linear-gradient(135deg,
+                    #a100ff,
+                    #6500ff);
+
+            box-shadow:
+                0 0 12px rgba(160, 0, 255, .25);
+        }
+
+        .btn-primary:hover {
+            filter: brightness(1.15);
+
+            transform:
+                translateY(-1px);
+        }
+
+
+        /* =========================================================
+   STAT CARDS
+========================================================= */
+
+        .stats {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 16px;
+
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            position: relative;
+
+            overflow: hidden;
+
+            padding: 20px;
+
+            min-height: 135px;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(145deg,
+                    var(--card-secondary),
+                    var(--card));
+
+            border:
+                1px solid var(--border);
+
+            box-shadow: var(--shadow);
+
+            transition: .25s;
+        }
+
+        .stat-card::before {
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+            top: 0;
+
+            width: 100%;
+            height: 2px;
+
+            background:
+                linear-gradient(90deg,
+                    transparent,
+                    var(--purple-2),
+                    transparent);
+        }
+
+        .stat-card:hover {
+            transform:
+                translateY(-3px);
+
+            border-color:
+                var(--purple);
+
+            box-shadow: var(--glow);
+        }
+
+        .stat-top {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+        }
+
+        .stat-title {
+            color: var(--muted);
+
+            font-size: 10px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+        }
+
+        .stat-icon {
+            width: 36px;
+            height: 36px;
+
+            border-radius: 9px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            color: var(--purple-2);
+
+            background:
+                rgba(160, 0, 255, .08);
+
+            border:
+                1px solid rgba(160, 0, 255, .18);
+
+            font-size: 18px;
+        }
+
+        .stat-value {
+            margin-top: 15px;
+
+            color: var(--text);
+
+            font-size: 27px;
+
+            font-weight: 700;
+        }
+
+        .stat-description {
+            margin-top: 7px;
+
+            font-size: 10px;
+
+            color: var(--muted-2);
+        }
+
+        .stat-description.green {
+            color: var(--green);
+        }
+
+        .stat-description.yellow {
+            color: var(--yellow);
+        }
+
+        .stat-description.red {
+            color: var(--red);
+        }
+
+
+        /* =========================================================
+   CONTENT GRID
+========================================================= */
+
+        .content-grid {
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1.7fr) minmax(290px, .75fr);
+
+            gap: 20px;
+        }
+
+
+        /* =========================================================
+   PANEL
+========================================================= */
+
+        .panel {
+            margin-bottom: 20px;
+
+            overflow: hidden;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(145deg,
+                    var(--card),
+                    var(--card-secondary));
+
+            border:
+                1px solid var(--border-light);
+
+            box-shadow:
+                var(--shadow);
+
+            transition:
+                background var(--transition),
+                border-color var(--transition);
+        }
+
+        .panel-header {
+            min-height: 60px;
+
+            padding: 15px 18px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            border-bottom:
+                1px solid var(--border-light);
+        }
+
+        .panel-title {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            color: var(--text);
+
+            font-size: 14px;
+
+            font-weight: 700;
+        }
+
+        .panel-title-icon {
+            color: var(--purple-2);
+
+            filter:
+                drop-shadow(0 0 7px rgba(190, 0, 255, .7));
+        }
+
+
+        /* =========================================================
+   FILTERS
+========================================================= */
+
+        .filters {
+            display: grid;
+
+            grid-template-columns:
+                1.5fr 1fr 1fr 1fr;
+
+            gap: 9px;
+
+            padding: 15px 18px;
+
+            border-bottom:
+                1px solid var(--border-light);
+        }
+
+        .filter-input,
+        .filter-select {
+            width: 100%;
+
+            padding: 10px 11px;
+
+            border-radius: 7px;
+
+            background: var(--input);
+
+            border:
+                1px solid var(--border-light);
+
+            color: var(--text-secondary);
+
+            outline: none;
+
+            font-size: 10px;
+
+            transition: .2s;
+        }
+
+        .filter-input:focus,
+        .filter-select:focus {
+            color: var(--text);
+
+            border-color:
+                var(--purple);
+
+            box-shadow:
+                0 0 8px rgba(160, 0, 255, .18);
+        }
+
+        .filter-select option {
+            background: var(--card);
+            color: var(--text);
+        }
+
+
+        /* =========================================================
+   TABLE
+========================================================= */
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+
+            border-collapse: collapse;
+        }
+
+        th {
+            padding:
+                12px 14px;
+
+            color: var(--muted-2);
+
+            font-size: 9px;
+
+            font-weight: 600;
+
+            letter-spacing: .8px;
+
+            text-align: left;
+
+            white-space: nowrap;
+
+            border-bottom:
+                1px solid var(--border-light);
+        }
+
+        td {
+            padding:
+                13px 14px;
+
+            color: var(--text-secondary);
+
+            border-bottom:
+                1px solid var(--border-light);
+
+            font-size: 11px;
+
+            white-space: nowrap;
+        }
+
+        tbody tr {
+            transition: .2s;
+        }
+
+        tbody tr:hover {
+            background:
+                var(--hover);
+        }
+
+
+        /* =========================================================
+   PRODUCT
+========================================================= */
+
+        .product {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+        }
+
+        .product-image {
+            width: 39px;
+            height: 39px;
+
+            border-radius: 8px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            background:
+                linear-gradient(145deg,
+                    var(--card-secondary),
+                    var(--input));
+
+            border:
+                1px solid var(--border-light);
+
+            font-size: 18px;
+        }
+
+        .product-name {
+            color: var(--text);
+
+            font-weight: 600;
+
+            font-size: 11px;
+        }
+
+        .product-code {
+            margin-top: 3px;
+
+            color: var(--muted-2);
+
+            font-size: 9px;
+        }
+
+
+        /* =========================================================
+   STOCK
+========================================================= */
+
+        .stock-info {
+            min-width: 105px;
+        }
+
+        .stock-number {
+            display: flex;
+
+            justify-content: space-between;
+
+            margin-bottom: 6px;
+
+            font-size: 10px;
+        }
+
+        .stock-number strong {
+            color: var(--text);
+        }
+
+        .stock-number span {
+            color: var(--muted-2);
+        }
+
+        .progress {
+            width: 100%;
+
+            height: 5px;
+
+            overflow: hidden;
+
+            border-radius: 10px;
+
+            background:
+                rgba(130, 120, 140, .18);
+        }
+
+        .progress-bar {
+            height: 100%;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(90deg,
+                    #7000ff,
+                    #c000ff);
+
+            box-shadow:
+                0 0 8px rgba(180, 0, 255, .4);
+        }
+
+        .progress-bar.warning {
+            background:
+                linear-gradient(90deg,
+                    #d89d00,
+                    #ffd000);
+
+            box-shadow:
+                0 0 8px rgba(255, 208, 0, .3);
+        }
+
+        .progress-bar.danger {
+            background:
+                linear-gradient(90deg,
+                    #b80035,
+                    #ff3d5a);
+
+            box-shadow:
+                0 0 8px rgba(255, 61, 90, .3);
+        }
+
+
+        /* =========================================================
+   STATUS
+========================================================= */
+
+        .status {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 5px;
+
+            padding:
+                5px 9px;
+
+            border-radius: 20px;
+
+            border: 1px solid;
+
+            font-size: 9px;
+        }
+
+        .status::before {
+            content: "";
+
+            width: 5px;
+            height: 5px;
+
+            border-radius: 50%;
+
+            background: currentColor;
+
+            box-shadow:
+                0 0 6px currentColor;
+        }
+
+        .status.normal {
+            color: var(--green);
+
+            border-color:
+                rgba(0, 230, 118, .35);
+
+            background:
+                rgba(0, 230, 118, .05);
+        }
+
+        .status.low {
+            color: var(--yellow);
+
+            border-color:
+                rgba(255, 208, 0, .35);
+
+            background:
+                rgba(255, 208, 0, .05);
+        }
+
+        .status.critical {
+            color: var(--red);
+
+            border-color:
+                rgba(255, 61, 90, .35);
+
+            background:
+                rgba(255, 61, 90, .05);
+        }
+
+
+        /* =========================================================
+   ACTION
+========================================================= */
+
+        .action-btn {
+            padding:
+                6px 9px;
+
+            border-radius: 6px;
+
+            background: var(--input);
+
+            border:
+                1px solid var(--border-light);
+
+            color: var(--text-secondary);
+
+            cursor: pointer;
+
+            font-size: 9px;
+
+            transition: .2s;
+        }
+
+        .action-btn:hover {
+            color: var(--text);
+
+            border-color:
+                var(--purple);
+
+            box-shadow:
+                0 0 8px rgba(160, 0, 255, .2);
+        }
+
+
+        /* =========================================================
+   RIGHT COLUMN
+========================================================= */
+
+        .stock-health {
+            padding: 20px;
+        }
+
+        .health-circle {
+            width: 145px;
+            height: 145px;
+
+            margin:
+                8px auto 20px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+            justify-content: center;
+
+            background:
+                radial-gradient(circle,
+                    var(--card-secondary) 55%,
+                    transparent 56%);
+
+            border:
+                10px solid rgba(160, 0, 255, .12);
+
+            box-shadow:
+                inset 0 0 20px rgba(160, 0, 255, .08),
+                0 0 25px rgba(160, 0, 255, .12);
+        }
+
+        .health-score {
+            font-size: 32px;
+
+            font-weight: 700;
+
+            color: var(--text);
+        }
+
+        .health-label {
+            margin-top: 3px;
+
+            color: var(--muted);
+
+            font-size: 9px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+        }
+
+        .health-list {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 10px;
+        }
+
+        .health-row {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 10px;
+
+            border-radius: 7px;
+
+            background:
+                rgba(130, 120, 140, .06);
+
+            border:
+                1px solid var(--border-light);
+        }
+
+        .health-left {
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            color: var(--text-secondary);
+
+            font-size: 10px;
+        }
+
+        .dot {
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+        }
+
+        .dot.green {
+            background: var(--green);
+
+            box-shadow:
+                0 0 7px var(--green);
+        }
+
+        .dot.yellow {
+            background: var(--yellow);
+
+            box-shadow:
+                0 0 7px var(--yellow);
+        }
+
+        .dot.red {
+            background: var(--red);
+
+            box-shadow:
+                0 0 7px var(--red);
+        }
+
+        .health-count {
+            color: var(--text);
+
+            font-size: 11px;
+
+            font-weight: bold;
+        }
+
+
+        /* =========================================================
+   LOW STOCK
+========================================================= */
+
+        .low-stock-list {
+            padding:
+                4px 18px 10px;
+        }
+
+        .low-item {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            padding: 12px 0;
+
+            border-bottom:
+                1px solid var(--border-light);
+        }
+
+        .low-item:last-child {
+            border-bottom: none;
+        }
+
+        .low-icon {
+            width: 35px;
+            height: 35px;
+
+            border-radius: 7px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            background:
+                rgba(255, 61, 90, .06);
+
+            border:
+                1px solid rgba(255, 61, 90, .15);
+        }
+
+        .low-info {
+            flex: 1;
+        }
+
+        .low-name {
+            color: var(--text);
+
+            font-size: 10px;
+
+            font-weight: 600;
+        }
+
+        .low-store {
+            margin-top: 3px;
+
+            color: var(--muted-2);
+
+            font-size: 9px;
+        }
+
+        .low-count {
+            color: var(--red);
+
+            font-size: 11px;
+
+            font-weight: bold;
+        }
+
+
+        /* =========================================================
+   AI INSIGHT
+========================================================= */
+
+        .ai-insight {
+            padding: 17px;
+
+            background:
+                radial-gradient(circle at 0% 50%,
+                    rgba(160, 0, 255, .16),
+                    transparent 65%);
+        }
+
+        .ai-label {
+            color: var(--purple-2);
+
+            font-size: 10px;
+
+            font-weight: bold;
+
+            letter-spacing: .5px;
+
+            margin-bottom: 8px;
+        }
+
+        .ai-insight p {
+            color: var(--muted);
+
+            font-size: 10px;
+
+            line-height: 1.7;
+        }
+
+        .ai-insight strong {
+            color: var(--text);
+        }
+
+
+        /* =========================================================
+   FOOTER
+========================================================= */
+
+        .footer {
+            padding:
+                15px 0 25px;
+
+            text-align: center;
+
+            color: var(--muted-2);
+
+            font-size: 9px;
+        }
+
+
+        /* =========================================================
+   TOAST
+========================================================= */
+
+        .toast {
+            position: fixed;
+
+            right: 25px;
+            bottom: 25px;
+
+            min-width: 260px;
+
+            padding: 14px 18px;
+
+            border-radius: 10px;
+
+            background: var(--card);
+
+            color: var(--text);
+
+            border:
+                1px solid var(--purple);
+
+            box-shadow:
+                var(--glow);
+
+            font-size: 11px;
+
+            transform:
+                translateY(100px);
+
+            opacity: 0;
+
+            pointer-events: none;
+
+            transition: .3s;
+
+            z-index: 9999;
+        }
+
+        .toast.show {
+            transform:
+                translateY(0);
+
+            opacity: 1;
+        }
+
+
+        /* =========================================================
+   RESPONSIVE
+========================================================= */
+
+        @media(max-width:1200px) {
+
+            .stats {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+        @media(max-width:800px) {
+
+            .sidebar {
+                width: 72px;
+
+                padding:
+                    18px 9px;
+            }
+
+            .logo {
+                justify-content: center;
+
+                padding-left: 0;
+                padding-right: 0;
+            }
+
+            .logo-text,
+            .menu-title,
+            .menu-text {
+                display: none;
+            }
+
+            .menu-item {
+                justify-content: center;
+
+                padding: 0;
+
+                height: 48px;
+            }
+
+            .menu-icon {
+                width: auto;
+            }
+
+            .main {
+                margin-left: 72px;
+
+                padding:
+                    18px 15px;
+            }
+
+            .search-wrapper {
+                width: 230px;
+            }
+        }
+
+
+        @media(max-width:600px) {
+
+            .topbar {
+                flex-direction: column;
+
+                align-items: stretch;
+            }
+
+            .search-wrapper {
+                width: 100%;
+            }
+
+            .profile-area {
+                justify-content: flex-end;
+            }
+
+            .page-header {
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+
+            .page-actions {
+                width: 100%;
+            }
+
+            .page-actions .btn {
+                flex: 1;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .filters {
+                grid-template-columns: 1fr;
+            }
+
+            .panel-header {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+    <script src="js/logout.js"></script>
+    <link rel="stylesheet" href="css/logout.css">
+    <script src="js/auth.js"></script>
+    <style>[hidden]{display:none!important}</style>
+<link rel="stylesheet" href="css/auth.css">
+</head>
+
+
+<body>
+
+    <!-- =======================================================
+     SIDEBAR
+======================================================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <div class="logo-icon">◈</div>
+
+            <div class="logo-text">
+                AI STOCK
+                <span>MANAGER</span>
+            </div>
+        </div>
+
+
+        <div class="menu-title">
+            Yönetim
+        </div>
+
+
+        <a href="anasayfa.html" class="menu-item">
+            <span class="menu-icon">⌂</span>
+            <span class="menu-text">Ana Sayfa</span>
+        </a>
+
+
+        <a href="stok.html" class="menu-item active">
+            <span class="menu-icon">◇</span>
+            <span class="menu-text">Stok Yönetimi</span>
+        </a>
+
+
+        <a href="transferler.html" class="menu-item">
+            <span class="menu-icon">⇄</span>
+            <span class="menu-text">Transferler</span>
+        </a>
+
+
+        <a href="ai-onerileri.html" class="menu-item">
+            <span class="menu-icon">✦</span>
+            <span class="menu-text">AI Önerileri</span>
+        </a>
+
+
+        <a href="magazalar.html" class="menu-item">
+            <span class="menu-icon">▣</span>
+            <span class="menu-text">Mağazalar</span>
+        </a>
+
+
+        <div class="menu-title">
+            Analiz
+        </div>
+
+
+        <a href="raporlar.html" class="menu-item">
+            <span class="menu-icon">▥</span>
+            <span class="menu-text">Raporlar</span>
+        </a>
+
+
+        <a href="satis-analizi.html" class="menu-item">
+            <span class="menu-icon">↗</span>
+            <span class="menu-text">Satış Analizi</span>
+        </a>
+
+
+        <a href="bildirimler.html" class="menu-item">
+            <span class="menu-icon">♧</span>
+            <span class="menu-text">Bildirimler</span>
+        </a>
+
+
+        <div class="menu-title">
+            Sistem
+        </div>
+
+
+        <a href="ayarlar.html" class="menu-item">
+            <span class="menu-icon">⚙</span>
+            <span class="menu-text">Ayarlar</span>
+        </a>
+
+
+        <a href="kullanicilar.html" class="menu-item">
+            <span class="menu-icon">♙</span>
+            <span class="menu-text">Kullanıcılar</span>
+        </a>
+
+
+        <a href="entegrasyon.html" class="menu-item">
+            <span class="menu-icon">⌘</span>
+            <span class="menu-text">Entegrasyon</span>
+        </a>
+
+    </aside>
+
+
+
+    <!-- =======================================================
+     MAIN
+======================================================= -->
+
+    <main class="main">
+
+
+        <!-- TOPBAR -->
+
+        <div class="topbar">
+
+            <div class="search-wrapper">
+
+                <input type="search" id="globalSearch" class="search" placeholder="Ürün, kod veya mağaza ara...">
+
+                <span class="search-icon">
+                    ⌕
+                </span>
+
+            </div>
+
+
+            <div class="profile-area">
+
+                <button class="theme-btn" id="themeBtn" title="Tema değiştir">
+                    🌙
+                </button>
+
+                <button class="notification" id="notificationBtn" title="Bildirimler">
+                    ♧
+
+                    <span style="
+                        position:absolute;
+                        margin:-30px 0 0 25px;
+                        width:18px;
+                        height:18px;
+                        border-radius:50%;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        background:var(--purple-2);
+                        color:white;
+                        font-size:9px;
+                    " id="notificationCount">
+                        5
+                    </span>
+
+                </button>
+
+                <div class="user-area" id="userArea" tabindex="0">
+
+                    <div class="avatar" id="avatar">
+                        M
+                    </div>
+
+                    <div class="user-info">
+
+                        <div class="user-name" id="userName">
+                            Admin
+                        </div>
+
+                        <!-- DAKİKA SAYACI KALDIRILDI -->
+
+                        <div class="user-status">
+
+                            <span class="online-dot"></span>
+
+                            Çevrim içi
+
+                        </div>
+
+                    </div>
+
+                    <div class="user-arrow">
+                        ▾
+                    </div>
+
+                    <div class="account-menu" id="accountMenu">
+
+                        <div class="account-header">
+
+                            <div class="account-name" id="accountName">
+                                Admin
+                            </div>
+
+                            <div class="account-role">
+                                Sistem Yöneticisi
+                            </div>
+
+                            <!-- DAKİKA SAYACI KALDIRILDI -->
+
+                            <div class="account-online">
+                                ● Çevrim içi
+                            </div>
+
+                        </div>
+
+                        <a href="ayarlar.html" class="account-item">
+                            <span class="account-item-icon">
+                                ♙
+                            </span>
+
+                            Hesabım
+                        </a>
+
+                        <a href="ayarlar.html#guvenlik" class="account-item">
+                            <span class="account-item-icon">
+                                🔐
+                            </span>
+
+                            Giriş Güvenliği
+                        </a>
+
+                        <button class="account-item logout" id="logoutBtn" type="button">
+                            <span class="account-item-icon" aria-hidden="true">⇥</span>
+                            Güvenli Çıkış
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- PAGE HEADER -->
+
+        <div class="page-header">
+
+            <div class="page-title">
+
+                <h1>
+                    Stok Yönetimi
+                </h1>
+
+                <p>
+                    Tüm ürün stoklarınızı ve mağaza bazlı stok durumunu yönetin.
+                </p>
+
+            </div>
+
+
+            <div class="page-actions">
+
+                <button class="btn" id="exportBtn" type="button">
+                    ⇩ Dışa Aktar
+                </button>
+
+
+                <button class="btn btn-primary" id="addStockBtn" type="button">
+                    ＋ Stok İşlemi
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ===================================================
+         STATISTICS
+    =================================================== -->
+
+        <section class="stats">
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Toplam Stok
+                    </div>
+
+                    <div class="stat-icon">
+                        ◇
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    125.420
+                </div>
+
+                <div class="stat-description green">
+                    ↑ %4.8 geçen aya göre
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Normal Stok
+                    </div>
+
+                    <div class="stat-icon">
+                        ✓
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    97.840
+                </div>
+
+                <div class="stat-description green">
+                    %78.0 toplam stok
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Düşük Stok
+                    </div>
+
+                    <div class="stat-icon">
+                        !
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    18.240
+                </div>
+
+                <div class="stat-description yellow">
+                    342 ürün kontrol edilmeli
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Kritik Stok
+                    </div>
+
+                    <div class="stat-icon">
+                        ⚠
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    87
+                </div>
+
+                <div class="stat-description red">
+                    Acil aksiyon gerekli
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ===================================================
+         CONTENT
+    =================================================== -->
+
+        <div class="content-grid">
+
+
+            <!-- LEFT -->
+
+            <div>
+
+
+                <!-- STOCK TABLE -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ◇
+                            </span>
+
+                            ÜRÜN STOKLARI
+
+                        </div>
+
+                        <span style="
+                            color:var(--muted-2);
+                            font-size:9px;
+                        ">
+                            1.248 ürün
+                        </span>
+
+                    </div>
+
+
+                    <!-- FILTERS -->
+
+                    <div class="filters">
+
+                        <input id="productSearch" class="filter-input" placeholder="Ürün adı veya kodu...">
+
+
+                        <select id="storeFilter" class="filter-select">
+
+                            <option value="">
+                                Tüm Mağazalar
+                            </option>
+
+                            <option>
+                                İstanbul Mağaza 01
+                            </option>
+
+                            <option>
+                                İstanbul Mağaza 02
+                            </option>
+
+                            <option>
+                                Ankara Mağaza 01
+                            </option>
+
+                            <option>
+                                İzmir Mağaza 01
+                            </option>
+
+                            <option>
+                                Bursa Mağaza 01
+                            </option>
+
+                        </select>
+
+
+                        <select id="statusFilter" class="filter-select">
+
+                            <option value="">
+                                Tüm Durumlar
+                            </option>
+
+                            <option value="normal">
+                                Normal
+                            </option>
+
+                            <option value="low">
+                                Düşük
+                            </option>
+
+                            <option value="critical">
+                                Kritik
+                            </option>
+
+                        </select>
+
+
+                        <select id="categoryFilter" class="filter-select">
+
+                            <option value="">
+                                Tüm Kategoriler
+                            </option>
+
+                            <option>
+                                T-Shirt
+                            </option>
+
+                            <option>
+                                Pantolon
+                            </option>
+
+                            <option>
+                                Ayakkabı
+                            </option>
+
+                            <option>
+                                Aksesuar
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- TABLE -->
+
+                    <div class="table-wrapper">
+
+                        <table id="stockTable">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>ÜRÜN</th>
+
+                                    <th>MAĞAZA</th>
+
+                                    <th>MEVCUT STOK</th>
+
+                                    <th>MİN. STOK</th>
+
+                                    <th>DURUM</th>
+
+                                    <th>İŞLEM</th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+
+                                <tr data-status="normal" data-category="T-Shirt">
+
+                                    <td>
+
+                                        <div class="product">
+
+                                            <div class="product-image">
+                                                👕
+                                            </div>
+
+                                            <div>
+
+                                                <div class="product-name">
+                                                    Nike T-Shirt 1023
+                                                </div>
+
+                                                <div class="product-code">
+                                                    NT1023
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+                                        İstanbul Mağaza 01
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="stock-info">
+
+                                            <div class="stock-number">
+
+                                                <strong>
+                                                    480
+                                                </strong>
+
+                                                <span>
+                                                    / 600
+                                                </span>
+
+                                            </div>
+
+                                            <div class="progress">
+
+                                                <div class="progress-bar" style="width:80%"></div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+                                        120
+                                    </td>
+
+
+                                    <td>
+                                        <span class="status normal">
+                                            Normal
+                                        </span>
+                                    </td>
+
+
+                                    <td>
+
+                                        <button class="action-btn" onclick="showDetail('Nike T-Shirt 1023')"
+                                            type="button">
+                                            Detay
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+
+
+
+                                <tr data-status="low" data-category="Pantolon">
+
+                                    <td>
+
+                                        <div class="product">
+
+                                            <div class="product-image">
+                                                👖
+                                            </div>
+
+                                            <div>
+
+                                                <div class="product-name">
+                                                    Pantolon 2045
+                                                </div>
+
+                                                <div class="product-code">
+                                                    PN2045
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+                                        İstanbul Mağaza 02
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="stock-info">
+
+                                            <div class="stock-number">
+
+                                                <strong>
+                                                    74
+                                                </strong>
+
+                                                <span>
+                                                    / 250
+                                                </span>
+
+                                            </div>
+
+                                            <div class="progress">
+
+                                                <div class="progress-bar warning" style="width:30%"></div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+                                        100
+                                    </td>
+
+
+                                    <td>
+                                        <span class="status low">
+                                            Düşük
+                                        </span>
+                                    </td>
+
+
+                                    <td>
+
+                                        <button class="action-btn" onclick="showDetail('Pantolon 2045')" type="button">
+                                            Detay
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+
+
+
+                                <tr data-status="critical" data-category="T-Shirt">
+
+                                    <td>
+
+                                        <div class="product">
+
+                                            <div class="product-image">
+                                                🧥
+                                            </div>
+
+                                            <div>
+
+                                                <div class="product-name">
+                                                    Sweatshirt 3021
+                                                </div>
+
+                                                <div class="product-code">
+                                                    SW3021
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+                                        İzmir Mağaza 01
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="stock-info">
+
+                                            <div class="stock-number">
+
+                                                <strong>
+                                                    18
+                                                </strong>
+
+                                                <span>
+                                                    / 200
+                                                </span>
+
+                                            </div>
+
+                                            <div class="progress">
+
+                                                <div class="progress-bar danger" style="width:9%"></div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+                                        80
+                                    </td>
+
+
+                                    <td>
+
+                                        <span class="status critical">
+                                            Kritik
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <button class="action-btn" onclick="showDetail('Sweatshirt 3021')"
+                                            type="button">
+                                            Detay
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+
+
+
+                                <tr data-status="normal" data-category="Ayakkabı">
+
+                                    <td>
+
+                                        <div class="product">
+
+                                            <div class="product-image">
+                                                👟
+                                            </div>
+
+                                            <div>
+
+                                                <div class="product-name">
+                                                    Ayakkabı 4012
+                                                </div>
+
+                                                <div class="product-code">
+                                                    AY4012
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+                                        Ankara Mağaza 01
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="stock-info">
+
+                                            <div class="stock-number">
+
+                                                <strong>
+                                                    320
+                                                </strong>
+
+                                                <span>
+                                                    / 400
+                                                </span>
+
+                                            </div>
+
+                                            <div class="progress">
+
+                                                <div class="progress-bar" style="width:80%"></div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+                                        100
+                                    </td>
+
+
+                                    <td>
+
+                                        <span class="status normal">
+                                            Normal
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <button class="action-btn" onclick="showDetail('Ayakkabı 4012')" type="button">
+                                            Detay
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+
+
+
+                                <tr data-status="low" data-category="Aksesuar">
+
+                                    <td>
+
+                                        <div class="product">
+
+                                            <div class="product-image">
+                                                👜
+                                            </div>
+
+                                            <div>
+
+                                                <div class="product-name">
+                                                    Çanta 5015
+                                                </div>
+
+                                                <div class="product-code">
+                                                    CN5015
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+                                        Bursa Mağaza 01
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="stock-info">
+
+                                            <div class="stock-number">
+
+                                                <strong>
+                                                    42
+                                                </strong>
+
+                                                <span>
+                                                    / 180
+                                                </span>
+
+                                            </div>
+
+                                            <div class="progress">
+
+                                                <div class="progress-bar warning" style="width:23%"></div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+                                        70
+                                    </td>
+
+
+                                    <td>
+
+                                        <span class="status low">
+                                            Düşük
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <button class="action-btn" onclick="showDetail('Çanta 5015')" type="button">
+                                            Detay
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- AI INSIGHT -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ✦
+                            </span>
+
+                            AI STOK ANALİZİ
+
+                        </div>
+
+                        <span style="
+                            color:var(--green);
+                            font-size:9px;
+                        ">
+                            ● ANALİZ HAZIR
+                        </span>
+
+                    </div>
+
+
+                    <div class="ai-insight">
+
+                        <div class="ai-label">
+                            ✦ YAPAY ZEKA ÖNERİSİ
+                        </div>
+
+                        <p>
+
+                            Son satış hızlarına göre
+                            <strong>İzmir Mağaza 01</strong>
+                            stok seviyelerinde kritik düşüş
+                            tespit edildi.
+
+                            <br><br>
+
+                            Özellikle
+                            <strong>Sweatshirt 3021</strong>
+                            ürününün mevcut stok seviyesi
+                            minimum stok seviyesinin altında.
+
+                            <br><br>
+
+                            Önerilen aksiyon:
+                            <strong>
+                                Ankara Mağaza 01 → İzmir Mağaza 01
+                            </strong>
+
+                            arasında transfer oluşturulması.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- RIGHT -->
+
+            <div>
+
+
+                <!-- STOCK HEALTH -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ◉
+                            </span>
+
+                            STOK SAĞLIĞI
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stock-health">
+
+                        <div class="health-circle">
+
+                            <div class="health-score">
+                                82%
+                            </div>
+
+                            <div class="health-label">
+                                Sağlıklı
+                            </div>
+
+                        </div>
+
+
+                        <div class="health-list">
+
+
+                            <div class="health-row">
+
+                                <div class="health-left">
+
+                                    <span class="dot green"></span>
+
+                                    Normal
+
+                                </div>
+
+                                <div class="health-count">
+                                    1.024
+                                </div>
+
+                            </div>
+
+
+                            <div class="health-row">
+
+                                <div class="health-left">
+
+                                    <span class="dot yellow"></span>
+
+                                    Düşük
+
+                                </div>
+
+                                <div class="health-count">
+                                    137
+                                </div>
+
+                            </div>
+
+
+                            <div class="health-row">
+
+                                <div class="health-left">
+
+                                    <span class="dot red"></span>
+
+                                    Kritik
+
+                                </div>
+
+                                <div class="health-count">
+                                    87
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- LOW STOCK -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon" style="color:var(--red)">
+                                ⚠
+                            </span>
+
+                            KRİTİK STOKLAR
+
+                        </div>
+
+                        <a href="#" onclick="return false;" style="
+                            color:var(--purple-2);
+                            font-size:9px;
+                            text-decoration:none;
+                        ">
+                            Tümünü Gör
+                        </a>
+
+                    </div>
+
+
+                    <div class="low-stock-list">
+
+
+                        <div class="low-item">
+
+                            <div class="low-icon">
+                                🧥
+                            </div>
+
+                            <div class="low-info">
+
+                                <div class="low-name">
+                                    Sweatshirt 3021
+                                </div>
+
+                                <div class="low-store">
+                                    İzmir Mağaza 01
+                                </div>
+
+                            </div>
+
+                            <div class="low-count">
+                                18
+                            </div>
+
+                        </div>
+
+
+                        <div class="low-item">
+
+                            <div class="low-icon">
+                                👕
+                            </div>
+
+                            <div class="low-info">
+
+                                <div class="low-name">
+                                    Basic T-Shirt 1102
+                                </div>
+
+                                <div class="low-store">
+                                    Bursa Mağaza 01
+                                </div>
+
+                            </div>
+
+                            <div class="low-count">
+                                24
+                            </div>
+
+                        </div>
+
+
+                        <div class="low-item">
+
+                            <div class="low-icon">
+                                👟
+                            </div>
+
+                            <div class="low-info">
+
+                                <div class="low-name">
+                                    Sneaker 4031
+                                </div>
+
+                                <div class="low-store">
+                                    İstanbul Mağaza 02
+                                </div>
+
+                            </div>
+
+                            <div class="low-count">
+                                31
+                            </div>
+
+                        </div>
+
+
+                        <div class="low-item">
+
+                            <div class="low-icon">
+                                👜
+                            </div>
+
+                            <div class="low-info">
+
+                                <div class="low-name">
+                                    Çanta 5015
+                                </div>
+
+                                <div class="low-store">
+                                    Bursa Mağaza 01
+                                </div>
+
+                            </div>
+
+                            <div class="low-count">
+                                42
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="footer">
+
+            AI Stock Manager
+            •
+            Nebim V3 Entegrasyon Paneli
+
+        </div>
+
+    </main>
+
+
+    <!-- TOAST -->
+
+    <div id="toast" class="toast"></div>
+
+
+
+    <script>
+
+        /* =========================================================
+           THEME SYSTEM
+           - localStorage ile kalıcı
+           - Sayfa açılmadan önce tema uygulanır
+        ========================================================= */
+
+        (function () {
+
+            const savedTheme =
+                localStorage.getItem("aiStockTheme");
+
+            if (savedTheme === "light") {
+
+                document.body.classList.add(
+                    "light-theme"
+                );
+
+            }
+
+        })();
+
+
+        const themeBtn =
+            document.getElementById("themeBtn");
+
+
+        function updateThemeButton() {
+
+            const isLight =
+                document.body.classList.contains(
+                    "light-theme"
+                );
+
+            themeBtn.textContent =
+                isLight ? "☀️" : "🌙";
+
+            themeBtn.title =
+                isLight
+                    ? "Karanlık temaya geç"
+                    : "Açık temaya geç";
+
+            themeBtn.setAttribute(
+                "aria-label",
+                themeBtn.title
+            );
+
+        }
+
+
+        updateThemeButton();
+
+
+        themeBtn.addEventListener(
+            "click",
+            function () {
+
+                const isLight =
+                    document.body.classList.toggle(
+                        "light-theme"
+                    );
+
+
+                localStorage.setItem(
+                    "aiStockTheme",
+                    isLight
+                        ? "light"
+                        : "dark"
+                );
+
+
+                updateThemeButton();
+
+            }
+        );
+
+
+        /* =========================================================
+           PRODUCT SEARCH / FILTER
+        ========================================================= */
+
+        const productSearch =
+            document.getElementById(
+                "productSearch"
+            );
+
+        const storeFilter =
+            document.getElementById(
+                "storeFilter"
+            );
+
+        const statusFilter =
+            document.getElementById(
+                "statusFilter"
+            );
+
+        const categoryFilter =
+            document.getElementById(
+                "categoryFilter"
+            );
+
+        const rows =
+            document.querySelectorAll(
+                "#stockTable tbody tr"
+            );
+
+
+        function filterProducts() {
+
+            const search =
+                productSearch.value
+                    .toLocaleLowerCase("tr-TR")
+                    .trim();
+
+            const store =
+                storeFilter.value
+                    .toLocaleLowerCase("tr-TR");
+
+            const status =
+                statusFilter.value
+                    .toLocaleLowerCase("tr-TR");
+
+            const category =
+                categoryFilter.value
+                    .toLocaleLowerCase("tr-TR");
+
+
+            rows.forEach(function (row) {
+
+                const text =
+                    row.innerText
+                        .toLocaleLowerCase("tr-TR");
+
+                const rowStatus =
+                    row.dataset.status
+                        .toLocaleLowerCase("tr-TR");
+
+                const rowCategory =
+                    row.dataset.category
+                        .toLocaleLowerCase("tr-TR");
+
+
+                const searchMatch =
+                    !search ||
+                    text.includes(search);
+
+
+                const storeMatch =
+                    !store ||
+                    text.includes(store);
+
+
+                const statusMatch =
+                    !status ||
+                    rowStatus === status;
+
+
+                const categoryMatch =
+                    !category ||
+                    rowCategory === category;
+
+
+                row.style.display =
+                    searchMatch &&
+                        storeMatch &&
+                        statusMatch &&
+                        categoryMatch
+                        ? ""
+                        : "none";
+
+            });
+
+        }
+
+
+        productSearch.addEventListener(
+            "input",
+            filterProducts
+        );
+
+        storeFilter.addEventListener(
+            "change",
+            filterProducts
+        );
+
+        statusFilter.addEventListener(
+            "change",
+            filterProducts
+        );
+
+        categoryFilter.addEventListener(
+            "change",
+            filterProducts
+        );
+
+
+        /* =========================================================
+           DETAIL
+        ========================================================= */
+
+        function showDetail(product) {
+
+            showToast(
+                product +
+                " için stok detay ekranı açılacak."
+            );
+
+        }
+
+
+        /* =========================================================
+           STOK İŞLEMİ
+        ========================================================= */
+
+        document
+            .getElementById("addStockBtn")
+            .addEventListener(
+                "click",
+                function () {
+
+                    showToast(
+                        "Yeni stok işlemi ekranı açılacak."
+                    );
+
+                }
+            );
+
+
+        /* =========================================================
+           EXPORT
+        ========================================================= */
+
+        document
+            .getElementById("exportBtn")
+            .addEventListener(
+                "click",
+                function () {
+
+                    const table =
+                        document.getElementById(
+                            "stockTable"
+                        );
+
+                    let csv = [];
+
+                    const rows =
+                        table.querySelectorAll(
+                            "tr"
+                        );
+
+
+                    rows.forEach(function (row) {
+
+                        if (
+                            row.style.display === "none"
+                        ) {
+                            return;
+                        }
+
+
+                        const cols =
+                            row.querySelectorAll(
+                                "th, td"
+                            );
+
+
+                        const rowData = [];
+
+
+                        cols.forEach(function (col) {
+
+                            let value =
+                                col.innerText
+                                    .replace(/\n/g, " ")
+                                    .replace(/;/g, ",");
+
+                            rowData.push(
+                                '"' + value + '"'
+                            );
+
+                        });
+
+
+                        csv.push(
+                            rowData.join(";")
+                        );
+
+                    });
+
+
+                    const blob =
+                        new Blob(
+                            [
+                                "\uFEFF" +
+                                csv.join("\n")
+                            ],
+                            {
+                                type:
+                                    "text/csv;charset=utf-8;"
+                            }
+                        );
+
+
+                    const url =
+                        URL.createObjectURL(
+                            blob
+                        );
+
+
+                    const link =
+                        document.createElement(
+                            "a"
+                        );
+
+                    link.href = url;
+
+                    link.download =
+                        "stok-listesi.csv";
+
+                    document.body.appendChild(
+                        link
+                    );
+
+                    link.click();
+
+                    link.remove();
+
+                    URL.revokeObjectURL(url);
+
+
+                    showToast(
+                        "Stok listesi dışa aktarıldı."
+                    );
+
+                }
+            );
+
+
+        /* =========================================================
+           TOAST
+        ========================================================= */
+
+        let toastTimer;
+
+
+        function showToast(message) {
+
+            const toast =
+                document.getElementById(
+                    "toast"
+                );
+
+
+            toast.textContent =
+                message;
+
+
+            toast.classList.add(
+                "show"
+            );
+
+
+            clearTimeout(
+                toastTimer
+            );
+
+
+            toastTimer =
+                setTimeout(
+                    function () {
+
+                        toast.classList.remove(
+                            "show"
+                        );
+
+                    },
+                    2500
+                );
+
+        }
+
+
+        /* =========================================================
+           AUTOMATIC ACTIVE MENU
+        ========================================================= */
+
+        (function () {
+
+            const currentPage =
+                window.location.pathname
+                    .split("/")
+                    .pop()
+                    .toLowerCase();
+
+
+            document
+                .querySelectorAll(".menu-item")
+                .forEach(function (item) {
+
+                    const href =
+                        item
+                            .getAttribute("href")
+                            .split("/")
+                            .pop()
+                            .toLowerCase();
+
+
+                    if (
+                        currentPage === href
+                    ) {
+
+                        document
+                            .querySelectorAll(".menu-item")
+                            .forEach(
+                                menu =>
+                                    menu.classList
+                                        .remove("active")
+                            );
+
+
+                        item.classList.add(
+                            "active"
+                        );
+
+                    }
+
+                });
+
+        })();
+
+
+        /* =========================================================
+           KULLANICI MENÜSÜ
+        ========================================================= */
+
+        const userArea =
+            document.getElementById("userArea");
+
+        userArea.addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    event.target.closest(".account-menu")
+                ) {
+                    return;
+                }
+
+                this.classList.toggle("open");
+            }
+        );
+
+        document.addEventListener(
+            "click",
+            function (event) {
+
+                if (!userArea.contains(event.target)) {
+
+                    userArea.classList.remove("open");
+                }
+            }
+        );
+
+
+        /* =========================================================
+           BİLDİRİMLER
+        ========================================================= */
+
+        document.getElementById("notificationBtn")
+            .addEventListener(
+                "click",
+                function () {
+
+                    window.location.href =
+                        "bildirimler.html";
+                }
+            );
+
+
+        /* =========================================================
+           GÜVENLİ ÇIKIŞ
+        ========================================================= */
+
+        
+
+    </script>
+
+</body>
+
+</html>

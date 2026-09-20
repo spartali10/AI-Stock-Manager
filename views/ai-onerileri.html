@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Önerileri | AI Stock Manager</title>
+
+    <link rel="stylesheet" href="/css/pages/ai-onerileri-1.css">
+    <script src="/js/logout.js"></script>
+    <link rel="stylesheet" href="/css/logout.css">
+    <script src="/js/auth.js"></script>
+    <link rel="stylesheet" href="/css/pages/ai-onerileri-2.css">
+<link rel="stylesheet" href="/css/auth.css">
+</head>
+
+
+<body>
+
+
+    <!-- =======================================================
+     SIDEBAR
+======================================================= -->
+
+    <%- include('partials/sidebar-shared-1.html', { active: '/AiOnerileri' }) %>
+
+
+
+    <!-- =======================================================
+     MAIN
+======================================================= -->
+
+    <main class="main">
+
+
+        <!-- =====================================================
+         TOPBAR
+    ===================================================== -->
+
+        <div class="topbar">
+
+            <div class="search-wrapper">
+
+                <input type="search" id="globalSearch" class="search" placeholder="Ürün, kod veya mağaza ara...">
+
+                <span class="search-icon">
+                    ⌕
+                </span>
+
+            </div>
+
+            <div class="profile-area">
+
+                <button class="theme-btn" id="themeBtn" title="Tema değiştir">
+                    🌙
+                </button>
+
+                <button class="notification" id="notificationBtn" title="Bildirimler">
+                    ♧
+
+                    <span style="
+                        position:absolute;
+                        margin:-30px 0 0 25px;
+                        width:18px;
+                        height:18px;
+                        border-radius:50%;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        background:var(--purple-2);
+                        color:white;
+                        font-size:9px;
+                    " id="notificationCount">
+                        5
+                    </span>
+
+                </button>
+
+                <div class="user-area" id="userArea" tabindex="0">
+
+                    <div class="avatar" id="avatar">
+                        M
+                    </div>
+
+                    <div class="user-info">
+
+                        <div class="user-name" id="userName">
+                            Admin
+                        </div>
+
+                        <!-- DAKİKA SAYACI KALDIRILDI -->
+
+                        <div class="user-status">
+
+                            <span class="online-dot"></span>
+
+                            Çevrim içi
+
+                        </div>
+
+                    </div>
+
+                    <div class="user-arrow">
+                        ▾
+                    </div>
+
+
+                    <!-- ACCOUNT MENU -->
+
+                    <div class="account-menu" id="accountMenu">
+
+                        <div class="account-header">
+
+                            <div class="account-name" id="accountName">
+                                Admin
+                            </div>
+
+                            <div class="account-role">
+                                Sistem Yöneticisi
+                            </div>
+
+                            <!-- DAKİKA SAYACI KALDIRILDI -->
+
+                            <div class="account-online">
+                                ● Çevrim içi
+                            </div>
+
+                        </div>
+
+
+                        <a href="/Ayarlar" class="account-item">
+
+                            <span class="account-item-icon">
+                                ♙
+                            </span>
+
+                            Hesabım
+
+                        </a>
+
+
+                        <a href="/Ayarlar#guvenlik" class="account-item">
+
+                            <span class="account-item-icon">
+                                🔐
+                            </span>
+
+                            Giriş Güvenliği
+
+                        </a>
+
+
+                        <button class="account-item logout" id="logoutBtn" type="button">
+                            <span class="account-item-icon" aria-hidden="true">⇥</span>
+                            Güvenli Çıkış
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =====================================================
+         PAGE HEADER
+    ===================================================== -->
+
+        <div class="page-header">
+
+            <div class="page-title">
+
+                <h1>
+                    AI Önerileri
+                </h1>
+
+                <p>
+                    Yapay zeka destekli stok, satış ve mağaza önerilerini görüntüleyin.
+                </p>
+
+            </div>
+
+
+            <div class="page-actions">
+
+                <button class="btn" id="refreshBtn" type="button">
+                    ↻ Yenile
+                </button>
+
+                <button class="btn btn-primary" id="runAiBtn" type="button">
+                    ✦ AI Analizi Başlat
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =====================================================
+         AI HERO
+    ===================================================== -->
+
+        <section class="ai-hero">
+
+            <div class="ai-hero-content">
+
+                <div class="ai-hero-left">
+
+                    <div class="ai-brain">
+                        ✦
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            AI Stock Intelligence
+                        </h2>
+
+                        <p>
+                            Sisteminizdeki stok, satış, transfer ve mağaza
+                            verileri analiz edilerek operasyonel kararlarınız
+                            için akıllı öneriler oluşturuluyor.
+                        </p>
+
+                        <div class="ai-status">
+
+                            <span class="ai-status-dot"></span>
+
+                            AI ANALİZ MOTORU AKTİF
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+         STATS
+    ===================================================== -->
+
+        <section class="stats-grid">
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Aktif Öneriler
+                    </div>
+
+                    <div class="stat-icon">
+                        ✦
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    24
+                </div>
+
+                <div class="stat-change green">
+                    ↑ 6 yeni öneri
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Kritik Öneriler
+                    </div>
+
+                    <div class="stat-icon">
+                        !
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    5
+                </div>
+
+                <div class="stat-change red">
+                    Öncelikli aksiyon gerekli
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Tahmini Kazanç
+                    </div>
+
+                    <div class="stat-icon">
+                        ₺
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    ₺ 184.600
+                </div>
+
+                <div class="stat-change green">
+                    Öneriler uygulanırsa
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        AI Doğruluk
+                    </div>
+
+                    <div class="stat-icon">
+                        ◎
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    %94.8
+                </div>
+
+                <div class="stat-change green">
+                    ↑ %2.4 bu ay
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+         CONTENT
+    ===================================================== -->
+
+        <div class="content-grid">
+
+
+            <!-- LEFT COLUMN -->
+
+            <div>
+
+
+                <!-- RECOMMENDATIONS -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ✦
+                            </span>
+
+                            AI ÖNERİLERİ
+
+                        </div>
+
+                        <span style="
+                            color:var(--purple-2);
+                            font-size:9px;
+                        ">
+                            24 ÖNERİ
+                        </span>
+
+                    </div>
+
+
+                    <div class="recommendation-list">
+
+
+                        <div class="recommendation">
+
+                            <div class="recommendation-icon red">
+                                !
+                            </div>
+
+                            <div class="recommendation-content">
+
+                                <div class="recommendation-title">
+                                    İstanbul Mağaza 01 için stok takviyesi öneriliyor
+                                </div>
+
+                                <div class="recommendation-text">
+                                    SKU-1048 kodlu ürünün son 14 gündeki satış
+                                    hızına göre mevcut stok seviyesi yaklaşık
+                                    5 gün içinde kritik seviyeye düşebilir.
+                                </div>
+
+                                <div class="recommendation-meta">
+
+                                    <span class="tag high">
+                                        Yüksek Öncelik
+                                    </span>
+
+                                    <span class="tag">
+                                        Stok
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <button class="recommendation-action" data-action="İstanbul Mağaza 01 stok takviyesi">
+                                İncele
+                            </button>
+
+                        </div>
+
+
+
+                        <div class="recommendation">
+
+                            <div class="recommendation-icon green">
+                                ⇄
+                            </div>
+
+                            <div class="recommendation-content">
+
+                                <div class="recommendation-title">
+                                    Ankara'dan İstanbul'a transfer önerisi
+                                </div>
+
+                                <div class="recommendation-text">
+                                    Ankara Mağaza 01'de düşük satış hızına sahip
+                                    320 adet ürün bulunuyor. İstanbul Mağaza 01
+                                    için bu ürünlerde yüksek talep tespit edildi.
+                                </div>
+
+                                <div class="recommendation-meta">
+
+                                    <span class="tag">
+                                        Transfer
+                                    </span>
+
+                                    <span class="tag medium">
+                                        Orta Öncelik
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <button class="recommendation-action" data-action="Ankara İstanbul transfer önerisi">
+                                İncele
+                            </button>
+
+                        </div>
+
+
+
+                        <div class="recommendation">
+
+                            <div class="recommendation-icon yellow">
+                                ₺
+                            </div>
+
+                            <div class="recommendation-content">
+
+                                <div class="recommendation-title">
+                                    Yavaş hareket eden stoklar için kampanya önerisi
+                                </div>
+
+                                <div class="recommendation-text">
+                                    İzmir ve Bursa mağazalarında 60 günden uzun
+                                    süredir satış görmeyen 184 SKU tespit edildi.
+                                    Kampanya uygulanması stok devir hızını artırabilir.
+                                </div>
+
+                                <div class="recommendation-meta">
+
+                                    <span class="tag medium">
+                                        Orta Öncelik
+                                    </span>
+
+                                    <span class="tag">
+                                        Satış
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <button class="recommendation-action" data-action="Yavaş stok kampanya önerisi">
+                                İncele
+                            </button>
+
+                        </div>
+
+
+
+                        <div class="recommendation">
+
+                            <div class="recommendation-icon blue">
+                                ↗
+                            </div>
+
+                            <div class="recommendation-content">
+
+                                <div class="recommendation-title">
+                                    Hafta sonu satış artışı bekleniyor
+                                </div>
+
+                                <div class="recommendation-text">
+                                    Geçmiş satış verilerine göre hafta sonu
+                                    elektronik kategorisinde yaklaşık %17
+                                    talep artışı bekleniyor.
+                                </div>
+
+                                <div class="recommendation-meta">
+
+                                    <span class="tag">
+                                        Talep Tahmini
+                                    </span>
+
+                                    <span class="tag">
+                                        Satış
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <button class="recommendation-action" data-action="Hafta sonu satış tahmini">
+                                İncele
+                            </button>
+
+                        </div>
+
+
+
+                        <div class="recommendation">
+
+                            <div class="recommendation-icon green">
+                                ◇
+                            </div>
+
+                            <div class="recommendation-content">
+
+                                <div class="recommendation-title">
+                                    Kritik stok seviyeleri için otomatik sipariş
+                                </div>
+
+                                <div class="recommendation-text">
+                                    12 farklı SKU için güvenlik stok seviyesinin
+                                    altına düşüş tespit edildi. Otomatik sipariş
+                                    oluşturulması öneriliyor.
+                                </div>
+
+                                <div class="recommendation-meta">
+
+                                    <span class="tag high">
+                                        Yüksek Öncelik
+                                    </span>
+
+                                    <span class="tag">
+                                        Satın Alma
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <button class="recommendation-action" data-action="Otomatik sipariş önerisi">
+                                İncele
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- STORE ANALYSIS -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ▣
+                            </span>
+
+                            MAĞAZA AI ANALİZİ
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="store-list">
+
+
+                        <div class="store-item">
+
+                            <div class="store-top">
+
+                                <div class="store-name">
+                                    İstanbul Mağaza 01
+                                </div>
+
+                                <div class="store-score">
+                                    %94
+                                </div>
+
+                            </div>
+
+                            <div class="store-track">
+
+                                <div class="store-bar" style="width:94%"></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="store-item">
+
+                            <div class="store-top">
+
+                                <div class="store-name">
+                                    Ankara Mağaza 01
+                                </div>
+
+                                <div class="store-score">
+                                    %88
+                                </div>
+
+                            </div>
+
+                            <div class="store-track">
+
+                                <div class="store-bar" style="width:88%"></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="store-item">
+
+                            <div class="store-top">
+
+                                <div class="store-name">
+                                    İstanbul Mağaza 02
+                                </div>
+
+                                <div class="store-score">
+                                    %83
+                                </div>
+
+                            </div>
+
+                            <div class="store-track">
+
+                                <div class="store-bar" style="width:83%"></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="store-item">
+
+                            <div class="store-top">
+
+                                <div class="store-name">
+                                    İzmir Mağaza 01
+                                </div>
+
+                                <div class="store-score" style="color:var(--yellow)">
+                                    %76
+                                </div>
+
+                            </div>
+
+                            <div class="store-track">
+
+                                <div class="store-bar" style="
+                                    width:76%;
+                                    background:
+                                    linear-gradient(
+                                        90deg,
+                                        #d89d00,
+                                        #ffd000
+                                    );
+                                "></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="store-item">
+
+                            <div class="store-top">
+
+                                <div class="store-name">
+                                    Bursa Mağaza 01
+                                </div>
+
+                                <div class="store-score" style="color:var(--yellow)">
+                                    %71
+                                </div>
+
+                            </div>
+
+                            <div class="store-track">
+
+                                <div class="store-bar" style="
+                                    width:71%;
+                                    background:
+                                    linear-gradient(
+                                        90deg,
+                                        #d89d00,
+                                        #ffd000
+                                    );
+                                "></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- RIGHT COLUMN -->
+
+            <div>
+
+
+                <!-- AI SCORE -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ◎
+                            </span>
+
+                            AI SAĞLIK SKORU
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="ai-score-panel">
+
+                        <div class="score-center">
+
+                            <div class="score-circle">
+
+                                <div class="score-inner">
+
+                                    <div class="score-number">
+                                        85
+                                    </div>
+
+                                    <div class="score-label">
+                                        AI Skoru
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="score-description">
+
+                            Sisteminizin mevcut stok ve satış
+                            yönetimi <strong style="color:var(--text)">
+                                iyi seviyede</strong>.
+                            Kritik önerilerin uygulanmasıyla
+                            skorun %91 seviyesine çıkması bekleniyor.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- PRIORITIES -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                !
+                            </span>
+
+                            ÖNCELİKLER
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="priority-list">
+
+
+                        <div class="priority-item">
+
+                            <div class="priority-number">
+                                01
+                            </div>
+
+                            <div class="priority-info">
+
+                                <div class="priority-name">
+                                    Kritik stokları tamamla
+                                </div>
+
+                                <div class="priority-desc">
+                                    12 SKU kritik seviyede
+                                </div>
+
+                            </div>
+
+                            <div class="priority-level high">
+                                YÜKSEK
+                            </div>
+
+                        </div>
+
+
+                        <div class="priority-item">
+
+                            <div class="priority-number">
+                                02
+                            </div>
+
+                            <div class="priority-info">
+
+                                <div class="priority-name">
+                                    Transferleri optimize et
+                                </div>
+
+                                <div class="priority-desc">
+                                    8 transfer öneriliyor
+                                </div>
+
+                            </div>
+
+                            <div class="priority-level medium">
+                                ORTA
+                            </div>
+
+                        </div>
+
+
+                        <div class="priority-item">
+
+                            <div class="priority-number">
+                                03
+                            </div>
+
+                            <div class="priority-info">
+
+                                <div class="priority-name">
+                                    Yavaş stokları azalt
+                                </div>
+
+                                <div class="priority-desc">
+                                    184 SKU tespit edildi
+                                </div>
+
+                            </div>
+
+                            <div class="priority-level medium">
+                                ORTA
+                            </div>
+
+                        </div>
+
+
+                        <div class="priority-item">
+
+                            <div class="priority-number">
+                                04
+                            </div>
+
+                            <div class="priority-info">
+
+                                <div class="priority-name">
+                                    Güvenlik stoklarını güncelle
+                                </div>
+
+                                <div class="priority-desc">
+                                    31 SKU analiz edildi
+                                </div>
+
+                            </div>
+
+                            <div class="priority-level low">
+                                DÜŞÜK
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- AI INSIGHT -->
+
+                <div class="panel">
+
+                    <div class="insight">
+
+                        <div class="insight-title">
+                            ✦ AI ÖZETİ
+                        </div>
+
+                        <p>
+
+                            Son analiz sonuçlarına göre
+                            <strong>İstanbul Mağaza 01</strong>
+                            en güçlü performansa sahip.
+
+                            <br><br>
+
+                            <strong>İzmir</strong> ve
+                            <strong>Bursa</strong> mağazalarında
+                            yavaş hareket eden stokların azaltılması,
+                            <strong>İstanbul</strong> mağazalarına ise
+                            yüksek talep gören ürünlerin aktarılması
+                            öneriliyor.
+
+                        </p>
+
+                        <button class="insight-btn" id="detailAnalysisBtn" type="button">
+                            ✦ Detaylı Analiz
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =====================================================
+         FOOTER
+    ===================================================== -->
+
+        <div class="footer">
+
+            AI Stock Manager
+            •
+            Nebim V3 Entegrasyon Paneli
+
+        </div>
+
+    </main>
+
+
+
+    <!-- =======================================================
+     TOAST
+======================================================= -->
+
+    <div id="toast" class="toast"></div>
+
+
+
+    <script src="/js/pages/ai-onerileri-1.js"></script>
+
+</body>
+
+</html>

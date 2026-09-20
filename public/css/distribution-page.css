@@ -1,0 +1,36 @@
+.distribution-page .sidebar,
+.distribution-page .main > .topbar,
+.distribution-page .main > .page-header,
+.distribution-page .main > .stats,
+.distribution-page .content-grid > :not(:first-child) { display: none; }
+.distribution-page .main { margin-left: 0; width: 100%; padding: 16px; }
+.distribution-page .content-grid { display: block; }
+.distribution-page .distribution-panel { width: 100%; }
+.distribution-page .wm-scroll { max-height: none; height: auto; }
+.wm-view-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 10px 0; }
+.distribution-panel .panel-header { gap: 12px; flex-wrap: wrap; }
+.distribution-panel a.btn { text-decoration: none; }
+body.matrix-expanded { overflow: hidden; }
+.matrix-expanded #chanceMatrix { position: fixed; inset: 0; z-index: 1000; background: var(--card, #fff); padding: 12px; display: flex; flex-direction: column; overflow: auto; }
+.matrix-expanded #chanceMatrix > .distribution-description,
+.matrix-expanded #chanceMatrix > p:not(#wmSource):not(#wmValidation) { display: none; }
+.matrix-expanded #chanceMatrix .wm-view-actions { flex: 0 0 auto; margin: 0 0 10px; }
+.matrix-expanded #chanceMatrix .wm-scroll { flex: 0 0 auto; height: auto; max-height: none; }
+.matrix-expanded #chanceMatrix .wm-table { min-width: 100%; }
+.matrix-expanded #chanceMatrix > :not(.wm-scroll) { flex-shrink: 0; }
+.matrix-expanded #chanceMatrix .wm-toolbar { margin-top: 0; }
+.matrix-expanded #chanceMatrix .wm-filters { margin: 8px 0; }
+.matrix-expanded #chanceMatrix .wm-summary > div { padding: 8px 12px; }
+.matrix-expanded #chanceMatrix .wm-summary strong { margin-top: 4px; }
+.matrix-expanded #chanceMatrix #wmSource,
+.matrix-expanded #chanceMatrix #wmValidation { margin: 6px 0; }
+.matrix-expanded #chanceMatrix > #wmApply,
+.matrix-expanded #chanceMatrix > #wmReceipt { align-self: flex-start; margin-top: 4px; }
+.distribution-page .wm-toolbar .btn,
+.matrix-expanded .wm-toolbar .btn { height: 42px; min-height: 42px; font-size: 12px; padding: 0 14px; }
+.distribution-page .wm-target,
+.matrix-expanded .wm-target { font-size: 13px; }
+.distribution-page .wm-target input,
+.matrix-expanded .wm-target input { height: 40px; width: 70px; }
+.wm-view-actions .btn[aria-pressed=true] { border-color: var(--purple); color: var(--purple); }
+@media (max-width: 600px) { .distribution-page .main { padding: 8px; } .distribution-page .distribution-body { padding: 10px; } }

@@ -1,0 +1,542 @@
+<!-- =================================================
+     USER AREA - ORTAK ONLINE SÜRE
+     Tüm yan panel sayfalarında aynı süreyi kullanır.
+================================================= -->
+
+<div
+    class="user-area"
+    id="userArea"
+    role="button"
+    tabindex="0"
+    aria-expanded="false"
+>
+
+    <!-- AVATAR -->
+    <div class="avatar">
+        M
+    </div>
+
+
+    <!-- USER INFO -->
+    <div class="user-info">
+
+        <div class="user-name">
+            Mehmet Admin
+        </div>
+
+        <div class="user-status">
+
+            <span class="online-dot"></span>
+
+            Çevrim içi
+
+            <span class="online-time">
+                •
+                <span id="onlineMinutes">0</span>
+                dk
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- ARROW -->
+    <div class="user-arrow">
+        ▾
+    </div>
+
+
+    <!-- =================================================
+         ACCOUNT MENU
+    ================================================= -->
+
+    <div
+        class="account-menu"
+        id="accountMenu"
+    >
+
+        <!-- ACCOUNT HEADER -->
+        <div class="account-header">
+
+            <div class="account-name">
+                Mehmet Admin
+            </div>
+
+            <div class="account-role">
+                Sistem Yöneticisi
+            </div>
+
+            <div class="account-online">
+
+                <span>●</span>
+                Çevrim içi •
+
+                <span id="accountOnlineMinutes">
+                    0
+                </span>
+
+                dakika
+
+            </div>
+
+        </div>
+
+
+        <!-- HESABIM -->
+        <a
+            href="ayarlar.html"
+            class="account-item"
+        >
+
+            <span class="account-item-icon">
+                ♙
+            </span>
+
+            <span>
+                Hesabım
+            </span>
+
+        </a>
+
+
+        <!-- GİRİŞ GÜVENLİĞİ -->
+        <a
+            href="ayarlar.html#guvenlik"
+            class="account-item"
+        >
+
+            <span class="account-item-icon">
+                🔐
+            </span>
+
+            <span>
+                Giriş Güvenliği
+            </span>
+
+        </a>
+
+
+        <!-- GÜVENLİ ÇIKIŞ -->
+        <button
+            class="account-item logout"
+            id="logoutBtn"
+            type="button"
+        >
+
+            <span class="account-item-icon">
+                ⇥
+            </span>
+
+            <span>
+                Güvenli Çıkış
+            </span>
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =================================================
+     ORTAK ONLINE SÜRE SİSTEMİ
+================================================= -->
+
+<script>
+
+(function () {
+
+    "use strict";
+
+
+    /*
+     * =================================================
+     * ORTAK GİRİŞ ZAMANI
+     * =================================================
+     *
+     * Bütün yan panel sayfaları aynı localStorage
+     * anahtarını kullanır.
+     *
+     * Böylece:
+     *
+     * index.html
+     * kullanicilar.html
+     * ayarlar.html
+     * raporlar.html
+     * vb.
+     *
+     * aynı giriş süresini gösterir.
+     */
+
+    const LOGIN_TIME_KEY = "adminLoginTime";
+
+
+    /*
+     * =================================================
+     * GİRİŞ ZAMANINI AL
+     * =================================================
+     */
+
+    function getLoginTime() {
+
+        let loginTime = localStorage.getItem(LOGIN_TIME_KEY);
+
+
+        /*
+         * Eğer daha önce giriş zamanı oluşturulmamışsa
+         * şu anı giriş zamanı olarak kaydet.
+         */
+
+        if (!loginTime) {
+
+            loginTime = Date.now().toString();
+
+            localStorage.setItem(
+                LOGIN_TIME_KEY,
+                loginTime
+            );
+        }
+
+
+        return parseInt(loginTime, 10);
+    }
+
+
+    /*
+     * =================================================
+     * ONLINE SÜREYİ HESAPLA
+     * =================================================
+     */
+
+    function getOnlineMinutes() {
+
+        const loginTime = getLoginTime();
+
+        const currentTime = Date.now();
+
+        const difference =
+            currentTime - loginTime;
+
+
+        /*
+         * Milisaniyeyi dakikaya çevir.
+         */
+
+        const minutes =
+            Math.floor(
+                difference / 1000 / 60
+            );
+
+
+        return Math.max(0, minutes);
+    }
+
+
+    /*
+     * =================================================
+     * EKRANDAKİ SÜRELERİ GÜNCELLE
+     * =================================================
+     */
+
+    function updateOnlineTime() {
+
+        const minutes =
+            getOnlineMinutes();
+
+
+        /*
+         * Sol paneldeki süre
+         */
+
+        const onlineMinutes =
+            document.getElementById(
+                "onlineMinutes"
+            );
+
+
+        if (onlineMinutes) {
+
+            onlineMinutes.textContent =
+                minutes;
+
+        }
+
+
+        /*
+         * Kullanıcı menüsündeki süre
+         */
+
+        const accountOnlineMinutes =
+            document.getElementById(
+                "accountOnlineMinutes"
+            );
+
+
+        if (accountOnlineMinutes) {
+
+            accountOnlineMinutes.textContent =
+                minutes;
+
+        }
+
+    }
+
+
+    /*
+     * =================================================
+     * İLK ÇALIŞTIRMA
+     * =================================================
+     */
+
+    updateOnlineTime();
+
+
+    /*
+     * =================================================
+     * HER 1 SANİYEDE KONTROL
+     * =================================================
+     *
+     * Dakika değişimini beklemeden sürekli kontrol
+     * edilir.
+     *
+     * Böylece sekmeler arasında geçiş yapıldığında
+     * süre güncel kalır.
+     */
+
+    setInterval(
+        updateOnlineTime,
+        1000
+    );
+
+
+    /*
+     * =================================================
+     * SEKME TEKRAR AKTİF OLDUĞUNDA GÜNCELLE
+     * =================================================
+     *
+     * Kullanıcı başka bir sekmeye geçip geri geldiğinde
+     * süre anında güncellenir.
+     */
+
+    document.addEventListener(
+        "visibilitychange",
+        function () {
+
+            if (
+                document.visibilityState ===
+                "visible"
+            ) {
+
+                updateOnlineTime();
+
+            }
+
+        }
+    );
+
+
+    /*
+     * =================================================
+     * SAYFA FOCUS OLDUĞUNDA GÜNCELLE
+     * =================================================
+     */
+
+    window.addEventListener(
+        "focus",
+        updateOnlineTime
+    );
+
+
+    /*
+     * =================================================
+     * ACCOUNT MENU
+     * =================================================
+     */
+
+    const userArea =
+        document.getElementById(
+            "userArea"
+        );
+
+
+    const accountMenu =
+        document.getElementById(
+            "accountMenu"
+        );
+
+
+    if (userArea && accountMenu) {
+
+
+        /*
+         * USER AREA TIKLAMA
+         */
+
+        userArea.addEventListener(
+            "click",
+            function (event) {
+
+                /*
+                 * Menü içerisindeki link veya butona
+                 * basıldığında userArea click olayını
+                 * tetiklememesi için kontrol.
+                 */
+
+                if (
+                    event.target.closest(
+                        ".account-menu"
+                    )
+                ) {
+
+                    return;
+
+                }
+
+
+                const isOpen =
+                    userArea.getAttribute(
+                        "aria-expanded"
+                    ) === "true";
+
+
+                userArea.setAttribute(
+                    "aria-expanded",
+                    String(!isOpen)
+                );
+
+
+                accountMenu.classList.toggle(
+                    "active",
+                    !isOpen
+                );
+
+            }
+        );
+
+
+        /*
+         * KLAVYE DESTEĞİ
+         */
+
+        userArea.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "Enter" ||
+                    event.key === " "
+                ) {
+
+                    event.preventDefault();
+
+                    const isOpen =
+                        userArea.getAttribute(
+                            "aria-expanded"
+                        ) === "true";
+
+
+                    userArea.setAttribute(
+                        "aria-expanded",
+                        String(!isOpen)
+                    );
+
+
+                    accountMenu.classList.toggle(
+                        "active",
+                        !isOpen
+                    );
+
+                }
+
+            }
+        );
+
+
+        /*
+         * DIŞARI TIKLANDIĞINDA MENÜYÜ KAPAT
+         */
+
+        document.addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    !userArea.contains(
+                        event.target
+                    )
+                ) {
+
+                    userArea.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+
+
+                    accountMenu.classList.remove(
+                        "active"
+                    );
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /*
+     * =================================================
+     * GÜVENLİ ÇIKIŞ
+     * =================================================
+     *
+     * Çıkış yapıldığında ortak giriş zamanı silinir.
+     *
+     * Bir sonraki girişte yeni zaman oluşturulur.
+     */
+
+    const logoutBtn =
+        document.getElementById(
+            "logoutBtn"
+        );
+
+
+    if (logoutBtn) {
+
+        logoutBtn.addEventListener(
+            "click",
+            function (event) {
+
+                event.preventDefault();
+
+
+                /*
+                 * Ortak giriş zamanını temizle
+                 */
+
+                localStorage.removeItem(
+                    LOGIN_TIME_KEY
+                );
+
+
+                /*
+                 * Buraya mevcut logout sistemin varsa
+                 * kendi yönlendirme kodunu ekleyebilirsin.
+                 *
+                 * Örnek:
+                 *
+                 * window.location.href = "login.html";
+                 */
+
+
+                window.location.href =
+                    "login.html";
+
+            }
+        );
+
+    }
+
+})();
+
+</script>

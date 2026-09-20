@@ -1,0 +1,23 @@
+.integration-dialog { margin: auto; padding: 0; width: min(700px, calc(100% - 32px)); max-height: calc(100dvh - 40px); overflow: auto; border: 1px solid var(--border); border-radius: 16px; background: var(--card); color: var(--text); box-shadow: 0 25px 90px #0008; }
+.integration-dialog::backdrop { background: #080810b8; backdrop-filter: blur(5px); }
+body:has(.integration-dialog[open]) { overflow: hidden; }
+.integration-dialog header { display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; gap: 16px; border-bottom: 1px solid var(--border-light); }
+.integration-dialog h2 { font-size: 19px; }
+.integration-dialog h3 { font-size: 14px; margin-bottom: 15px; }
+#integrationClose { width: 32px; height: 32px; border: 1px solid var(--border-light); border-radius: 8px; background: var(--card); color: var(--text); font-size: 22px; cursor: pointer; }
+.integration-dialog-body { padding: 20px 24px; }
+.integration-note { font-size: 11px; line-height: 1.8; color: var(--muted); margin-bottom: 16px; }
+.integration-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.integration-dialog label { display: block; color: var(--text-secondary); font-size: 12px; }
+.integration-dialog input, .integration-dialog select { display: block; width: 100%; margin-top: 8px; padding: 11px; border: 1px solid var(--border-light); border-radius: 8px; background: var(--input); color: var(--text); font: inherit; }
+.integration-dialog-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0; }
+.integration-dialog section { border-top: 1px solid var(--border-light); padding-top: 20px; margin-top: 20px; }
+.integration-feedback { font-size: 12px; line-height: 1.8; color: var(--text-secondary); padding: 12px; background: var(--hover); border-radius: 8px; }
+.integration-feedback:empty, .issued-api-key:empty { display: none; }
+.issued-api-key { display: block; padding: 14px; background: var(--input); color: var(--text); border: 1px solid var(--border); border-radius: 8px; overflow-wrap: anywhere; user-select: all; }
+#apiKeysList { list-style: none; padding: 0; }
+#apiKeysList li { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border-light); font-size: 12px; }
+#apiKeysList button { border: 1px solid var(--border-light); border-radius: 6px; padding: 7px; color: var(--red); background: var(--card); cursor: pointer; }
+.integration-dialog button:disabled { opacity: .5; cursor: wait; }
+.integration-dialog :is(input, select, button):focus-visible { outline: 2px solid var(--purple); outline-offset: 3px; }
+@media (max-width: 550px) { .integration-fields { grid-template-columns: 1fr; } .integration-dialog-body, .integration-dialog header { padding: 18px; } }

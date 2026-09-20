@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bildirimler | AI Stock Manager</title>
+
+    <link rel="stylesheet" href="/css/pages/bildirimler-1.css">
+    <script src="/js/logout.js"></script>
+    <link rel="stylesheet" href="/css/logout.css">
+    <script src="/js/auth.js"></script>
+    <link rel="stylesheet" href="/css/pages/bildirimler-2.css">
+<link rel="stylesheet" href="/css/auth.css">
+</head>
+
+
+<body>
+
+
+    <!-- =======================================================
+     SIDEBAR
+======================================================= -->
+
+    <%- include('partials/sidebar-shared-1.html', { active: '/Bildirimler' }) %>
+
+
+
+    <!-- =======================================================
+     MAIN
+======================================================= -->
+
+    <main class="main">
+
+
+        <!-- TOPBAR -->
+
+        <div class="topbar">
+
+            <div class="search-wrapper">
+
+                <input type="search" id="globalSearch" class="search" placeholder="Bildirim, ürün veya mağaza ara...">
+
+                <span class="search-icon">
+                    ⌕
+                </span>
+
+            </div>
+
+
+            <div class="profile-area">
+
+                <button class="theme-btn" id="themeBtn" title="Tema değiştir">
+                    🌙
+                </button>
+
+                <button class="notification" id="notificationBtn" title="Bildirimler">
+                    ♧
+
+                    <span style="
+                        position:absolute;
+                        margin:-30px 0 0 25px;
+                        width:18px;
+                        height:18px;
+                        border-radius:50%;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        background:var(--purple-2);
+                        color:white;
+                        font-size:9px;
+                    " id="notificationCount">
+                        5
+                    </span>
+
+                </button>
+
+                <div class="user-area" id="userArea" tabindex="0">
+
+                    <div class="avatar" id="avatar">
+                        M
+                    </div>
+
+                    <div class="user-info">
+
+                        <div class="user-name" id="userName">
+                            Admin
+                        </div>
+
+                        <!-- DAKİKA SAYACI KALDIRILDI -->
+
+                        <div class="user-status">
+
+                            <span class="online-dot"></span>
+
+                            Çevrim içi
+
+                        </div>
+
+                    </div>
+
+                    <div class="user-arrow">
+                        ▾
+                    </div>
+
+
+                    <!-- ACCOUNT MENU -->
+
+                    <div class="account-menu" id="accountMenu">
+
+                        <div class="account-header">
+
+                            <div class="account-name" id="accountName">
+                                Admin
+                            </div>
+
+                            <div class="account-role">
+                                Sistem Yöneticisi
+                            </div>
+
+                            <!-- DAKİKA SAYACI KALDIRILDI -->
+
+                            <div class="account-online">
+                                ● Çevrim içi
+                            </div>
+
+                        </div>
+
+
+                        <a href="/Ayarlar" class="account-item">
+
+                            <span class="account-item-icon">
+                                ♙
+                            </span>
+
+                            Hesabım
+
+                        </a>
+
+
+                        <a href="/Ayarlar#guvenlik" class="account-item">
+
+                            <span class="account-item-icon">
+                                🔐
+                            </span>
+
+                            Giriş Güvenliği
+
+                        </a>
+
+
+                        <button class="account-item logout" id="logoutBtn" type="button">
+                            <span class="account-item-icon" aria-hidden="true">⇥</span>
+                            Güvenli Çıkış
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- PAGE HEADER -->
+
+        <div class="page-header">
+
+            <div class="page-title">
+
+                <h1>
+                    Bildirimler
+                </h1>
+
+                <p>
+                    Stok, satış, AI ve sistem bildirimlerinizi tek merkezden takip edin.
+                </p>
+
+            </div>
+
+
+            <div class="page-actions">
+
+                <button class="btn" id="clearBtn" type="button">
+                    ✓ Okundu İşaretle
+                </button>
+
+
+                <button class="btn btn-primary" id="notificationSettingsBtn" type="button">
+                    ⚙ Bildirim Ayarları
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ===================================================
+         SUMMARY
+    =================================================== -->
+
+        <section class="summary-grid">
+
+
+            <div class="summary-card">
+
+                <div class="summary-top">
+
+                    <div class="summary-title">
+                        Toplam Bildirim
+                    </div>
+
+                    <div class="summary-icon">
+                        ♧
+                    </div>
+
+                </div>
+
+                <div class="summary-value" id="totalCount">
+                    24
+                </div>
+
+                <div class="summary-description">
+                    Son 7 günde
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-top">
+
+                    <div class="summary-title">
+                        Okunmamış
+                    </div>
+
+                    <div class="summary-icon">
+                        ●
+                    </div>
+
+                </div>
+
+                <div class="summary-value" id="unreadCount">
+                    5
+                </div>
+
+                <div class="summary-description red">
+                    Dikkat gerektiriyor
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-top">
+
+                    <div class="summary-title">
+                        Kritik Uyarı
+                    </div>
+
+                    <div class="summary-icon">
+                        ⚠
+                    </div>
+
+                </div>
+
+                <div class="summary-value">
+                    3
+                </div>
+
+                <div class="summary-description yellow">
+                    Acil kontrol edilmeli
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-top">
+
+                    <div class="summary-title">
+                        AI Önerisi
+                    </div>
+
+                    <div class="summary-icon">
+                        ✦
+                    </div>
+
+                </div>
+
+                <div class="summary-value">
+                    7
+                </div>
+
+                <div class="summary-description green">
+                    Yeni öneri mevcut
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ===================================================
+         CONTENT
+    =================================================== -->
+
+        <div class="content-grid">
+
+
+            <!-- =================================================
+             LEFT COLUMN
+        ================================================= -->
+
+            <div>
+
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ♧
+                            </span>
+
+                            BİLDİRİM MERKEZİ
+
+                        </div>
+
+                        <span style="
+                            color:var(--muted-2);
+                            font-size:9px;
+                        " id="resultCount">
+                            6 bildirim
+                        </span>
+
+                    </div>
+
+
+                    <!-- FILTER BAR -->
+
+                    <div class="notification-toolbar">
+
+                        <div class="filter-buttons">
+
+                            <button class="filter-btn active" data-filter="all" type="button">
+                                Tümü
+                            </button>
+
+                            <button class="filter-btn" data-filter="unread" type="button">
+                                Okunmamış
+                            </button>
+
+                            <button class="filter-btn" data-filter="critical" type="button">
+                                Kritik
+                            </button>
+
+                            <button class="filter-btn" data-filter="ai" type="button">
+                                AI
+                            </button>
+
+                            <button class="filter-btn" data-filter="system" type="button">
+                                Sistem
+                            </button>
+
+                        </div>
+
+
+                        <button class="mark-all" id="markAllBtn" type="button">
+                            Tümünü okundu yap
+                        </button>
+
+                    </div>
+
+
+
+                    <!-- NOTIFICATION LIST -->
+
+                    <div class="notification-list" id="notificationList">
+
+
+                        <!-- NOTIFICATION 1 -->
+
+                        <div class="notification-item unread" data-type="critical"
+                            data-search="sweatshirt 3021 izmir mağaza kritik stok">
+
+                            <div class="notification-icon critical">
+                                ⚠
+                            </div>
+
+
+                            <div class="notification-content">
+
+                                <div class="notification-title">
+
+                                    <span class="unread-dot"></span>
+
+                                    Kritik stok seviyesi
+
+                                </div>
+
+                                <div class="notification-text">
+
+                                    <strong>Sweatshirt 3021</strong>
+                                    ürününün İzmir Mağaza 01 stok seviyesi
+                                    minimum seviyenin altına düştü.
+                                    Mevcut stok: <strong>18 adet</strong>.
+
+                                </div>
+
+                                <div class="notification-time">
+                                    8 dakika önce • Stok Yönetimi
+                                </div>
+
+                            </div>
+
+
+                            <div class="notification-action">
+
+                                <button class="small-btn"
+                                    onclick="notificationAction(this,'Stok detayına yönlendiriliyor...')" type="button">
+                                    Görüntüle
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- NOTIFICATION 2 -->
+
+                        <div class="notification-item unread" data-type="ai"
+                            data-search="ai transfer önerisi ankara izmir sweatshirt">
+
+                            <div class="notification-icon ai">
+                                ✦
+                            </div>
+
+
+                            <div class="notification-content">
+
+                                <div class="notification-title">
+
+                                    <span class="unread-dot"></span>
+
+                                    Yeni AI transfer önerisi
+
+                                </div>
+
+                                <div class="notification-text">
+
+                                    AI analiz motoru,
+                                    <strong>Ankara Mağaza 01 → İzmir Mağaza 01</strong>
+                                    arasında stok transferi yapılmasını öneriyor.
+
+                                </div>
+
+                                <div class="notification-time">
+                                    22 dakika önce • AI Önerileri
+                                </div>
+
+                            </div>
+
+
+                            <div class="notification-action">
+
+                                <button class="small-btn" onclick="notificationAction(this,'AI önerisi açılıyor...')"
+                                    type="button">
+                                    İncele
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- NOTIFICATION 3 -->
+
+                        <div class="notification-item unread" data-type="critical"
+                            data-search="kritik stok sneaker 4031 istanbul">
+
+                            <div class="notification-icon critical">
+                                ⚠
+                            </div>
+
+
+                            <div class="notification-content">
+
+                                <div class="notification-title">
+
+                                    <span class="unread-dot"></span>
+
+                                    Kritik stok uyarısı
+
+                                </div>
+
+                                <div class="notification-text">
+
+                                    <strong>Sneaker 4031</strong>
+                                    ürününde İstanbul Mağaza 02 stok seviyesi
+                                    kritik sınıra yaklaştı.
+
+                                </div>
+
+                                <div class="notification-time">
+                                    45 dakika önce • Stok Yönetimi
+                                </div>
+
+                            </div>
+
+
+                            <div class="notification-action">
+
+                                <button class="small-btn"
+                                    onclick="notificationAction(this,'Sneaker 4031 detayları açılıyor...')"
+                                    type="button">
+                                    Görüntüle
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- NOTIFICATION 4 -->
+
+                        <div class="notification-item unread" data-type="system"
+                            data-search="nebim v3 entegrasyon senkronizasyon tamamlandı">
+
+                            <div class="notification-icon system">
+                                ↻
+                            </div>
+
+
+                            <div class="notification-content">
+
+                                <div class="notification-title">
+
+                                    <span class="unread-dot"></span>
+
+                                    Veri senkronizasyonu tamamlandı
+
+                                </div>
+
+                                <div class="notification-text">
+
+                                    Nebim V3 ile ürün, stok ve mağaza verilerinin
+                                    senkronizasyonu başarıyla tamamlandı.
+
+                                </div>
+
+                                <div class="notification-time">
+                                    1 saat önce • Sistem
+                                </div>
+
+                            </div>
+
+
+                            <div class="notification-action">
+
+                                <button class="small-btn"
+                                    onclick="notificationAction(this,'Senkronizasyon detayları açılıyor...')"
+                                    type="button">
+                                    Detay
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- NOTIFICATION 5 -->
+
+                        <div class="notification-item unread" data-type="ai"
+                            data-search="ai satış tahmini nike tshirt 1023">
+
+                            <div class="notification-icon ai">
+                                ✦
+                            </div>
+
+
+                            <div class="notification-content">
+
+                                <div class="notification-title">
+
+                                    <span class="unread-dot"></span>
+
+                                    AI satış tahmini hazır
+
+                                </div>
+
+                                <div class="notification-text">
+
+                                    <strong>Nike T-Shirt 1023</strong>
+                                    için önümüzdeki 14 günlük satış tahmini
+                                    normal seviyenin %12 üzerinde.
+
+                                </div>
+
+                                <div class="notification-time">
+                                    2 saat önce • Satış Analizi
+                                </div>
+
+                            </div>
+
+
+                            <div class="notification-action">
+
+                                <button class="small-btn" onclick="notificationAction(this,'Satış analizi açılıyor...')"
+                                    type="button">
+                                    İncele
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- NOTIFICATION 6 -->
+
+                        <div class="notification-item" data-type="success"
+                            data-search="stok transfer tamamlandı ankara istanbul">
+
+                            <div class="notification-icon success">
+                                ✓
+                            </div>
+
+
+                            <div class="notification-content">
+
+                                <div class="notification-title">
+                                    Stok transferi tamamlandı
+                                </div>
+
+                                <div class="notification-text">
+
+                                    Ankara Mağaza 01'den İstanbul Mağaza 01'e
+                                    yapılan <strong>120 adet</strong> stok transferi
+                                    başarıyla tamamlandı.
+
+                                </div>
+
+                                <div class="notification-time">
+                                    Dün • Transferler
+                                </div>
+
+                            </div>
+
+
+                            <div class="notification-action">
+
+                                <button class="small-btn"
+                                    onclick="notificationAction(this,'Transfer detayları açılıyor...')" type="button">
+                                    Detay
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- EMPTY STATE -->
+
+                    <div class="empty-state" id="emptyState">
+
+                        <div class="empty-icon">
+                            ✓
+                        </div>
+
+                        <h3>
+                            Bildirim bulunamadı
+                        </h3>
+
+                        <p>
+                            Seçtiğiniz filtreye uygun bildirim bulunmuyor.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- AI NOTICE -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ✦
+                            </span>
+
+                            AI BİLDİRİM ÖZETİ
+
+                        </div>
+
+                        <span style="
+                            color:var(--green);
+                            font-size:9px;
+                        ">
+                            ● AKTİF
+                        </span>
+
+                    </div>
+
+
+                    <div class="ai-notice">
+
+                        <div class="ai-label">
+                            ✦ YAPAY ZEKA ÖZETİ
+                        </div>
+
+                        <p>
+
+                            Son 24 saatte sistem tarafından
+                            <strong>5 önemli bildirim</strong>
+                            oluşturuldu.
+
+                            Bunların 2'si kritik stok seviyesi,
+                            2'si AI önerisi ve 1'i sistem
+                            senkronizasyon bildirimi.
+
+                            <br><br>
+
+                            Öncelikli aksiyon:
+                            <strong>
+                                İzmir Mağaza 01 stoklarının kontrol edilmesi.
+                            </strong>
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+             RIGHT COLUMN
+        ================================================= -->
+
+            <div>
+
+
+                <!-- ALERT OVERVIEW -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ◉
+                            </span>
+
+                            UYARI DURUMU
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="alert-overview">
+
+                        <div class="alert-score">
+
+                            <div class="alert-score-number">
+                                82%
+                            </div>
+
+                            <div class="alert-score-label">
+                                Sistem Sağlığı
+                            </div>
+
+                        </div>
+
+
+                        <div class="alert-list">
+
+
+                            <div class="alert-row">
+
+                                <div class="alert-left">
+
+                                    <span class="alert-dot red"></span>
+
+                                    Kritik
+
+                                </div>
+
+                                <div class="alert-number">
+                                    3
+                                </div>
+
+                            </div>
+
+
+                            <div class="alert-row">
+
+                                <div class="alert-left">
+
+                                    <span class="alert-dot yellow"></span>
+
+                                    Uyarı
+
+                                </div>
+
+                                <div class="alert-number">
+                                    7
+                                </div>
+
+                            </div>
+
+
+                            <div class="alert-row">
+
+                                <div class="alert-left">
+
+                                    <span class="alert-dot purple"></span>
+
+                                    AI Önerisi
+
+                                </div>
+
+                                <div class="alert-number">
+                                    7
+                                </div>
+
+                            </div>
+
+
+                            <div class="alert-row">
+
+                                <div class="alert-left">
+
+                                    <span class="alert-dot green"></span>
+
+                                    Başarılı
+
+                                </div>
+
+                                <div class="alert-number">
+                                    7
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- QUICK ACTIONS -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ⚡
+                            </span>
+
+                            HIZLI İŞLEMLER
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="quick-actions">
+
+
+                        <button class="quick-action" type="button" onclick="location.href='/Stok'">
+
+                            <div class="quick-action-icon">
+                                ◇
+                            </div>
+
+                            <div class="quick-action-title">
+                                Stokları Gör
+                            </div>
+
+                            <div class="quick-action-text">
+                                Kritik stokları kontrol et
+                            </div>
+
+                        </button>
+
+
+                        <button class="quick-action" type="button" onclick="location.href='/AiOnerileri'">
+
+                            <div class="quick-action-icon">
+                                ✦
+                            </div>
+
+                            <div class="quick-action-title">
+                                AI Önerileri
+                            </div>
+
+                            <div class="quick-action-text">
+                                Yeni önerileri incele
+                            </div>
+
+                        </button>
+
+
+                        <button class="quick-action" type="button" onclick="location.href='/Transfer'">
+
+                            <div class="quick-action-icon">
+                                ⇄
+                            </div>
+
+                            <div class="quick-action-title">
+                                Transferler
+                            </div>
+
+                            <div class="quick-action-text">
+                                Stok transferlerini yönet
+                            </div>
+
+                        </button>
+
+
+                        <button class="quick-action" type="button" onclick="location.href='/SatisAnalizi'">
+
+                            <div class="quick-action-icon">
+                                ↗
+                            </div>
+
+                            <div class="quick-action-title">
+                                Satış Analizi
+                            </div>
+
+                            <div class="quick-action-text">
+                                Satış performansını incele
+                            </div>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- SYSTEM STATUS -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ◈
+                            </span>
+
+                            SİSTEM DURUMU
+
+                        </div>
+
+                    </div>
+
+
+                    <div style="
+                        padding:18px;
+                    ">
+
+                        <div style="
+                            display:flex;
+                            align-items:center;
+                            justify-content:space-between;
+                            padding:11px 0;
+                            border-bottom:1px solid var(--border-light);
+                        ">
+
+                            <span style="
+                                color:var(--text-secondary);
+                                font-size:10px;
+                            ">
+                                Nebim V3
+                            </span>
+
+                            <span style="
+                                color:var(--green);
+                                font-size:9px;
+                            ">
+                                ● Bağlı
+                            </span>
+
+                        </div>
+
+
+                        <div style="
+                            display:flex;
+                            align-items:center;
+                            justify-content:space-between;
+                            padding:11px 0;
+                            border-bottom:1px solid var(--border-light);
+                        ">
+
+                            <span style="
+                                color:var(--text-secondary);
+                                font-size:10px;
+                            ">
+                                AI Motoru
+                            </span>
+
+                            <span style="
+                                color:var(--green);
+                                font-size:9px;
+                            ">
+                                ● Aktif
+                            </span>
+
+                        </div>
+
+
+                        <div style="
+                            display:flex;
+                            align-items:center;
+                            justify-content:space-between;
+                            padding:11px 0;
+                        ">
+
+                            <span style="
+                                color:var(--text-secondary);
+                                font-size:10px;
+                            ">
+                                Son Senkronizasyon
+                            </span>
+
+                            <span style="
+                                color:var(--muted);
+                                font-size:9px;
+                            ">
+                                08:42
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- FOOTER -->
+
+        <div class="footer">
+
+            AI Stock Manager
+            •
+            Nebim V3 Entegrasyon Paneli
+
+        </div>
+
+    </main>
+
+
+
+    <!-- TOAST -->
+
+    <div id="toast" class="toast"></div>
+
+
+
+    <script src="/js/pages/bildirimler-1.js"></script>
+    <script src="/js/nebim-adapter.js"></script>
+
+    <script src="/js/pages/bildirimler-2.js"></script>
+
+</body>
+
+</html>

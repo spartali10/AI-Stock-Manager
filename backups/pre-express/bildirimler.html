@@ -1,0 +1,3991 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bildirimler | AI Stock Manager</title>
+
+    <style>
+        /* =========================================================
+   THEME VARIABLES
+========================================================= */
+
+        :root {
+            --bg: #050505;
+            --bg-secondary: #090909;
+            --sidebar-bg: #07070a;
+
+            --card: #0d0d0f;
+            --card-secondary: #111114;
+            --input: #090909;
+
+            --text: #ffffff;
+            --text-secondary: #aaa7b0;
+            --muted: #85818d;
+            --muted-2: #65616c;
+
+            --border: rgba(178, 0, 255, .25);
+            --border-light: rgba(255, 255, 255, .07);
+
+            --purple: #a100ff;
+            --purple-2: #c000ff;
+            --purple-3: #7000ff;
+
+            --green: #00e676;
+            --yellow: #ffd000;
+            --red: #ff3d5a;
+            --blue: #00aaff;
+
+            --hover: rgba(161, 0, 255, .06);
+
+            --shadow:
+                0 10px 35px rgba(0, 0, 0, .28);
+
+            --glow:
+                0 0 8px rgba(170, 0, 255, .45),
+                0 0 25px rgba(170, 0, 255, .15);
+
+            --transition: .25s ease;
+        }
+
+
+        /* =========================================================
+   LIGHT THEME
+========================================================= */
+
+        body.light-theme {
+
+            --bg: #f4f5f9;
+            --bg-secondary: #ffffff;
+            --sidebar-bg: #ffffff;
+
+            --card: #ffffff;
+            --card-secondary: #f8f8fb;
+            --input: #f5f5f8;
+
+            --text: #18151d;
+            --text-secondary: #55515e;
+            --muted: #77727f;
+            --muted-2: #9994a1;
+
+            --border: rgba(125, 0, 190, .18);
+            --border-light: rgba(20, 15, 30, .08);
+
+            --hover: rgba(161, 0, 255, .055);
+
+            --shadow:
+                0 8px 30px rgba(40, 25, 60, .08);
+
+            --glow:
+                0 0 10px rgba(161, 0, 255, .18),
+                0 0 25px rgba(161, 0, 255, .08);
+        }
+
+
+        /* =========================================================
+   RESET
+========================================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+
+            min-height: 100vh;
+
+            background:
+                radial-gradient(circle at 80% 0%,
+                    rgba(140, 0, 255, .10),
+                    transparent 30%),
+                radial-gradient(circle at 15% 100%,
+                    rgba(120, 0, 255, .07),
+                    transparent 30%),
+                var(--bg);
+
+            color: var(--text);
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            transition:
+                background-color var(--transition),
+                color var(--transition);
+        }
+
+
+        /* =========================================================
+   SIDEBAR
+========================================================= */
+
+        .sidebar {
+
+            position: fixed;
+
+            left: 0;
+            top: 0;
+
+            width: 250px;
+            height: 100vh;
+
+            padding: 22px 14px;
+
+            background: var(--sidebar-bg);
+
+            border-right:
+                1px solid var(--border);
+
+            z-index: 1000;
+
+            overflow-y: auto;
+
+            box-shadow:
+                10px 0 40px rgba(0, 0, 0, .08);
+
+            transition:
+                background var(--transition),
+                border-color var(--transition);
+        }
+
+
+        /* =========================================================
+   LOGO
+========================================================= */
+
+        .logo {
+
+            height: 62px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            padding:
+                0 10px 20px;
+
+            margin-bottom: 10px;
+
+            border-bottom:
+                1px solid var(--border-light);
+        }
+
+        .logo-icon {
+
+            width: 42px;
+            height: 42px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 13px;
+
+            background:
+                linear-gradient(135deg,
+                    #7000ff,
+                    #c000ff);
+
+            color: #fff;
+
+            font-size: 20px;
+
+            box-shadow:
+                0 0 15px rgba(170, 0, 255, .45);
+        }
+
+        .logo-text {
+
+            color: var(--text);
+
+            font-size: 16px;
+
+            font-weight: 800;
+
+            letter-spacing: .8px;
+
+            line-height: 1.1;
+        }
+
+        .logo-text span {
+
+            display: block;
+
+            margin-top: 5px;
+
+            color: var(--purple-2);
+
+            font-size: 9px;
+
+            letter-spacing: 4px;
+        }
+
+
+        /* =========================================================
+   MENU
+========================================================= */
+
+        .menu-title {
+
+            padding:
+                18px 12px 8px;
+
+            color: var(--muted-2);
+
+            font-size: 9px;
+
+            font-weight: 700;
+
+            letter-spacing: 1.8px;
+
+            text-transform: uppercase;
+        }
+
+        .menu-item {
+
+            position: relative;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+
+            height: 46px;
+
+            margin: 4px 0;
+
+            padding: 0 13px;
+
+            border-radius: 10px;
+
+            color: var(--muted);
+
+            text-decoration: none;
+
+            font-size: 12px;
+
+            transition:
+                color .2s ease,
+                background .2s ease,
+                transform .2s ease;
+        }
+
+        .menu-icon {
+
+            width: 22px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            color: var(--muted);
+
+            font-size: 17px;
+
+            transition: .2s;
+        }
+
+        .menu-item:hover {
+
+            color: var(--text);
+
+            background:
+                linear-gradient(90deg,
+                    rgba(161, 0, 255, .14),
+                    rgba(161, 0, 255, .03));
+
+            transform:
+                translateX(2px);
+        }
+
+        .menu-item:hover .menu-icon {
+            color: var(--purple-2);
+        }
+
+
+        /* ACTIVE */
+
+        .menu-item.active {
+
+            color: #fff;
+
+            background:
+                linear-gradient(90deg,
+                    rgba(161, 0, 255, .75),
+                    rgba(100, 0, 255, .18));
+
+            box-shadow:
+                0 5px 20px rgba(150, 0, 255, .18);
+        }
+
+        .menu-item.active::before {
+
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+
+            top: 8px;
+            bottom: 8px;
+
+            width: 3px;
+
+            border-radius:
+                0 4px 4px 0;
+
+            background:
+                linear-gradient(180deg,
+                    #d000ff,
+                    #7000ff);
+
+            box-shadow:
+                0 0 10px #a100ff;
+        }
+
+        .menu-item.active .menu-icon {
+
+            color: white;
+
+            filter:
+                drop-shadow(0 0 7px rgba(210, 0, 255, .8));
+        }
+
+
+        /* =========================================================
+   MAIN
+========================================================= */
+
+        .main {
+
+            margin-left: 250px;
+
+            padding:
+                25px 30px;
+
+            min-height: 100vh;
+        }
+
+
+        /* =========================================================
+   TOPBAR
+========================================================= */
+
+        .topbar {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            margin-bottom: 28px;
+        }
+
+        .search-wrapper {
+
+            position: relative;
+
+            width: 390px;
+        }
+
+        .search {
+
+            width: 100%;
+
+            padding:
+                13px 45px 13px 17px;
+
+            background: var(--input);
+
+            border:
+                1px solid var(--border-light);
+
+            border-radius: 9px;
+
+            color: var(--text);
+
+            outline: none;
+
+            font-size: 12px;
+
+            transition: .25s;
+        }
+
+        .search:focus {
+
+            border-color:
+                var(--purple);
+
+            box-shadow:
+                var(--glow);
+        }
+
+        .search::placeholder {
+            color: var(--muted-2);
+        }
+
+        .search-icon {
+
+            position: absolute;
+
+            right: 15px;
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            color: var(--purple-2);
+
+            font-size: 19px;
+        }
+
+        .profile-area {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+        }
+
+        .theme-btn,
+        .notification {
+
+            width: 40px;
+            height: 40px;
+
+            border-radius: 10px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            background: var(--input);
+
+            border:
+                1px solid var(--border-light);
+
+            color: var(--text);
+
+            cursor: pointer;
+
+            transition: .25s;
+        }
+
+        .theme-btn:hover,
+        .notification:hover {
+
+            border-color:
+                var(--purple);
+
+            box-shadow:
+                var(--glow);
+
+            transform:
+                translateY(-1px);
+        }
+
+        .notification {
+
+            position: relative;
+        }
+
+        .notification-number {
+
+            position: absolute;
+
+            top: -5px;
+            right: -5px;
+
+            width: 18px;
+            height: 18px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            background:
+                var(--purple-2);
+
+            color: #fff;
+
+            font-size: 9px;
+
+            box-shadow:
+                var(--glow);
+        }
+
+        .user-area {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 190px;
+            padding: 5px 9px 5px 5px;
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            background: var(--input);
+            cursor: pointer;
+            transition: .25s;
+        }
+
+        .user-area:hover,
+        .user-area:focus-visible,
+        .user-area[aria-expanded="true"] {
+            border-color: var(--purple);
+            box-shadow: var(--glow);
+        }
+
+        .user-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .user-name {
+            color: var(--text);
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .user-status {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 4px;
+            color: var(--green);
+            font-size: 8px;
+            white-space: nowrap;
+        }
+
+        .online-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 7px var(--green);
+        }
+
+        .user-arrow {
+            color: var(--muted);
+            font-size: 12px;
+            transition: .2s;
+        }
+
+        .user-area.open .user-arrow {
+            transform: rotate(180deg);
+            color: var(--purple-2);
+        }
+
+        .account-menu {
+            position: absolute;
+            right: 0;
+            top: calc(100% + 10px);
+            width: 245px;
+            padding: 8px;
+            border-radius: 12px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-8px);
+            transition: .2s;
+            z-index: 5000;
+        }
+
+        .user-area.open .account-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .account-header {
+            padding: 11px 10px 13px;
+            margin-bottom: 5px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .account-name {
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .account-role {
+            margin-top: 4px;
+            color: var(--purple-2);
+            font-size: 9px;
+        }
+
+        .account-online {
+            margin-top: 7px;
+            color: var(--green);
+            font-size: 8px;
+        }
+
+        .account-item {
+            width: 100%;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 10px;
+            margin: 3px 0;
+            border-radius: 8px;
+            background: transparent;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 10px;
+            transition: .2s;
+        }
+
+        .account-item:hover {
+            color: var(--text);
+            background: rgba(161, 0, 255, .09);
+        }
+
+        .account-item-icon {
+            width: 25px;
+            color: var(--purple-2);
+            font-size: 15px;
+            text-align: center;
+        }
+
+        .avatar {
+
+            width: 40px;
+            height: 40px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            background:
+                linear-gradient(135deg,
+                    #7000ff,
+                    #c000ff);
+
+            color: #fff;
+
+            font-weight: bold;
+
+            box-shadow:
+                0 0 15px rgba(170, 0, 255, .35);
+        }
+
+
+        /* =========================================================
+   PAGE HEADER
+========================================================= */
+
+        .page-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: flex-end;
+
+            gap: 20px;
+
+            margin-bottom: 25px;
+        }
+
+        .page-title h1 {
+
+            color: var(--text);
+
+            font-size: 29px;
+
+            letter-spacing: -.5px;
+        }
+
+        .page-title p {
+
+            margin-top: 7px;
+
+            color: var(--muted);
+
+            font-size: 12px;
+        }
+
+        .page-actions {
+
+            display: flex;
+
+            gap: 10px;
+        }
+
+        .btn {
+
+            padding:
+                11px 16px;
+
+            border-radius: 8px;
+
+            border:
+                1px solid var(--border-light);
+
+            background:
+                var(--card);
+
+            color:
+                var(--text-secondary);
+
+            cursor: pointer;
+
+            font-size: 11px;
+
+            transition: .2s;
+        }
+
+        .btn:hover {
+
+            border-color:
+                var(--purple);
+
+            color:
+                var(--text);
+
+            box-shadow:
+                var(--glow);
+        }
+
+        .btn-primary {
+
+            color: #fff;
+
+            border-color:
+                var(--purple);
+
+            background:
+                linear-gradient(135deg,
+                    #a100ff,
+                    #6500ff);
+
+            box-shadow:
+                0 0 12px rgba(160, 0, 255, .25);
+        }
+
+        .btn-primary:hover {
+
+            filter:
+                brightness(1.15);
+
+            transform:
+                translateY(-1px);
+        }
+
+
+        /* =========================================================
+   SUMMARY CARDS
+========================================================= */
+
+        .summary-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 16px;
+
+            margin-bottom: 20px;
+        }
+
+        .summary-card {
+
+            position: relative;
+
+            overflow: hidden;
+
+            min-height: 125px;
+
+            padding: 18px;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(145deg,
+                    var(--card-secondary),
+                    var(--card));
+
+            border:
+                1px solid var(--border-light);
+
+            box-shadow:
+                var(--shadow);
+
+            transition: .25s;
+        }
+
+        .summary-card:hover {
+
+            transform:
+                translateY(-3px);
+
+            border-color:
+                var(--purple);
+
+            box-shadow:
+                var(--glow);
+        }
+
+        .summary-card::before {
+
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+            top: 0;
+
+            width: 100%;
+            height: 2px;
+
+            background:
+                linear-gradient(90deg,
+                    transparent,
+                    var(--purple-2),
+                    transparent);
+        }
+
+        .summary-top {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+        }
+
+        .summary-title {
+
+            color: var(--muted);
+
+            font-size: 10px;
+
+            letter-spacing: 1px;
+
+            text-transform: uppercase;
+        }
+
+        .summary-icon {
+
+            width: 35px;
+            height: 35px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 9px;
+
+            background:
+                rgba(160, 0, 255, .08);
+
+            border:
+                1px solid rgba(160, 0, 255, .18);
+
+            color:
+                var(--purple-2);
+
+            font-size: 17px;
+        }
+
+        .summary-value {
+
+            margin-top: 14px;
+
+            color:
+                var(--text);
+
+            font-size: 27px;
+
+            font-weight: 700;
+        }
+
+        .summary-description {
+
+            margin-top: 6px;
+
+            color:
+                var(--muted-2);
+
+            font-size: 10px;
+        }
+
+        .summary-description.red {
+            color: var(--red);
+        }
+
+        .summary-description.yellow {
+            color: var(--yellow);
+        }
+
+        .summary-description.green {
+            color: var(--green);
+        }
+
+        .summary-description.blue {
+            color: var(--blue);
+        }
+
+
+        /* =========================================================
+   CONTENT LAYOUT
+========================================================= */
+
+        .content-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1.65fr) minmax(290px, .75fr);
+
+            gap: 20px;
+        }
+
+
+        /* =========================================================
+   PANEL
+========================================================= */
+
+        .panel {
+
+            margin-bottom: 20px;
+
+            overflow: hidden;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(145deg,
+                    var(--card),
+                    var(--card-secondary));
+
+            border:
+                1px solid var(--border-light);
+
+            box-shadow:
+                var(--shadow);
+        }
+
+        .panel-header {
+
+            min-height: 60px;
+
+            padding:
+                15px 18px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            border-bottom:
+                1px solid var(--border-light);
+        }
+
+        .panel-title {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            color:
+                var(--text);
+
+            font-size: 14px;
+
+            font-weight: 700;
+        }
+
+        .panel-title-icon {
+
+            color:
+                var(--purple-2);
+
+            filter:
+                drop-shadow(0 0 7px rgba(190, 0, 255, .7));
+        }
+
+
+        /* =========================================================
+   NOTIFICATION FILTER BAR
+========================================================= */
+
+        .notification-toolbar {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            padding:
+                14px 18px;
+
+            border-bottom:
+                1px solid var(--border-light);
+        }
+
+        .filter-buttons {
+
+            display: flex;
+
+            gap: 7px;
+
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+
+            padding:
+                8px 12px;
+
+            border-radius: 7px;
+
+            border:
+                1px solid var(--border-light);
+
+            background:
+                var(--input);
+
+            color:
+                var(--muted);
+
+            cursor: pointer;
+
+            font-size: 10px;
+
+            transition: .2s;
+        }
+
+        .filter-btn:hover {
+
+            color:
+                var(--text);
+
+            border-color:
+                var(--purple);
+        }
+
+        .filter-btn.active {
+
+            color: #fff;
+
+            border-color:
+                var(--purple);
+
+            background:
+                linear-gradient(135deg,
+                    rgba(161, 0, 255, .75),
+                    rgba(100, 0, 255, .35));
+
+            box-shadow:
+                0 0 10px rgba(160, 0, 255, .16);
+        }
+
+        .mark-all {
+
+            border: none;
+
+            background: transparent;
+
+            color:
+                var(--purple-2);
+
+            font-size: 10px;
+
+            cursor: pointer;
+        }
+
+        .mark-all:hover {
+
+            color:
+                var(--text);
+
+            text-decoration:
+                underline;
+        }
+
+
+        /* =========================================================
+   NOTIFICATION LIST
+========================================================= */
+
+        .notification-list {
+
+            padding:
+                5px 18px 10px;
+        }
+
+        .notification-item {
+
+            position: relative;
+
+            display: flex;
+
+            align-items: flex-start;
+
+            gap: 14px;
+
+            padding:
+                16px 5px;
+
+            border-bottom:
+                1px solid var(--border-light);
+
+            cursor: pointer;
+
+            transition: .2s;
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+
+        .notification-item:hover {
+
+            background:
+                var(--hover);
+
+            padding-left: 9px;
+
+            padding-right: 9px;
+        }
+
+        .notification-item.unread::before {
+
+            content: "";
+
+            position: absolute;
+
+            left: -1px;
+
+            top: 17px;
+
+            width: 4px;
+            height: 34px;
+
+            border-radius:
+                0 4px 4px 0;
+
+            background:
+                linear-gradient(180deg,
+                    #c000ff,
+                    #7000ff);
+
+            box-shadow:
+                0 0 8px rgba(190, 0, 255, .6);
+        }
+
+
+        /* =========================================================
+   NOTIFICATION ICON
+========================================================= */
+
+        .notification-icon {
+
+            flex: 0 0 43px;
+
+            width: 43px;
+            height: 43px;
+
+            border-radius: 11px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-size: 19px;
+
+            border: 1px solid;
+        }
+
+        .notification-icon.critical {
+
+            color:
+                var(--red);
+
+            background:
+                rgba(255, 61, 90, .07);
+
+            border-color:
+                rgba(255, 61, 90, .2);
+        }
+
+        .notification-icon.warning {
+
+            color:
+                var(--yellow);
+
+            background:
+                rgba(255, 208, 0, .07);
+
+            border-color:
+                rgba(255, 208, 0, .2);
+        }
+
+        .notification-icon.ai {
+
+            color:
+                var(--purple-2);
+
+            background:
+                rgba(161, 0, 255, .08);
+
+            border-color:
+                rgba(161, 0, 255, .2);
+        }
+
+        .notification-icon.success {
+
+            color:
+                var(--green);
+
+            background:
+                rgba(0, 230, 118, .07);
+
+            border-color:
+                rgba(0, 230, 118, .2);
+        }
+
+        .notification-icon.system {
+
+            color:
+                var(--blue);
+
+            background:
+                rgba(0, 170, 255, .07);
+
+            border-color:
+                rgba(0, 170, 255, .2);
+        }
+
+
+        /* =========================================================
+   NOTIFICATION CONTENT
+========================================================= */
+
+        .notification-content {
+
+            flex: 1;
+
+            min-width: 0;
+        }
+
+        .notification-title {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            color:
+                var(--text);
+
+            font-size: 12px;
+
+            font-weight: 700;
+        }
+
+        .unread-dot {
+
+            width: 6px;
+            height: 6px;
+
+            border-radius: 50%;
+
+            background:
+                var(--purple-2);
+
+            box-shadow:
+                0 0 7px var(--purple-2);
+        }
+
+        .notification-text {
+
+            margin-top: 6px;
+
+            color:
+                var(--muted);
+
+            font-size: 10px;
+
+            line-height: 1.65;
+        }
+
+        .notification-text strong {
+            color: var(--text-secondary);
+        }
+
+        .notification-time {
+
+            margin-top: 7px;
+
+            color:
+                var(--muted-2);
+
+            font-size: 9px;
+        }
+
+        .notification-action {
+
+            flex: 0 0 auto;
+
+            align-self: center;
+        }
+
+        .small-btn {
+
+            padding:
+                7px 9px;
+
+            border-radius: 6px;
+
+            background:
+                var(--input);
+
+            border:
+                1px solid var(--border-light);
+
+            color:
+                var(--muted);
+
+            cursor: pointer;
+
+            font-size: 9px;
+
+            transition: .2s;
+        }
+
+        .small-btn:hover {
+
+            color:
+                var(--text);
+
+            border-color:
+                var(--purple);
+
+            box-shadow:
+                0 0 8px rgba(160, 0, 255, .18);
+        }
+
+
+        /* =========================================================
+   RIGHT COLUMN - ALERT CENTER
+========================================================= */
+
+        .alert-overview {
+
+            padding: 18px;
+        }
+
+        .alert-score {
+
+            position: relative;
+
+            width: 150px;
+            height: 150px;
+
+            margin:
+                5px auto 20px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+            justify-content: center;
+
+            background:
+                radial-gradient(circle,
+                    var(--card-secondary) 56%,
+                    transparent 57%);
+
+            border:
+                10px solid rgba(161, 0, 255, .11);
+
+            box-shadow:
+                inset 0 0 25px rgba(161, 0, 255, .08),
+                0 0 30px rgba(161, 0, 255, .10);
+        }
+
+        .alert-score-number {
+
+            color:
+                var(--text);
+
+            font-size: 32px;
+
+            font-weight: 700;
+        }
+
+        .alert-score-label {
+
+            margin-top: 4px;
+
+            color:
+                var(--muted);
+
+            font-size: 9px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+        }
+
+
+        /* =========================================================
+   ALERT ROWS
+========================================================= */
+
+        .alert-list {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 9px;
+        }
+
+        .alert-row {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 10px 11px;
+
+            border-radius: 8px;
+
+            background:
+                rgba(130, 120, 140, .05);
+
+            border:
+                1px solid var(--border-light);
+        }
+
+        .alert-left {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            color:
+                var(--text-secondary);
+
+            font-size: 10px;
+        }
+
+        .alert-dot {
+
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+        }
+
+        .alert-dot.red {
+
+            background:
+                var(--red);
+
+            box-shadow:
+                0 0 7px var(--red);
+        }
+
+        .alert-dot.yellow {
+
+            background:
+                var(--yellow);
+
+            box-shadow:
+                0 0 7px var(--yellow);
+        }
+
+        .alert-dot.purple {
+
+            background:
+                var(--purple-2);
+
+            box-shadow:
+                0 0 7px var(--purple-2);
+        }
+
+        .alert-dot.green {
+
+            background:
+                var(--green);
+
+            box-shadow:
+                0 0 7px var(--green);
+        }
+
+        .alert-number {
+
+            color:
+                var(--text);
+
+            font-size: 11px;
+
+            font-weight: 700;
+        }
+
+
+        /* =========================================================
+   QUICK ACTIONS
+========================================================= */
+
+        .quick-actions {
+
+            padding:
+                4px 18px 18px;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 9px;
+        }
+
+        .quick-action {
+
+            min-height: 75px;
+
+            padding: 12px;
+
+            border-radius: 9px;
+
+            background:
+                var(--input);
+
+            border:
+                1px solid var(--border-light);
+
+            cursor: pointer;
+
+            text-align: left;
+
+            transition: .2s;
+        }
+
+        .quick-action:hover {
+
+            border-color:
+                var(--purple);
+
+            background:
+                var(--hover);
+
+            transform:
+                translateY(-2px);
+        }
+
+        .quick-action-icon {
+
+            color:
+                var(--purple-2);
+
+            font-size: 17px;
+        }
+
+        .quick-action-title {
+
+            margin-top: 8px;
+
+            color:
+                var(--text);
+
+            font-size: 10px;
+
+            font-weight: 700;
+        }
+
+        .quick-action-text {
+
+            margin-top: 3px;
+
+            color:
+                var(--muted-2);
+
+            font-size: 8px;
+        }
+
+
+        /* =========================================================
+   AI NOTICE
+========================================================= */
+
+        .ai-notice {
+
+            padding: 17px;
+
+            background:
+                radial-gradient(circle at 0% 50%,
+                    rgba(160, 0, 255, .16),
+                    transparent 65%);
+        }
+
+        .ai-label {
+
+            color:
+                var(--purple-2);
+
+            font-size: 10px;
+
+            font-weight: bold;
+
+            letter-spacing: .5px;
+
+            margin-bottom: 8px;
+        }
+
+        .ai-notice p {
+
+            color:
+                var(--muted);
+
+            font-size: 10px;
+
+            line-height: 1.7;
+        }
+
+        .ai-notice strong {
+            color:
+                var(--text);
+        }
+
+
+        /* =========================================================
+   EMPTY STATE
+========================================================= */
+
+        .empty-state {
+
+            display: none;
+
+            padding:
+                50px 20px;
+
+            text-align: center;
+        }
+
+        .empty-icon {
+
+            width: 55px;
+            height: 55px;
+
+            margin: 0 auto 12px;
+
+            border-radius: 14px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            background:
+                rgba(161, 0, 255, .08);
+
+            border:
+                1px solid rgba(161, 0, 255, .18);
+
+            color:
+                var(--purple-2);
+
+            font-size: 23px;
+        }
+
+        .empty-state h3 {
+
+            color:
+                var(--text);
+
+            font-size: 13px;
+        }
+
+        .empty-state p {
+
+            margin-top: 6px;
+
+            color:
+                var(--muted);
+
+            font-size: 10px;
+        }
+
+
+        /* =========================================================
+   FOOTER
+========================================================= */
+
+        .footer {
+
+            padding:
+                15px 0 25px;
+
+            text-align: center;
+
+            color:
+                var(--muted-2);
+
+            font-size: 9px;
+        }
+
+
+        /* =========================================================
+   TOAST
+========================================================= */
+
+        .toast {
+
+            position: fixed;
+
+            right: 25px;
+            bottom: 25px;
+
+            min-width: 260px;
+
+            padding:
+                14px 18px;
+
+            border-radius: 10px;
+
+            background:
+                var(--card);
+
+            color:
+                var(--text);
+
+            border:
+                1px solid var(--purple);
+
+            box-shadow:
+                var(--glow);
+
+            font-size: 11px;
+
+            transform:
+                translateY(100px);
+
+            opacity: 0;
+
+            pointer-events: none;
+
+            transition: .3s;
+
+            z-index: 9999;
+        }
+
+        .toast.show {
+
+            transform:
+                translateY(0);
+
+            opacity: 1;
+        }
+
+
+        /* =========================================================
+   RESPONSIVE
+========================================================= */
+
+        @media(max-width:1200px) {
+
+            .summary-grid {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .content-grid {
+
+                grid-template-columns:
+                    1fr;
+            }
+        }
+
+
+        @media(max-width:800px) {
+
+            .sidebar {
+
+                width: 72px;
+
+                padding:
+                    18px 9px;
+            }
+
+            .logo {
+
+                justify-content:
+                    center;
+
+                padding-left: 0;
+                padding-right: 0;
+            }
+
+            .logo-text,
+            .menu-title,
+            .menu-text {
+
+                display: none;
+            }
+
+            .menu-item {
+
+                justify-content:
+                    center;
+
+                padding: 0;
+
+                height: 48px;
+            }
+
+            .menu-icon {
+                width: auto;
+            }
+
+            .main {
+
+                margin-left: 72px;
+
+                padding:
+                    18px 15px;
+            }
+
+            .search-wrapper {
+
+                width: 230px;
+            }
+        }
+
+
+        @media(max-width:600px) {
+
+            .topbar {
+
+                flex-direction:
+                    column;
+
+                align-items:
+                    stretch;
+            }
+
+            .search-wrapper {
+
+                width: 100%;
+            }
+
+            .profile-area {
+
+                justify-content:
+                    flex-end;
+            }
+
+            .page-header {
+
+                flex-direction:
+                    column;
+
+                align-items:
+                    flex-start;
+            }
+
+            .page-actions {
+
+                width: 100%;
+            }
+
+            .page-actions .btn {
+
+                flex: 1;
+            }
+
+            .summary-grid {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+            .notification-toolbar {
+
+                flex-direction:
+                    column;
+
+                align-items:
+                    flex-start;
+            }
+
+            .notification-item {
+
+                gap: 10px;
+            }
+
+            .notification-action {
+
+                display: none;
+            }
+
+            .quick-actions {
+
+                grid-template-columns:
+                    1fr;
+            }
+        }
+        .account-item.logout {
+            margin-top: 6px;
+            border: 0;
+            border-top: 1px solid var(--border-light);
+            color: var(--red);
+            font-family: inherit;
+            text-align: left;
+            cursor: pointer;
+        }
+        .account-item.logout .account-item-icon { color: var(--purple-2); }
+        .account-item.logout:hover { color: var(--red); background: rgba(255, 61, 90, .08); }
+        .account-item.logout:focus-visible { outline: 2px solid var(--purple); outline-offset: 2px; }
+    </style>
+    <script src="js/logout.js"></script>
+    <link rel="stylesheet" href="css/logout.css">
+    <script src="js/auth.js"></script>
+    <style>[hidden]{display:none!important}</style>
+<link rel="stylesheet" href="css/auth.css">
+</head>
+
+
+<body>
+
+
+    <!-- =======================================================
+     SIDEBAR
+======================================================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                ◈
+            </div>
+
+            <div class="logo-text">
+
+                AI STOCK
+
+                <span>
+                    MANAGER
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="menu-title">
+            Yönetim
+        </div>
+
+
+        <a href="anasayfa.html" class="menu-item">
+
+            <span class="menu-icon">
+                ⌂
+            </span>
+
+            <span class="menu-text">
+                Ana Sayfa
+            </span>
+
+        </a>
+
+
+        <a href="stok.html" class="menu-item">
+
+            <span class="menu-icon">
+                ◇
+            </span>
+
+            <span class="menu-text">
+                Stok Yönetimi
+            </span>
+
+        </a>
+
+
+        <a href="transferler.html" class="menu-item">
+
+            <span class="menu-icon">
+                ⇄
+            </span>
+
+            <span class="menu-text">
+                Transferler
+            </span>
+
+        </a>
+
+
+        <a href="ai-onerileri.html" class="menu-item">
+
+            <span class="menu-icon">
+                ✦
+            </span>
+
+            <span class="menu-text">
+                AI Önerileri
+            </span>
+
+        </a>
+
+
+        <a href="magazalar.html" class="menu-item">
+
+            <span class="menu-icon">
+                ▣
+            </span>
+
+            <span class="menu-text">
+                Mağazalar
+            </span>
+
+        </a>
+
+
+        <div class="menu-title">
+            Analiz
+        </div>
+
+
+        <a href="raporlar.html" class="menu-item">
+
+            <span class="menu-icon">
+                ▥
+            </span>
+
+            <span class="menu-text">
+                Raporlar
+            </span>
+
+        </a>
+
+
+        <a href="satis-analizi.html" class="menu-item">
+
+            <span class="menu-icon">
+                ↗
+            </span>
+
+            <span class="menu-text">
+                Satış Analizi
+            </span>
+
+        </a>
+
+
+        <a href="bildirimler.html" class="menu-item active">
+
+            <span class="menu-icon">
+                ♧
+            </span>
+
+            <span class="menu-text">
+                Bildirimler
+            </span>
+
+        </a>
+
+
+        <div class="menu-title">
+            Sistem
+        </div>
+
+
+        <a href="ayarlar.html" class="menu-item">
+
+            <span class="menu-icon">
+                ⚙
+            </span>
+
+            <span class="menu-text">
+                Ayarlar
+            </span>
+
+        </a>
+
+
+        <a href="kullanicilar.html" class="menu-item">
+
+            <span class="menu-icon">
+                ♙
+            </span>
+
+            <span class="menu-text">
+                Kullanıcılar
+            </span>
+
+        </a>
+
+
+        <a href="entegrasyon.html" class="menu-item">
+
+            <span class="menu-icon">
+                ⌘
+            </span>
+
+            <span class="menu-text">
+                Entegrasyon
+            </span>
+
+        </a>
+
+    </aside>
+
+
+
+    <!-- =======================================================
+     MAIN
+======================================================= -->
+
+    <main class="main">
+
+
+        <!-- TOPBAR -->
+
+        <div class="topbar">
+
+            <div class="search-wrapper">
+
+                <input type="search" id="globalSearch" class="search" placeholder="Bildirim, ürün veya mağaza ara...">
+
+                <span class="search-icon">
+                    ⌕
+                </span>
+
+            </div>
+
+
+            <div class="profile-area">
+
+                <button class="theme-btn" id="themeBtn" title="Tema değiştir">
+                    🌙
+                </button>
+
+                <button class="notification" id="notificationBtn" title="Bildirimler">
+                    ♧
+
+                    <span style="
+                        position:absolute;
+                        margin:-30px 0 0 25px;
+                        width:18px;
+                        height:18px;
+                        border-radius:50%;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        background:var(--purple-2);
+                        color:white;
+                        font-size:9px;
+                    " id="notificationCount">
+                        5
+                    </span>
+
+                </button>
+
+                <div class="user-area" id="userArea" tabindex="0">
+
+                    <div class="avatar" id="avatar">
+                        M
+                    </div>
+
+                    <div class="user-info">
+
+                        <div class="user-name" id="userName">
+                            Admin
+                        </div>
+
+                        <!-- DAKİKA SAYACI KALDIRILDI -->
+
+                        <div class="user-status">
+
+                            <span class="online-dot"></span>
+
+                            Çevrim içi
+
+                        </div>
+
+                    </div>
+
+                    <div class="user-arrow">
+                        ▾
+                    </div>
+
+
+                    <!-- ACCOUNT MENU -->
+
+                    <div class="account-menu" id="accountMenu">
+
+                        <div class="account-header">
+
+                            <div class="account-name" id="accountName">
+                                Admin
+                            </div>
+
+                            <div class="account-role">
+                                Sistem Yöneticisi
+                            </div>
+
+                            <!-- DAKİKA SAYACI KALDIRILDI -->
+
+                            <div class="account-online">
+                                ● Çevrim içi
+                            </div>
+
+                        </div>
+
+
+                        <a href="ayarlar.html" class="account-item">
+
+                            <span class="account-item-icon">
+                                ♙
+                            </span>
+
+                            Hesabım
+
+                        </a>
+
+
+                        <a href="ayarlar.html#guvenlik" class="account-item">
+
+                            <span class="account-item-icon">
+                                🔐
+                            </span>
+
+                            Giriş Güvenliği
+
+                        </a>
+
+
+                        <button class="account-item logout" id="logoutBtn" type="button">
+                            <span class="account-item-icon" aria-hidden="true">⇥</span>
+                            Güvenli Çıkış
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- PAGE HEADER -->
+
+        <div class="page-header">
+
+            <div class="page-title">
+
+                <h1>
+                    Bildirimler
+                </h1>
+
+                <p>
+                    Stok, satış, AI ve sistem bildirimlerinizi tek merkezden takip edin.
+                </p>
+
+            </div>
+
+
+            <div class="page-actions">
+
+                <button class="btn" id="clearBtn" type="button">
+                    ✓ Okundu İşaretle
+                </button>
+
+
+                <button class="btn btn-primary" id="notificationSettingsBtn" type="button">
+                    ⚙ Bildirim Ayarları
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ===================================================
+         SUMMARY
+    =================================================== -->
+
+        <section class="summary-grid">
+
+
+            <div class="summary-card">
+
+                <div class="summary-top">
+
+                    <div class="summary-title">
+                        Toplam Bildirim
+                    </div>
+
+                    <div class="summary-icon">
+                        ♧
+                    </div>
+
+                </div>
+
+                <div class="summary-value" id="totalCount">
+                    24
+                </div>
+
+                <div class="summary-description">
+                    Son 7 günde
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-top">
+
+                    <div class="summary-title">
+                        Okunmamış
+                    </div>
+
+                    <div class="summary-icon">
+                        ●
+                    </div>
+
+                </div>
+
+                <div class="summary-value" id="unreadCount">
+                    5
+                </div>
+
+                <div class="summary-description red">
+                    Dikkat gerektiriyor
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-top">
+
+                    <div class="summary-title">
+                        Kritik Uyarı
+                    </div>
+
+                    <div class="summary-icon">
+                        ⚠
+                    </div>
+
+                </div>
+
+                <div class="summary-value">
+                    3
+                </div>
+
+                <div class="summary-description yellow">
+                    Acil kontrol edilmeli
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-top">
+
+                    <div class="summary-title">
+                        AI Önerisi
+                    </div>
+
+                    <div class="summary-icon">
+                        ✦
+                    </div>
+
+                </div>
+
+                <div class="summary-value">
+                    7
+                </div>
+
+                <div class="summary-description green">
+                    Yeni öneri mevcut
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ===================================================
+         CONTENT
+    =================================================== -->
+
+        <div class="content-grid">
+
+
+            <!-- =================================================
+             LEFT COLUMN
+        ================================================= -->
+
+            <div>
+
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ♧
+                            </span>
+
+                            BİLDİRİM MERKEZİ
+
+                        </div>
+
+                        <span style="
+                            color:var(--muted-2);
+                            font-size:9px;
+                        " id="resultCount">
+                            6 bildirim
+                        </span>
+
+                    </div>
+
+
+                    <!-- FILTER BAR -->
+
+                    <div class="notification-toolbar">
+
+                        <div class="filter-buttons">
+
+                            <button class="filter-btn active" data-filter="all" type="button">
+                                Tümü
+                            </button>
+
+                            <button class="filter-btn" data-filter="unread" type="button">
+                                Okunmamış
+                            </button>
+
+                            <button class="filter-btn" data-filter="critical" type="button">
+                                Kritik
+                            </button>
+
+                            <button class="filter-btn" data-filter="ai" type="button">
+                                AI
+                            </button>
+
+                            <button class="filter-btn" data-filter="system" type="button">
+                                Sistem
+                            </button>
+
+                        </div>
+
+
+                        <button class="mark-all" id="markAllBtn" type="button">
+                            Tümünü okundu yap
+                        </button>
+
+                    </div>
+
+
+
+                    <!-- NOTIFICATION LIST -->
+
+                    <div class="notification-list" id="notificationList">
+
+
+                        <!-- NOTIFICATION 1 -->
+
+                        <div class="notification-item unread" data-type="critical"
+                            data-search="sweatshirt 3021 izmir mağaza kritik stok">
+
+                            <div class="notification-icon critical">
+                                ⚠
+                            </div>
+
+
+                            <div class="notification-content">
+
+                                <div class="notification-title">
+
+                                    <span class="unread-dot"></span>
+
+                                    Kritik stok seviyesi
+
+                                </div>
+
+                                <div class="notification-text">
+
+                                    <strong>Sweatshirt 3021</strong>
+                                    ürününün İzmir Mağaza 01 stok seviyesi
+                                    minimum seviyenin altına düştü.
+                                    Mevcut stok: <strong>18 adet</strong>.
+
+                                </div>
+
+                                <div class="notification-time">
+                                    8 dakika önce • Stok Yönetimi
+                                </div>
+
+                            </div>
+
+
+                            <div class="notification-action">
+
+                                <button class="small-btn"
+                                    onclick="notificationAction(this,'Stok detayına yönlendiriliyor...')" type="button">
+                                    Görüntüle
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- NOTIFICATION 2 -->
+
+                        <div class="notification-item unread" data-type="ai"
+                            data-search="ai transfer önerisi ankara izmir sweatshirt">
+
+                            <div class="notification-icon ai">
+                                ✦
+                            </div>
+
+
+                            <div class="notification-content">
+
+                                <div class="notification-title">
+
+                                    <span class="unread-dot"></span>
+
+                                    Yeni AI transfer önerisi
+
+                                </div>
+
+                                <div class="notification-text">
+
+                                    AI analiz motoru,
+                                    <strong>Ankara Mağaza 01 → İzmir Mağaza 01</strong>
+                                    arasında stok transferi yapılmasını öneriyor.
+
+                                </div>
+
+                                <div class="notification-time">
+                                    22 dakika önce • AI Önerileri
+                                </div>
+
+                            </div>
+
+
+                            <div class="notification-action">
+
+                                <button class="small-btn" onclick="notificationAction(this,'AI önerisi açılıyor...')"
+                                    type="button">
+                                    İncele
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- NOTIFICATION 3 -->
+
+                        <div class="notification-item unread" data-type="critical"
+                            data-search="kritik stok sneaker 4031 istanbul">
+
+                            <div class="notification-icon critical">
+                                ⚠
+                            </div>
+
+
+                            <div class="notification-content">
+
+                                <div class="notification-title">
+
+                                    <span class="unread-dot"></span>
+
+                                    Kritik stok uyarısı
+
+                                </div>
+
+                                <div class="notification-text">
+
+                                    <strong>Sneaker 4031</strong>
+                                    ürününde İstanbul Mağaza 02 stok seviyesi
+                                    kritik sınıra yaklaştı.
+
+                                </div>
+
+                                <div class="notification-time">
+                                    45 dakika önce • Stok Yönetimi
+                                </div>
+
+                            </div>
+
+
+                            <div class="notification-action">
+
+                                <button class="small-btn"
+                                    onclick="notificationAction(this,'Sneaker 4031 detayları açılıyor...')"
+                                    type="button">
+                                    Görüntüle
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- NOTIFICATION 4 -->
+
+                        <div class="notification-item unread" data-type="system"
+                            data-search="nebim v3 entegrasyon senkronizasyon tamamlandı">
+
+                            <div class="notification-icon system">
+                                ↻
+                            </div>
+
+
+                            <div class="notification-content">
+
+                                <div class="notification-title">
+
+                                    <span class="unread-dot"></span>
+
+                                    Veri senkronizasyonu tamamlandı
+
+                                </div>
+
+                                <div class="notification-text">
+
+                                    Nebim V3 ile ürün, stok ve mağaza verilerinin
+                                    senkronizasyonu başarıyla tamamlandı.
+
+                                </div>
+
+                                <div class="notification-time">
+                                    1 saat önce • Sistem
+                                </div>
+
+                            </div>
+
+
+                            <div class="notification-action">
+
+                                <button class="small-btn"
+                                    onclick="notificationAction(this,'Senkronizasyon detayları açılıyor...')"
+                                    type="button">
+                                    Detay
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- NOTIFICATION 5 -->
+
+                        <div class="notification-item unread" data-type="ai"
+                            data-search="ai satış tahmini nike tshirt 1023">
+
+                            <div class="notification-icon ai">
+                                ✦
+                            </div>
+
+
+                            <div class="notification-content">
+
+                                <div class="notification-title">
+
+                                    <span class="unread-dot"></span>
+
+                                    AI satış tahmini hazır
+
+                                </div>
+
+                                <div class="notification-text">
+
+                                    <strong>Nike T-Shirt 1023</strong>
+                                    için önümüzdeki 14 günlük satış tahmini
+                                    normal seviyenin %12 üzerinde.
+
+                                </div>
+
+                                <div class="notification-time">
+                                    2 saat önce • Satış Analizi
+                                </div>
+
+                            </div>
+
+
+                            <div class="notification-action">
+
+                                <button class="small-btn" onclick="notificationAction(this,'Satış analizi açılıyor...')"
+                                    type="button">
+                                    İncele
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- NOTIFICATION 6 -->
+
+                        <div class="notification-item" data-type="success"
+                            data-search="stok transfer tamamlandı ankara istanbul">
+
+                            <div class="notification-icon success">
+                                ✓
+                            </div>
+
+
+                            <div class="notification-content">
+
+                                <div class="notification-title">
+                                    Stok transferi tamamlandı
+                                </div>
+
+                                <div class="notification-text">
+
+                                    Ankara Mağaza 01'den İstanbul Mağaza 01'e
+                                    yapılan <strong>120 adet</strong> stok transferi
+                                    başarıyla tamamlandı.
+
+                                </div>
+
+                                <div class="notification-time">
+                                    Dün • Transferler
+                                </div>
+
+                            </div>
+
+
+                            <div class="notification-action">
+
+                                <button class="small-btn"
+                                    onclick="notificationAction(this,'Transfer detayları açılıyor...')" type="button">
+                                    Detay
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- EMPTY STATE -->
+
+                    <div class="empty-state" id="emptyState">
+
+                        <div class="empty-icon">
+                            ✓
+                        </div>
+
+                        <h3>
+                            Bildirim bulunamadı
+                        </h3>
+
+                        <p>
+                            Seçtiğiniz filtreye uygun bildirim bulunmuyor.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- AI NOTICE -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ✦
+                            </span>
+
+                            AI BİLDİRİM ÖZETİ
+
+                        </div>
+
+                        <span style="
+                            color:var(--green);
+                            font-size:9px;
+                        ">
+                            ● AKTİF
+                        </span>
+
+                    </div>
+
+
+                    <div class="ai-notice">
+
+                        <div class="ai-label">
+                            ✦ YAPAY ZEKA ÖZETİ
+                        </div>
+
+                        <p>
+
+                            Son 24 saatte sistem tarafından
+                            <strong>5 önemli bildirim</strong>
+                            oluşturuldu.
+
+                            Bunların 2'si kritik stok seviyesi,
+                            2'si AI önerisi ve 1'i sistem
+                            senkronizasyon bildirimi.
+
+                            <br><br>
+
+                            Öncelikli aksiyon:
+                            <strong>
+                                İzmir Mağaza 01 stoklarının kontrol edilmesi.
+                            </strong>
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+             RIGHT COLUMN
+        ================================================= -->
+
+            <div>
+
+
+                <!-- ALERT OVERVIEW -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ◉
+                            </span>
+
+                            UYARI DURUMU
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="alert-overview">
+
+                        <div class="alert-score">
+
+                            <div class="alert-score-number">
+                                82%
+                            </div>
+
+                            <div class="alert-score-label">
+                                Sistem Sağlığı
+                            </div>
+
+                        </div>
+
+
+                        <div class="alert-list">
+
+
+                            <div class="alert-row">
+
+                                <div class="alert-left">
+
+                                    <span class="alert-dot red"></span>
+
+                                    Kritik
+
+                                </div>
+
+                                <div class="alert-number">
+                                    3
+                                </div>
+
+                            </div>
+
+
+                            <div class="alert-row">
+
+                                <div class="alert-left">
+
+                                    <span class="alert-dot yellow"></span>
+
+                                    Uyarı
+
+                                </div>
+
+                                <div class="alert-number">
+                                    7
+                                </div>
+
+                            </div>
+
+
+                            <div class="alert-row">
+
+                                <div class="alert-left">
+
+                                    <span class="alert-dot purple"></span>
+
+                                    AI Önerisi
+
+                                </div>
+
+                                <div class="alert-number">
+                                    7
+                                </div>
+
+                            </div>
+
+
+                            <div class="alert-row">
+
+                                <div class="alert-left">
+
+                                    <span class="alert-dot green"></span>
+
+                                    Başarılı
+
+                                </div>
+
+                                <div class="alert-number">
+                                    7
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- QUICK ACTIONS -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ⚡
+                            </span>
+
+                            HIZLI İŞLEMLER
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="quick-actions">
+
+
+                        <button class="quick-action" type="button" onclick="location.href='stok.html'">
+
+                            <div class="quick-action-icon">
+                                ◇
+                            </div>
+
+                            <div class="quick-action-title">
+                                Stokları Gör
+                            </div>
+
+                            <div class="quick-action-text">
+                                Kritik stokları kontrol et
+                            </div>
+
+                        </button>
+
+
+                        <button class="quick-action" type="button" onclick="location.href='ai-onerileri.html'">
+
+                            <div class="quick-action-icon">
+                                ✦
+                            </div>
+
+                            <div class="quick-action-title">
+                                AI Önerileri
+                            </div>
+
+                            <div class="quick-action-text">
+                                Yeni önerileri incele
+                            </div>
+
+                        </button>
+
+
+                        <button class="quick-action" type="button" onclick="location.href='transferler.html'">
+
+                            <div class="quick-action-icon">
+                                ⇄
+                            </div>
+
+                            <div class="quick-action-title">
+                                Transferler
+                            </div>
+
+                            <div class="quick-action-text">
+                                Stok transferlerini yönet
+                            </div>
+
+                        </button>
+
+
+                        <button class="quick-action" type="button" onclick="location.href='satis-analizi.html'">
+
+                            <div class="quick-action-icon">
+                                ↗
+                            </div>
+
+                            <div class="quick-action-title">
+                                Satış Analizi
+                            </div>
+
+                            <div class="quick-action-text">
+                                Satış performansını incele
+                            </div>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- SYSTEM STATUS -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ◈
+                            </span>
+
+                            SİSTEM DURUMU
+
+                        </div>
+
+                    </div>
+
+
+                    <div style="
+                        padding:18px;
+                    ">
+
+                        <div style="
+                            display:flex;
+                            align-items:center;
+                            justify-content:space-between;
+                            padding:11px 0;
+                            border-bottom:1px solid var(--border-light);
+                        ">
+
+                            <span style="
+                                color:var(--text-secondary);
+                                font-size:10px;
+                            ">
+                                Nebim V3
+                            </span>
+
+                            <span style="
+                                color:var(--green);
+                                font-size:9px;
+                            ">
+                                ● Bağlı
+                            </span>
+
+                        </div>
+
+
+                        <div style="
+                            display:flex;
+                            align-items:center;
+                            justify-content:space-between;
+                            padding:11px 0;
+                            border-bottom:1px solid var(--border-light);
+                        ">
+
+                            <span style="
+                                color:var(--text-secondary);
+                                font-size:10px;
+                            ">
+                                AI Motoru
+                            </span>
+
+                            <span style="
+                                color:var(--green);
+                                font-size:9px;
+                            ">
+                                ● Aktif
+                            </span>
+
+                        </div>
+
+
+                        <div style="
+                            display:flex;
+                            align-items:center;
+                            justify-content:space-between;
+                            padding:11px 0;
+                        ">
+
+                            <span style="
+                                color:var(--text-secondary);
+                                font-size:10px;
+                            ">
+                                Son Senkronizasyon
+                            </span>
+
+                            <span style="
+                                color:var(--muted);
+                                font-size:9px;
+                            ">
+                                08:42
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- FOOTER -->
+
+        <div class="footer">
+
+            AI Stock Manager
+            •
+            Nebim V3 Entegrasyon Paneli
+
+        </div>
+
+    </main>
+
+
+
+    <!-- TOAST -->
+
+    <div id="toast" class="toast"></div>
+
+
+
+    <script>
+        (() => {
+            const logoutBtn = document.getElementById("logoutBtn");
+            
+        })();
+    </script>
+    <script src="js/nebim-adapter.js"></script>
+
+    <script>
+
+        /* =========================================================
+           THEME SYSTEM
+        ========================================================= */
+
+        (function () {
+
+            const savedTheme =
+                localStorage.getItem("aiStockTheme");
+
+            if (savedTheme === "light") {
+
+                document.body.classList.add(
+                    "light-theme"
+                );
+
+            }
+
+        })();
+
+
+        const themeBtn =
+            document.getElementById("themeBtn");
+
+
+        function updateThemeButton() {
+
+            const isLight =
+                document.body.classList.contains(
+                    "light-theme"
+                );
+
+            themeBtn.textContent =
+                isLight ? "☀️" : "🌙";
+
+            themeBtn.title =
+                isLight
+                    ? "Karanlık temaya geç"
+                    : "Açık temaya geç";
+
+            themeBtn.setAttribute(
+                "aria-label",
+                themeBtn.title
+            );
+
+        }
+
+
+        updateThemeButton();
+
+
+        themeBtn.addEventListener(
+            "click",
+            function () {
+
+                const isLight =
+                    document.body.classList.toggle(
+                        "light-theme"
+                    );
+
+                localStorage.setItem(
+                    "aiStockTheme",
+                    isLight
+                        ? "light"
+                        : "dark"
+                );
+
+                updateThemeButton();
+
+            }
+        );
+
+
+        const userArea =
+            document.getElementById("userArea");
+
+        const accountMenu =
+            document.getElementById("accountMenu");
+
+        if (userArea && accountMenu) {
+
+            function setUserMenu(isOpen) {
+                userArea.classList.toggle("open", isOpen);
+                userArea.setAttribute("aria-expanded", isOpen ? "true" : "false");
+            }
+
+            userArea.addEventListener("click", function (event) {
+                if (event.target.closest(".account-menu")) {
+                    return;
+                }
+                setUserMenu(!userArea.classList.contains("open"));
+            });
+
+            userArea.addEventListener("keydown", function (event) {
+                if (event.target.closest(".account-menu") && event.key !== "Escape") return;
+                if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    setUserMenu(!userArea.classList.contains("open"));
+                }
+                if (event.key === "Escape") {
+                    setUserMenu(false);
+                }
+            });
+
+            document.addEventListener("click", function (event) {
+                if (!userArea.contains(event.target)) {
+                    setUserMenu(false);
+                }
+            });
+        }
+
+
+        /* =========================================================
+           NOTIFICATION DATA
+        ========================================================= */
+
+        const notificationItems =
+            document.querySelectorAll(
+                ".notification-item"
+            );
+
+        /* =========================================================
+           NEBIM V3 ADAPTER - SENKRONİZASYON
+        ========================================================= */
+
+        function getNotificationTitle(item) {
+
+            return item
+                .querySelector(".notification-title")
+                .textContent
+                .trim();
+        }
+
+        NebimAdapter.getNotifications().then(function (existing) {
+
+            const existingTitles =
+                new Set(existing.map(n => n.title));
+
+            notificationItems.forEach(function (item) {
+
+                const title = getNotificationTitle(item);
+
+                if (!existingTitles.has(title)) {
+
+                    NebimAdapter.addNotification({
+                        title: title,
+                        description: "",
+                        read: !item.classList.contains("unread")
+                    });
+
+                }
+
+            });
+
+        });
+
+        function markNotificationReadInStore(title) {
+
+            NebimAdapter.getNotifications().then(function (list) {
+
+                const match =
+                    list.find(n => n.title === title);
+
+                if (match) {
+                    NebimAdapter.markNotificationRead(match.id);
+                }
+
+            });
+        }
+
+        const filterButtons =
+            document.querySelectorAll(
+                ".filter-btn"
+            );
+
+        const globalSearch =
+            document.getElementById(
+                "globalSearch"
+            );
+
+        const emptyState =
+            document.getElementById(
+                "emptyState"
+            );
+
+        const resultCount =
+            document.getElementById(
+                "resultCount"
+            );
+
+
+        let currentFilter = "all";
+
+
+        /* =========================================================
+           FILTER SYSTEM
+        ========================================================= */
+
+        function filterNotifications() {
+
+            const search =
+                globalSearch.value
+                    .toLocaleLowerCase("tr-TR")
+                    .trim();
+
+            let visibleCount = 0;
+
+
+            notificationItems.forEach(
+                function (item) {
+
+                    const type =
+                        item.dataset.type;
+
+                    const text =
+                        item.dataset.search
+                            .toLocaleLowerCase("tr-TR");
+
+                    const unread =
+                        item.classList.contains(
+                            "unread"
+                        );
+
+
+                    let filterMatch = true;
+
+
+                    if (currentFilter === "unread") {
+
+                        filterMatch =
+                            unread;
+
+                    }
+
+                    else if (
+                        currentFilter === "critical"
+                    ) {
+
+                        filterMatch =
+                            type === "critical";
+
+                    }
+
+                    else if (
+                        currentFilter === "ai"
+                    ) {
+
+                        filterMatch =
+                            type === "ai";
+
+                    }
+
+                    else if (
+                        currentFilter === "system"
+                    ) {
+
+                        filterMatch =
+                            type === "system";
+
+                    }
+
+
+                    const searchMatch =
+                        !search ||
+                        text.includes(search);
+
+
+                    const visible =
+                        filterMatch &&
+                        searchMatch;
+
+
+                    item.style.display =
+                        visible
+                            ? ""
+                            : "none";
+
+
+                    if (visible) {
+
+                        visibleCount++;
+
+                    }
+
+                }
+            );
+
+
+            resultCount.textContent =
+                visibleCount +
+                " bildirim";
+
+
+            emptyState.style.display =
+                visibleCount === 0
+                    ? "block"
+                    : "none";
+
+        }
+
+
+        filterButtons.forEach(
+            function (button) {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        filterButtons.forEach(
+                            function (btn) {
+
+                                btn.classList.remove(
+                                    "active"
+                                );
+
+                            }
+                        );
+
+
+                        button.classList.add(
+                            "active"
+                        );
+
+
+                        currentFilter =
+                            button.dataset.filter;
+
+
+                        filterNotifications();
+
+                    }
+                );
+
+            }
+        );
+
+
+        globalSearch.addEventListener(
+            "input",
+            filterNotifications
+        );
+
+
+        /* =========================================================
+           UNREAD COUNT
+        ========================================================= */
+
+        function updateUnreadCount() {
+
+            const unread =
+                document.querySelectorAll(
+                    ".notification-item.unread"
+                ).length;
+
+
+            document.getElementById(
+                "unreadCount"
+            ).textContent =
+                unread;
+
+
+            const badge =
+                document.getElementById(
+                    "notificationBadge"
+                );
+
+
+            badge.textContent =
+                unread;
+
+
+            if (unread === 0) {
+
+                badge.style.display =
+                    "none";
+
+            } else {
+
+                badge.style.display =
+                    "flex";
+
+            }
+
+        }
+
+
+        /* =========================================================
+           MARK SINGLE AS READ
+        ========================================================= */
+
+        notificationItems.forEach(
+            function (item) {
+
+                item.addEventListener(
+                    "click",
+                    function (event) {
+
+                        if (
+                            event.target.closest(
+                                "button"
+                            )
+                        ) {
+                            return;
+                        }
+
+
+                        if (
+                            item.classList.contains(
+                                "unread"
+                            )
+                        ) {
+
+                            item.classList.remove(
+                                "unread"
+                            );
+
+
+                            const dot =
+                                item.querySelector(
+                                    ".unread-dot"
+                                );
+
+
+                            if (dot) {
+
+                                dot.remove();
+
+                            }
+
+
+                            updateUnreadCount();
+
+                            showToast(
+                                "Bildirim okundu olarak işaretlendi."
+                            );
+
+                            filterNotifications();
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+
+        /* =========================================================
+           MARK ALL READ
+        ========================================================= */
+
+        function markAllAsRead() {
+
+            notificationItems.forEach(
+                function (item) {
+
+                    markNotificationReadInStore(
+                        getNotificationTitle(item)
+                    );
+
+                    item.classList.remove(
+                        "unread"
+                    );
+
+
+                    const dot =
+                        item.querySelector(
+                            ".unread-dot"
+                        );
+
+
+                    if (dot) {
+
+                        dot.remove();
+
+                    }
+
+                }
+            );
+
+
+            updateUnreadCount();
+
+            filterNotifications();
+
+            showToast(
+                "Tüm bildirimler okundu olarak işaretlendi."
+            );
+
+        }
+
+
+        document
+            .getElementById("markAllBtn")
+            .addEventListener(
+                "click",
+                markAllAsRead
+            );
+
+
+        document
+            .getElementById("clearBtn")
+            .addEventListener(
+                "click",
+                markAllAsRead
+            );
+
+
+        /* =========================================================
+           BUTTON ACTION
+        ========================================================= */
+
+        function notificationAction(
+            button,
+            message
+        ) {
+
+            const item =
+                button.closest(
+                    ".notification-item"
+                );
+
+
+            if (
+                item &&
+                item.classList.contains(
+                    "unread"
+                )
+            ) {
+
+                item.classList.remove(
+                    "unread"
+                );
+
+
+                const dot =
+                    item.querySelector(
+                        ".unread-dot"
+                    );
+
+
+                if (dot) {
+
+                    dot.remove();
+
+                }
+
+
+                updateUnreadCount();
+
+            }
+
+
+            showToast(message);
+
+        }
+
+
+        /* =========================================================
+           SETTINGS
+        ========================================================= */
+
+        document
+            .getElementById(
+                "notificationSettingsBtn"
+            )
+            .addEventListener(
+                "click",
+                function () {
+
+                    showToast(
+                        "Bildirim ayarları ekranı açılacak."
+                    );
+
+                }
+            );
+
+
+        /* =========================================================
+           GLOBAL SEARCH
+        ========================================================= */
+
+        globalSearch.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "Escape"
+                ) {
+
+                    globalSearch.value = "";
+
+                    filterNotifications();
+
+                    globalSearch.blur();
+
+                }
+
+            }
+        );
+
+
+        /* =========================================================
+           TOAST
+        ========================================================= */
+
+        let toastTimer;
+
+
+        function showToast(message) {
+
+            const toast =
+                document.getElementById(
+                    "toast"
+                );
+
+
+            toast.textContent =
+                message;
+
+
+            toast.classList.add(
+                "show"
+            );
+
+
+            clearTimeout(
+                toastTimer
+            );
+
+
+            toastTimer =
+                setTimeout(
+                    function () {
+
+                        toast.classList.remove(
+                            "show"
+                        );
+
+                    },
+                    2500
+                );
+
+        }
+
+
+        /* =========================================================
+           AUTOMATIC ACTIVE MENU
+        ========================================================= */
+
+        (function () {
+
+            const currentPage =
+                window.location.pathname
+                    .split("/")
+                    .pop()
+                    .toLowerCase();
+
+
+            document
+                .querySelectorAll(
+                    ".menu-item"
+                )
+                .forEach(
+                    function (item) {
+
+                        const href =
+                            item
+                                .getAttribute(
+                                    "href"
+                                )
+                                .split("/")
+                                .pop()
+                                .toLowerCase();
+
+
+                        if (
+                            currentPage === href
+                        ) {
+
+                            document
+                                .querySelectorAll(
+                                    ".menu-item"
+                                )
+                                .forEach(
+                                    menu =>
+                                        menu.classList
+                                            .remove(
+                                                "active"
+                                            )
+                                );
+
+
+                            item.classList.add(
+                                "active"
+                            );
+
+                        }
+
+                    }
+                );
+
+        })();
+
+
+        /* =========================================================
+           INITIALIZE
+        ========================================================= */
+
+        updateUnreadCount();
+
+        filterNotifications();
+
+
+        /* =========================================================
+           LOGOUT
+        ========================================================= */
+
+    </script>
+
+</body>
+
+</html>

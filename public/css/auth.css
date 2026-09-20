@@ -1,0 +1,3 @@
+[hidden] { display: none !important; }
+.auth-stock-readonly :is(#addStockBtn, #importBtn, #saveOperationBtn, #detailOperationBtn, [onclick*="openOperationFromRow"]) { display: none !important; }
+.auth-not-admin #newStoreBtn { display: none !important; }
