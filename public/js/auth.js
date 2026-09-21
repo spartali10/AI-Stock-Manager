@@ -2,7 +2,7 @@
     const pagePermissions = { '/Migration': 'admin', '/Stok': 'stock', '/StokYonetimi': 'stock', '/Magazalar': 'stores', '/SatisAnalizi': 'sales', '/Raporlar': 'reports', '/Transfer': 'transfers', '/TransferEmri': 'transfers', '/AkilliDagitim': 'transfers', '/AiOnerileri': 'ai', '/Bildirimler': 'notifications', '/Kullanicilar': 'admin', '/Ayarlar': 'admin', '/Entegrasyon': 'admin', '/Home': 'dashboard', '/Index': 'dashboard' };
     const roles = { admin: 'Admin', supervisor: 'Yönetici', manager: 'Müdür', editor: 'Operasyon', viewer: 'Görüntüleyici' };
 
-    let session = window.StockSession || { user: null, csrf: '', users: [], setupRequired: true };
+    let session = window.StockSession || { user: null, csrf: '', users: [], setupRequired: false };
     let revision = null, polling = false;
     function current() { return session.user; }
     function can(permission) { const u = current(); return !!u && (u.role === 'admin' || permission !== 'admin' && u.permissions?.includes(permission)); }
@@ -11,7 +11,14 @@
     function changed() { window.dispatchEvent(Object.assign(new Event('stock:data-changed'), { key: 'aiStockNebimData' })); }
     async function request(path, options = {}) {
         const response = await fetch('/api' + path, { ...options, credentials: 'same-origin', cache: 'no-store', headers: { 'Content-Type': 'application/json', 'X-Stock-Request': '1', 'X-CSRF-Token': session.csrf || '', ...options.headers } });
-        const data = await response.json();
+        const type = response.headers.get('content-type') || '';
+        if (!type.includes('application/json')) {
+            if (response.status === 404) throw new Error('Merkezi giriş API’si bulunamadı. Çalışan sunucu eski sürüm olabilir. Sunucuyu güncel kodla yeniden başlatıp sayfayı yenileyin.');
+            throw new Error(`Merkezi sunucu beklenen yanıtı vermedi (HTTP ${response.status}). Sunucu adresini ve bağlantısını kontrol edin.`);
+        }
+        let data;
+        try { data = await response.json(); }
+        catch { throw new Error('Merkezi sunucudan geçersiz yanıt alındı. Sayfayı yenileyip tekrar deneyin.'); }
         if (!response.ok) { if (response.status === 401 && !['/login', '/logout'].includes(path)) location.replace('/Login'); throw new Error(data.error || 'Merkezi sunucu isteği başarısız.'); }
         return data;
     }
@@ -24,7 +31,7 @@
         if (write || newer) changed();
         return data.result;
     }
-    async function refreshSession() { session = { ...session, ...await request('/session') }; guard(); applyUI(); }
+    async function refreshSession() { session = { ...session, ...await request('/session') }; guard(); applyUI(); return session; }
     async function login(username, password) { session = { ...session, ...await request('/login', { method: 'POST', body: JSON.stringify({ username, password }) }) }; return landing(); }
     async function usersAction(action, values) { requirePermission('admin'); const data = await request('/users/' + action, { method: 'POST', body: JSON.stringify(values) }); session.users = data.users; }
     function canonicalPage(value) {

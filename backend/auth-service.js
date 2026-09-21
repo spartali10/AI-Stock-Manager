@@ -60,11 +60,22 @@ function setPermissions(state, actor, id, values) {
     user.permissions = [...new Set(values)].filter(p => permissions.has(p));
 }
 async function initialize(repo, env) {
-    if (!env.ADMIN_PASSWORD) return;
-    await repo.transaction(state => {
-        if (state.accounts.length) return;
+    const { result } = await repo.transaction(state => {
+        // Check inside the repository lock: concurrent server starts cannot seed twice.
+        // Never use the environment password to reset or replace an existing account.
+        if (state.accounts.length) return { status: 'existing' };
+        if (state.authSetup?.completedAt) return { status: 'recovery-required' };
+        if (typeof env.ADMIN_PASSWORD !== 'string' || env.ADMIN_PASSWORD.length < 8 || env.ADMIN_PASSWORD.length > 1024) return { status: 'configuration-required' };
         state.accounts.push({ id: 1, name: 'Admin', username: 'admin', role: 'admin', status: 'active', permissions: [], ...credentials(env.ADMIN_PASSWORD) });
+        state.authSetup = { completedAt: new Date().toISOString() };
+        return { status: 'created', username: 'admin' };
     }, { reason: 'initial-admin', actor: 'server' });
+    return result;
+}
+function setupMessage(state) {
+    return state.authSetup?.completedAt
+        ? 'İlk kurulum daha önce tamamlanmış, ancak merkezi kullanıcı kayıtları bulunamıyor. Otomatik Admin oluşturulmadı; sunucu yöneticisi kullanıcı yedeğini kontrol etmeli.'
+        : 'Merkezi yönetici hesabı henüz kurulmadı. Sunucuda ADMIN_PASSWORD ortam değişkenine 8–1024 karakterli bir şifre tanımlayıp yeniden başlatın. İlk kullanıcı adı: admin.';
 }
 function migrateAccounts(records) {
     if (!Array.isArray(records)) fail('Kullanıcı yedeği bir liste olmalı.');
@@ -83,4 +94,4 @@ function migrateAccounts(records) {
         return u;
     });
 }
-module.exports = { roles, defaults, clean, can, requirePermission, credentials, verify, current, login, saveUser, removeUser, setPermissions, initialize, migrateAccounts, sessionHash };
+module.exports = { roles, defaults, clean, can, requirePermission, credentials, verify, current, login, saveUser, removeUser, setPermissions, initialize, setupMessage, migrateAccounts, sessionHash };

@@ -52,10 +52,18 @@ Node.js **22.13+** gerekir; bu bilgisayarda 24.20.0 ile test edildi. PostgreSQL 
 1. `npm ci` çalıştırın.
 2. `.env.example` dosyasını `.env` olarak kopyalayın.
 3. `.env` içinde `ADMIN_PASSWORD` için kendiniz güçlü, benzersiz bir şifre belirleyin. Kaynak kodda varsayılan şifre yoktur. İlk merkezi kullanıcı `admin` olur. Sonraki başlatmalarda mevcut hesap/şifre değiştirilmez.
-4. `npm run start:env` çalıştırın. Ortam değişkenlerini PowerShell veya barındırma panelinde tanımladıysanız mevcut `npm start` komutu çalışır.
+4. `npm start` çalıştırın; proje kökündeki `.env` varsa otomatik okunur. PowerShell veya barındırma panelindeki değişkenler dosya tarafından değiştirilmez. `npm run start:env` de desteklenir.
 5. `http://localhost:3000/Login` üzerinden merkezi hesaba giriş yapın. Eski tarayıcı hesabı merkezi hesaba otomatik dönüşmez.
 
 `.env`, `data/` ve `private-backups/` Git dışında tutulur. Local Storage'daki eski veriler otomatik temizlenmez; yeni sürümün merkezi ekranları boş olsa bile eski veriler eski tarayıcı/origin üzerinde durur.
+
+### PostgreSQL geçişinden sonra Admin girişi
+
+Merkezi giriş kaynağı PostgreSQL `app_state.payload.accounts` listesidir; eski `data.users` profil listesi veya tarayıcı hesapları değildir. İlk kurulum transaction kilidi altında kullanıcı listesine bakar. Hiç hesap yoksa, geçerli `ADMIN_PASSWORD` ile `admin` adlı aktif yönetici oluşturulur. Şifre rastgele tuzla PBKDF2-SHA256 hashine dönüştürülür; açık metin olarak veritabanına veya loglara yazılmaz.
+
+Herhangi bir giriş hesabı varsa (pasif veya yönetici olmayan hesap dahil) otomatik hesap eklenmez ve şifre değiştirilmez. Başarılı ilk kurulum ayrıca işaretlenir; sonradan hesaplar veritabanından kaybolursa otomatik yeniden kurulum yerine kurtarma mesajı gösterilir. Başlangıçta eksik/geçersiz şifre varsa hesap yaratılmaz; giriş ekranı `ADMIN_PASSWORD` tanımlanması ve sunucunun yeniden başlatılması gerektiğini açıklar. Sunucu yeniden başladığında tanımladığınız şifreyle `admin` oluşturulur. Kaynakta veya Local Storage'da varsayılan/demo şifre kullanılmaz.
+
+Render için `ADMIN_PASSWORD` değerini web servisinin ortam değişkenlerine girip servisi yeniden başlatın. `DATABASE_URL` aynı merkezi PostgreSQL'e işaret etmelidir. Var olan hesabınıza giremiyorsanız bu değişkeni değiştirmek şifre sıfırlamaz; mevcut hesabın merkezi şifresi kullanılmalıdır. Bu geliştirme sırasında canlı Render veritabanına erişilmemiştir.
 
 ## Render kurulumu
 

@@ -8,6 +8,10 @@ Node.js + Express ve merkezi veritabanı kullanan AI Stock Manager. HTML uzantı
 
 **Önce [kurulum, yedek ve migration rehberini](docs/central-data.md) izleyin.** `.env.example` dosyasını `.env` olarak kopyalayın, kendi `ADMIN_PASSWORD` değerinizi belirleyin ve `npm run start:env` çalıştırın. Ortam değişkenleri zaten tanımlıysa aşağıdaki mevcut başlatma komutu kullanılabilir.
 
+**İlk PostgreSQL Admin girişi:** Sunucuda `DATABASE_URL` ve `ADMIN_PASSWORD` tanımlı olmalıdır. `npm start` artık proje kökündeki `.env` dosyasını da okur; Render'da tanımlanmış ortam değişkenleri önceliklidir. Merkezi veritabanında hiç giriş hesabı yoksa ilk başlatmada **`admin`** oluşturulur. Şifre `ADMIN_PASSWORD` değeridir (8–1024 karakter); kaynak kodda varsayılan şifre bulunmaz. Herhangi bir hesap varsa mevcut hesaplar ve şifreler aynen korunur. `ADMIN_PASSWORD` değiştirmek mevcut Admin şifresini sıfırlamaz. Eski Local Storage hesabı giriş için kullanılmaz.
+
+**Girişte “Sayfa bulunamadı / not valid JSON” hatası:** Eski `npm start` süreci yeni JavaScript dosyalarını sunarken eski backend koduyla çalışmaya devam edebilir. Açık terminalde `Ctrl+C` ile eski sunucuyu durdurup `npm start` ile yeniden başlatın, ardından giriş sayfasını yenileyin. `/api/session` adresi güncel sunucuda JSON döndürmelidir. Bu adres 404 dönüyorsa sorun şifreden önce sunucu sürümü/adresidir; kullanıcıları veya veritabanını silmeyin.
+
 ## Çalıştırma
 cd "C:\Users\Muzaffer\OneDrive\Desktop\AI-Stock-Manager"
 $env:Path = "C:\Program Files\nodejs;" + $env:Path

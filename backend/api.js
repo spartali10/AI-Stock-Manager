@@ -33,6 +33,7 @@ function safePayload(value) {
 function makeApi(repo, env = process.env) {
     const router = express.Router();
     const ready = auth.initialize(repo, env); ready.catch(() => {});
+    router.ready = ready;
     router.use(async (req, res, next) => {
         res.set('Cache-Control', 'no-store'); res.set('X-Content-Type-Options', 'nosniff');
         try { await ready; next(); } catch { res.status(503).json({ error: 'Veritabanı hazır değil. Sunucu yapılandırmasını kontrol edin.' }); }
@@ -62,12 +63,12 @@ function makeApi(repo, env = process.env) {
     }
     router.get('/session.js', async (req, res) => {
         const state = await repo.read(), { user, session } = auth.current(state, cookieToken(req));
-        const data = { user: auth.clean(user), csrf: session?.csrf || '', users: auth.can(user, 'admin') ? state.accounts.map(auth.clean) : [], setupRequired: !state.accounts.length };
+        const data = { user: auth.clean(user), csrf: session?.csrf || '', users: auth.can(user, 'admin') ? state.accounts.map(auth.clean) : [], setupRequired: !state.accounts.length, setupMessage: state.accounts.length ? '' : auth.setupMessage(state) };
         res.type('application/javascript').send('window.StockSession=' + JSON.stringify(data).replace(/</g, '\\u003c').replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029') + ';');
     });
     router.get('/session', async (req, res) => {
         const state = await repo.read(), { user, session } = auth.current(state, cookieToken(req));
-        res.json({ user: auth.clean(user), csrf: session?.csrf || '', users: auth.can(user, 'admin') ? state.accounts.map(auth.clean) : [] });
+        res.json({ user: auth.clean(user), csrf: session?.csrf || '', users: auth.can(user, 'admin') ? state.accounts.map(auth.clean) : [], setupRequired: !state.accounts.length, setupMessage: state.accounts.length ? '' : auth.setupMessage(state) });
     });
     const attempts = new Map();
     router.post('/login', async (req, res) => {
@@ -76,7 +77,10 @@ function makeApi(repo, env = process.env) {
         const attempt = attempts.get(key) || { count: 0, until: now + 15 * 60 * 1000 };
         if (++attempt.count > 20) fail('Çok fazla giriş denemesi. Bir süre sonra tekrar deneyin.', 429);
         attempts.set(key, attempt);
-        const { result } = await repo.transaction(state => auth.login(state, req.body?.username, req.body?.password), { reason: 'login' });
+        const { result } = await repo.transaction(state => {
+            if (!state.accounts.length) throw Object.assign(new Error(auth.setupMessage(state)), { status: 503, code: 'ADMIN_SETUP_REQUIRED' });
+            return auth.login(state, req.body?.username, req.body?.password);
+        }, { reason: 'login' });
         attempts.delete(key);
         res.cookie('stock_session', result.token, { httpOnly: true, secure: env.NODE_ENV === 'production' || !!env.RENDER, sameSite: 'strict', maxAge: 12 * 60 * 60 * 1000, path: '/' });
         res.json({ user: result.user, csrf: result.csrf });
@@ -178,6 +182,7 @@ function makeApi(repo, env = process.env) {
     });
     router.use((req, res) => res.status(404).json({ error: 'API bulunamadı.' }));
     router.use((error, req, res, next) => {
+        if (error.code === 'ADMIN_SETUP_REQUIRED') return res.status(503).json({ error: error.message, code: error.code });
         const status = error.status || 503;
         if (status >= 500) console.error('API hatası:', error.code || error.name);
         res.status(status).json({ error: status >= 500 ? 'Merkezi veri kaydedilemedi. Bağlantıyı kontrol edip veriyi yenileyin.' : error.message });
