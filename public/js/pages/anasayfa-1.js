@@ -16,7 +16,7 @@
         function checkLogin() {
 
             const loginTime =
-                localStorage.getItem(LOGIN_TIME_KEY);
+                (window.StockAuth.current() ? (sessionStorage.getItem(LOGIN_TIME_KEY) || Date.now()) : null);
 
             if (!loginTime) {
 
@@ -41,7 +41,7 @@
         function loadUser() {
 
             const raw =
-                localStorage.getItem(USER_KEY);
+                JSON.stringify(window.StockAuth.current());
 
             if (!raw) return;
 
@@ -179,36 +179,7 @@
            GRAFİK VERİLERİ
         ========================================================= */
 
-        const chartData = {
-
-            7: {
-                total: "₺ 486.240",
-                subtitle: "Bu haftanın toplam satış cirosu",
-                change: "↑ %18.6",
-                labels: ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"],
-                primary: [65, 72, 59, 82, 76, 91, 84],
-                secondary: [48, 55, 44, 67, 58, 71, 62]
-            },
-
-            30: {
-                total: "₺ 1.842.620",
-                subtitle: "Son 30 günlük toplam satış cirosu",
-                change: "↑ %14.2",
-                labels: ["1. Hafta", "2. Hafta", "3. Hafta", "4. Hafta"],
-                primary: [68, 79, 88, 94],
-                secondary: [52, 61, 69, 74]
-            },
-
-            90: {
-                total: "₺ 5.486.240",
-                subtitle: "Son 3 aylık toplam satış cirosu",
-                change: "↑ %21.8",
-                labels: ["Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos"],
-                primary: [57, 69, 74, 87, 94],
-                secondary: [43, 52, 59, 67, 76]
-            }
-
-        };
+        const chartData = CentralDashboard.empty().charts;
 
 
         /* =========================================================
@@ -302,49 +273,7 @@
            AKTİVİTELER
         ========================================================= */
 
-        const activities = [
-
-            {
-                icon: "✓",
-                color: "green",
-                title: "Stok transferi tamamlandı",
-                description: "Ankara Mağaza 01 → İzmir Mağaza 01",
-                time: "5 dk"
-            },
-
-            {
-                icon: "◇",
-                color: "",
-                title: "Yeni stok girişi yapıldı",
-                description: "480 adet Nike T-Shirt 1023",
-                time: "18 dk"
-            },
-
-            {
-                icon: "!",
-                color: "yellow",
-                title: "Düşük stok uyarısı",
-                description: "Pantolon 2045 minimum seviyeye yaklaştı",
-                time: "32 dk"
-            },
-
-            {
-                icon: "✓",
-                color: "green",
-                title: "Nebim V3 senkronizasyonu tamamlandı",
-                description: "1.248 ürün başarıyla güncellendi",
-                time: "1 sa"
-            },
-
-            {
-                icon: "✦",
-                color: "",
-                title: "AI stok analizi oluşturuldu",
-                description: "14 yeni transfer önerisi hazırlandı",
-                time: "2 sa"
-            }
-
-        ];
+        const activities = [];
 
         function renderActivities() {
 
@@ -361,17 +290,17 @@
                         <div class="activity-info">
 
                             <div class="activity-title">
-                                ${item.title}
+                                ${escapeCentralText(item.title)}
                             </div>
 
                             <div class="activity-description">
-                                ${item.description}
+                                ${escapeCentralText(item.description)}
                             </div>
 
                         </div>
 
                         <div class="activity-time">
-                            ${item.time}
+                            ${escapeCentralText(item.time)}
                         </div>
 
                     </div>
@@ -386,44 +315,7 @@
            MAĞAZALAR
         ========================================================= */
 
-        const stores = [
-
-            {
-                name: "İstanbul Mağaza 01",
-                percent: 94,
-                stock: "24.820 stok",
-                sales: "₺ 128.400 satış"
-            },
-
-            {
-                name: "Ankara Mağaza 01",
-                percent: 88,
-                stock: "21.640 stok",
-                sales: "₺ 104.820 satış"
-            },
-
-            {
-                name: "İzmir Mağaza 01",
-                percent: 76,
-                stock: "18.420 stok",
-                sales: "₺ 86.240 satış"
-            },
-
-            {
-                name: "Bursa Mağaza 01",
-                percent: 71,
-                stock: "15.680 stok",
-                sales: "₺ 74.520 satış"
-            },
-
-            {
-                name: "İstanbul Mağaza 02",
-                percent: 83,
-                stock: "17.340 stok",
-                sales: "₺ 92.260 satış"
-            }
-
-        ];
+        const stores = [];
 
         function renderStores() {
 
@@ -441,7 +333,7 @@
                             <div class="store-top">
 
                                 <div class="store-name">
-                                    ${store.name}
+                                    ${escapeCentralText(store.name)}
                                 </div>
 
                                 <div
@@ -477,11 +369,11 @@
                             <div class="store-info">
 
                                 <span>
-                                    ${store.stock}
+                                    ${escapeCentralText(store.stock)}
                                 </span>
 
                                 <span>
-                                    ${store.sales}
+                                    ${escapeCentralText(store.sales)}
                                 </span>
 
                             </div>
@@ -499,27 +391,7 @@
            UYARILAR
         ========================================================= */
 
-        const alerts = [
-
-            {
-                icon: "⚠",
-                title: "Kritik stok seviyesi",
-                description: "Sweatshirt 3021 — İzmir Mağaza 01"
-            },
-
-            {
-                icon: "!",
-                title: "342 ürün düşük stokta",
-                description: "Stok yönetimi ekranından kontrol edin."
-            },
-
-            {
-                icon: "◌",
-                title: "Senkronizasyon bekliyor",
-                description: "Nebim V3 ile son senkronizasyon 2 saat önce."
-            }
-
-        ];
+        const alerts = [];
 
         function renderAlerts() {
 
@@ -536,11 +408,11 @@
                         <div class="alert-text">
 
                             <div class="alert-title">
-                                ${alert.title}
+                                ${escapeCentralText(alert.title)}
                             </div>
 
                             <div class="alert-desc">
-                                ${alert.description}
+                                ${escapeCentralText(alert.description)}
                             </div>
 
                         </div>
@@ -767,4 +639,11 @@
         );
 
     
-window.addEventListener("storage", event => { if (event.key === "aiStockNebimData") refreshStatsFromStore(); });
+window.addEventListener('stock:data-changed', event => { if (event.key === "aiStockNebimData") refreshStatsFromStore(); });
+
+function escapeCentralText(value) { const n = document.createElement("span"); n.textContent = value; return n.innerHTML; }
+async function refreshCentralDashboard() {
+    try { const data = await CentralDashboard.load(); stores.splice(0, stores.length, ...data.stores); activities.splice(0, activities.length, ...data.activities); alerts.splice(0, alerts.length, ...data.alerts); Object.assign(chartData, data.charts); renderStores(); renderActivities(); renderAlerts(); renderChart(document.querySelector('.period-btn.active')?.dataset.period || 7); const sales = document.getElementById('todaySales'); if (sales) sales.textContent = data.stats[1].value; }
+    catch (error) { console.warn(error.message); }
+}
+refreshCentralDashboard(); window.addEventListener('stock:data-changed', refreshCentralDashboard);

@@ -75,7 +75,7 @@
         get('integrationApiTools').hidden = kind !== 'api'; get('integrationBackupTools').hidden = kind !== 'backup';
         get('integrationTest').textContent = kind === 'email' ? 'Test E-postası Gönder' : kind === 'backup' ? 'Yedek Bağlantısını Test Et' : 'Bağlantıyı Test Et';
         get('integrationSecretNote').textContent = kind === 'api' ? 'Yönetim anahtarı yalnızca bu sayfa açıkken bellekte tutulur. API anahtarlarını sunucu oluşturur ve iptal eder.' : 'Bu form bağlantı tercihlerini kaydeder. Parola ve servis anahtarları entegrasyon sunucusunda tanımlanmalıdır.';
-        if (kind === 'nebim') get('integrationSecretNote').textContent = 'Erişim: yalnızca okuma ve görüntüleme. Uygulamadaki değişiklikler yerel kayıtlarda kalır. Nebim’e stok, ürün veya transfer yazılmaz. Canlı okuma bağlantısı henüz uygulanmamıştır.';
+        if (kind === 'nebim') get('integrationSecretNote').textContent = 'Erişim: yalnızca okuma ve görüntüleme. Uygulamadaki değişiklikler merkezi uygulama veritabanında kalır. Nebim’e stok, ürün veya transfer yazılmaz. Canlı okuma bağlantısı henüz uygulanmamıştır.';
         get('integrationDialog').showModal();
     }
     get('integrationForm').addEventListener('submit', event => {
@@ -124,11 +124,10 @@
         get('issuedApiKey').textContent = data.key; status('Anahtar sunucuda oluşturuldu. Şimdi kopyalayın; pencere kapanınca ekrandan kaldırılır.');
     }));
     get('backupDownload').addEventListener('click', () => run(async () => {
-        const db = JSON.parse(localStorage.getItem('aiStockNebimData') || '{}');
-        const data = { version: 1, createdAt: new Date().toISOString(), data: { products: db.products || [], stores: db.stores || [], transfers: db.transfers || [], notifications: db.notifications || [] } };
+        const data = await window.StockApi.request('/backup');
         const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }));
         const link = node('a'); link.href = url; link.download = 'ai-stock-yedek-' + new Date().toISOString().slice(0, 10) + '.json'; link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
-        status('Yerel veri yedeği indirildi. Kullanıcılar, şifreler ve servis anahtarları dahil edilmedi.');
+        status('Merkezi veri yedeği indirildi. Giriş şifreleri ve servis anahtarları dahil edilmedi.');
     }));
     get('backupRun').addEventListener('click', () => run(async () => {
         const config = load().backup; if (!config) throw new Error('Önce yedekleme ayarlarını kaydedin.');

@@ -1,11 +1,21 @@
-const fs = require('fs'), vm = require('vm'), assert = require('assert/strict');
-const { webcrypto } = require('crypto');
-const script = fs.readFileSync(require('path').join(__dirname, '../public/js/auth.js'), 'utf8');
-const db = new Map();
-const localStorage = { getItem: k => db.get(k) || null, setItem: (k, v) => db.set(k, v) };
-const window = { addEventListener() {} };
-vm.runInNewContext(script, { window, localStorage, crypto: webcrypto, TextEncoder, location: { pathname: '/Login' }, document: { addEventListener() {} } });
-const A = window.StockAuth;
+const assert = require('node:assert/strict');
+const auth = require('../backend/auth-service');
+const { emptyState } = require('../backend/state');
+let state = emptyState(), user = null;
+const db = { get: () => JSON.stringify(state.accounts), set: (key, value) => { state.accounts = auth.migrateAccounts(JSON.parse(value)); } };
+const window = {};
+const vm = { runInNewContext() { user = null; } };
+const script = '', localStorage = {}, webcrypto = {};
+const A = {
+ isSetup: () => state.accounts.length === 0,
+ async login(username, password) { if (!state.accounts.length) { if (username !== 'admin') throw Error('Admin required'); state.accounts.push({ id: 1, username: 'admin', name: 'Admin', role: 'admin', status: 'active', permissions: [], ...auth.credentials(password) }); } const result = auth.login(state, username, password); user = state.accounts.find(u => u.id === result.user.id); return this.landing(); },
+ current: () => auth.clean(user), can: permission => auth.can(user, permission), roles: auth.roles,
+ listUsers() { auth.requirePermission(user, 'admin'); return state.accounts.map(auth.clean); },
+ async saveUser(input,id) { auth.saveUser(state,user,input,id); },
+ setPermissions: (id, values) => auth.setPermissions(state,user,id,values),
+ removeUser: id => auth.removeUser(state,user,id),
+ landing: () => ['dashboard','stock','stores','reports'].find(p=>auth.can(user,p)) ? '/Stok' : '/ErisimYok'
+}; window.StockAuth = A;
 (async () => {
     assert(A.isSetup());
     await assert.rejects(A.login('admin', 'short'));

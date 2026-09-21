@@ -12,11 +12,7 @@
             userKey:
                 "aiStockUser",
 
-            themeKey:
-                "aiStockTheme",
-
-            dashboardKey:
-                "aiStockDashboardData"
+            themeKey: "aiStockTheme"
 
         };
 
@@ -25,284 +21,7 @@
            DEMO DATA
         ========================================================= */
 
-        const DEFAULT_DATA = {
-
-            stats: [
-
-                {
-                    title: "Toplam Stok",
-                    value: "125.420",
-                    icon: "◇",
-                    description: "↑ %4.8 geçen aya göre",
-                    type: "green"
-                },
-
-                {
-                    title: "Bugünkü Satış",
-                    value: "2.486",
-                    icon: "↗",
-                    description: "↑ %12.4 dünkü satışa göre",
-                    type: "green"
-                },
-
-                {
-                    title: "Düşük Stok",
-                    value: "342",
-                    icon: "!",
-                    description: "Kontrol edilmesi gereken ürün",
-                    type: "yellow"
-                },
-
-                {
-                    title: "Kritik Stok",
-                    value: "87",
-                    icon: "⚠",
-                    description: "Acil aksiyon gerekli",
-                    type: "red"
-                }
-
-            ],
-
-
-            charts: {
-
-                "7": {
-
-                    total: "₺ 486.240",
-
-                    subtitle:
-                        "Bu haftanın toplam satış cirosu",
-
-                    change: "↑ %18.6",
-
-                    labels: [
-                        "Pzt",
-                        "Sal",
-                        "Çar",
-                        "Per",
-                        "Cum",
-                        "Cmt",
-                        "Paz"
-                    ],
-
-                    primary: [
-                        65,
-                        72,
-                        59,
-                        82,
-                        76,
-                        91,
-                        84
-                    ],
-
-                    secondary: [
-                        48,
-                        55,
-                        44,
-                        67,
-                        58,
-                        71,
-                        62
-                    ]
-
-                },
-
-
-                "30": {
-
-                    total: "₺ 1.842.620",
-
-                    subtitle:
-                        "Son 30 günlük toplam satış cirosu",
-
-                    change: "↑ %14.2",
-
-                    labels: [
-                        "1. Hafta",
-                        "2. Hafta",
-                        "3. Hafta",
-                        "4. Hafta"
-                    ],
-
-                    primary: [
-                        68,
-                        79,
-                        88,
-                        94
-                    ],
-
-                    secondary: [
-                        52,
-                        61,
-                        69,
-                        74
-                    ]
-
-                },
-
-
-                "90": {
-
-                    total: "₺ 5.486.240",
-
-                    subtitle:
-                        "Son 3 aylık toplam satış cirosu",
-
-                    change: "↑ %21.8",
-
-                    labels: [
-                        "Nisan",
-                        "Mayıs",
-                        "Haziran",
-                        "Temmuz",
-                        "Ağustos"
-                    ],
-
-                    primary: [
-                        57,
-                        69,
-                        74,
-                        87,
-                        94
-                    ],
-
-                    secondary: [
-                        43,
-                        52,
-                        59,
-                        67,
-                        76
-                    ]
-
-                }
-
-            },
-
-
-            activities: [
-
-                {
-                    icon: "✓",
-                    type: "green",
-                    title: "Stok transferi tamamlandı",
-                    description:
-                        "Ankara Mağaza 01 → İzmir Mağaza 01",
-                    time: "5 dk"
-                },
-
-                {
-                    icon: "◇",
-                    type: "",
-                    title: "Yeni stok girişi yapıldı",
-                    description:
-                        "480 adet Nike T-Shirt 1023",
-                    time: "18 dk"
-                },
-
-                {
-                    icon: "!",
-                    type: "yellow",
-                    title: "Düşük stok uyarısı",
-                    description:
-                        "Pantolon 2045 minimum seviyeye yaklaştı",
-                    time: "32 dk"
-                },
-
-                {
-                    icon: "✓",
-                    type: "green",
-                    title: "Nebim V3 senkronizasyonu tamamlandı",
-                    description:
-                        "1.248 ürün başarıyla güncellendi",
-                    time: "1 sa"
-                },
-
-                {
-                    icon: "✦",
-                    type: "",
-                    title: "AI stok analizi oluşturuldu",
-                    description:
-                        "14 yeni transfer önerisi hazırlandı",
-                    time: "2 sa"
-                }
-
-            ],
-
-
-            stores: [
-
-                {
-                    name: "İstanbul Mağaza 01",
-                    percent: 94,
-                    stock: "24.820 stok",
-                    sales: "₺ 128.400 satış",
-                    type: "normal"
-                },
-
-                {
-                    name: "Ankara Mağaza 01",
-                    percent: 88,
-                    stock: "21.640 stok",
-                    sales: "₺ 104.820 satış",
-                    type: "normal"
-                },
-
-                {
-                    name: "İzmir Mağaza 01",
-                    percent: 76,
-                    stock: "18.420 stok",
-                    sales: "₺ 86.240 satış",
-                    type: "warning"
-                },
-
-                {
-                    name: "Bursa Mağaza 01",
-                    percent: 71,
-                    stock: "15.680 stok",
-                    sales: "₺ 74.520 satış",
-                    type: "warning"
-                },
-
-                {
-                    name: "İstanbul Mağaza 02",
-                    percent: 83,
-                    stock: "17.340 stok",
-                    sales: "₺ 92.260 satış",
-                    type: "normal"
-                }
-
-            ],
-
-
-            alerts: [
-
-                {
-                    icon: "⚠",
-                    title: "Kritik stok seviyesi",
-                    description:
-                        "Sweatshirt 3021 — İzmir Mağaza 01",
-                    type: "red"
-                },
-
-                {
-                    icon: "!",
-                    title: "342 ürün düşük stokta",
-                    description:
-                        "Stok yönetimi ekranından kontrol edin.",
-                    type: "red"
-                },
-
-                {
-                    icon: "◌",
-                    title: "Senkronizasyon bekliyor",
-                    description:
-                        "Nebim V3 ile son senkronizasyon 2 saat önce.",
-                    type: "yellow"
-                }
-
-            ]
-
-        };
+        const DEFAULT_DATA = CentralDashboard.empty();
 
 
         /* =========================================================
@@ -338,9 +57,7 @@
 
             const loginTime =
                 parseInt(
-                    localStorage.getItem(
-                        CONFIG.loginTimeKey
-                    ),
+                    (window.StockAuth.current() ? (sessionStorage.getItem(CONFIG.loginTimeKey) || Date.now()) : null),
                     10
                 );
 
@@ -383,9 +100,7 @@
         function loadUser() {
 
             const savedUser =
-                localStorage.getItem(
-                    CONFIG.userKey
-                );
+                JSON.stringify(window.StockAuth.current());
 
 
             if (!savedUser) {
@@ -472,9 +187,7 @@
 
             const loginTime =
                 parseInt(
-                    localStorage.getItem(
-                        CONFIG.loginTimeKey
-                    ),
+                    (window.StockAuth.current() ? (sessionStorage.getItem(CONFIG.loginTimeKey) || Date.now()) : null),
                     10
                 );
 
@@ -819,53 +532,9 @@
            DASHBOARD DATA
         ========================================================= */
 
-        function loadDashboardData() {
-
-            const saved =
-                localStorage.getItem(
-                    CONFIG.dashboardKey
-                );
+        function loadDashboardData() { return CentralDashboard.empty(); }
 
 
-            if (!saved) {
-
-                return structuredClone(
-                    DEFAULT_DATA
-                );
-
-            }
-
-
-            try {
-
-                return JSON.parse(saved);
-
-            } catch (error) {
-
-                console.warn(
-                    "Dashboard verisi okunamadı."
-                );
-
-
-                return structuredClone(
-                    DEFAULT_DATA
-                );
-
-            }
-
-        }
-
-
-        function saveDashboardData() {
-
-            localStorage.setItem(
-                CONFIG.dashboardKey,
-                JSON.stringify(
-                    dashboardData
-                )
-            );
-
-        }
 
 
         /* =========================================================
@@ -1254,28 +923,7 @@
            AI INSIGHT
         ========================================================= */
 
-        function renderAI() {
-
-            $("#aiInsightText").innerHTML = `
-        Son 14 günlük satış verilerine göre
-        <strong>İzmir Mağaza 01</strong>
-        için stok riski artıyor.
-
-        <br><br>
-
-        Özellikle
-        <strong>Sweatshirt 3021</strong>
-        ürününde yaklaşık 3 günlük stok kaldığı
-        tahmin ediliyor.
-
-        <br><br>
-
-        AI sistemi,
-        <strong>Ankara Mağaza 01 → İzmir Mağaza 01</strong>
-        yönünde stok transferi öneriyor.
-    `;
-
-        }
+        function renderAI() { $('#aiInsightText').textContent = 'Güncel stok ve transferler merkezi veritabanından okunuyor. Ayrıntılar için Stok ve Akıllı Dağıtım ekranlarını kullanın.'; }
 
 
         /* =========================================================
@@ -1378,157 +1026,19 @@
            REFRESH
         ========================================================= */
 
-        $("#refreshBtn").addEventListener(
-            "click",
-            function () {
-
-                const button =
-                    this;
-
-
-                button.disabled =
-                    true;
-
-
-                button.textContent =
-                    "↻ Güncelleniyor...";
-
-
-                document
-                    .querySelector(".main")
-                    .classList.add(
-                        "is-loading"
-                    );
-
-
-                setTimeout(
-                    function () {
-
-                        /*
-                         * Gerçek API bağlandığında
-                         * bu bölüm fetch/API çağrısı
-                         * ile değiştirilebilir.
-                         */
-                        dashboardData =
-                            generateFreshDemoData();
-
-
-                        saveDashboardData();
-
-                        renderDashboard();
-
-
-                        button.disabled =
-                            false;
-
-
-                        button.textContent =
-                            "↻ Yenile";
-
-
-                        document
-                            .querySelector(".main")
-                            .classList.remove(
-                                "is-loading"
-                            );
-
-
-                        showToast(
-                            "Dashboard verileri güncellendi."
-                        );
-
-                    },
-                    900
-                );
-
-            }
-        );
+        $('#refreshBtn').addEventListener('click', async function () {
+            this.disabled = true; this.textContent = '↻ Güncelleniyor...';
+            try { dashboardData = await CentralDashboard.load(); renderDashboard(); showToast('Dashboard verileri güncellendi.'); }
+            catch (error) { showToast(error.message); }
+            finally { this.disabled = false; this.textContent = '↻ Yenile'; }
+        });
 
 
         /* =========================================================
            FRESH DEMO DATA
         ========================================================= */
 
-        function generateFreshDemoData() {
-
-            const data =
-                structuredClone(
-                    DEFAULT_DATA
-                );
-
-
-            const randomChange =
-                Math.floor(
-                    Math.random() * 5000
-                );
-
-
-            const totalStock =
-                125420 +
-                randomChange;
-
-
-            const todaySales =
-                2486 +
-                Math.floor(
-                    Math.random() * 150
-                );
-
-
-            const lowStock =
-                342 +
-                Math.floor(
-                    Math.random() * 10
-                );
-
-
-            const criticalStock =
-                87 +
-                Math.floor(
-                    Math.random() * 5
-                );
-
-
-            data.stats[0].value =
-                totalStock
-                    .toLocaleString("tr-TR");
-
-
-            data.stats[1].value =
-                todaySales
-                    .toLocaleString("tr-TR");
-
-
-            data.stats[2].value =
-                lowStock
-                    .toLocaleString("tr-TR");
-
-
-            data.stats[3].value =
-                criticalStock
-                    .toLocaleString("tr-TR");
-
-
-            data.charts["7"].primary =
-                data.charts["7"].primary
-                    .map(
-                        value =>
-                            Math.max(
-                                20,
-                                Math.min(
-                                    98,
-                                    value +
-                                    Math.floor(
-                                        Math.random() * 11
-                                    ) - 5
-                                )
-                            )
-                    );
-
-
-            return data;
-
-        }
+        // Refresh reads the central API; no random demo values are generated.
 
 
         /* =========================================================
@@ -1688,3 +1198,5 @@
         );
 
     
+async function refreshCentralDashboard() { try { dashboardData = await CentralDashboard.load(); renderDashboard(); } catch (error) { showToast(error.message); } }
+refreshCentralDashboard(); window.addEventListener('stock:data-changed', refreshCentralDashboard);

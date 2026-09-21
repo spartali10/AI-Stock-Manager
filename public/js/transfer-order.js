@@ -65,12 +65,12 @@
         try { await refreshInventory(); } catch (error) { get('status').textContent = 'Stoklar yenilenemedi: ' + error.message; }
     });
     get('special').addEventListener('change', render);
-    get('saveNotes').addEventListener('click', () => {
+    get('saveNotes').addEventListener('click', async () => {
         if (!task) return;
         try {
             window.StockAuth.require('transfers');
-            localStorage.setItem(`transfer-order-note:${task.id}`, get('orderNotes').value);
-            get('notesStatus').textContent = 'Not bu tarayıcıya kaydedildi.';
+            await window.NebimAdapter.saveOrderNote(task.id, get('orderNotes').value);
+            get('notesStatus').textContent = 'Not merkezi veritabanına kaydedildi.';
         } catch (error) { get('notesStatus').textContent = 'Not kaydedilemedi: ' + error.message; }
     });
     for (const [id, open] of [['expand', true], ['collapse', false]]) get(id).addEventListener('click', () => { get('groups').querySelectorAll('details').forEach(node => { node.open = open; }); });
@@ -95,7 +95,8 @@
             get('orderLabel').textContent = `${task.orderId} nolu Emir · ${task.quantity} adet`;
             const date = value => value ? new Date(value).toLocaleString('tr-TR', { dateStyle: 'short', timeStyle: 'short' }) : '—';
             for (const [id, value] of Object.entries({ metaNumber: `${task.orderId} nolu Emir`, metaTemplate: task.templateName || '—', metaUser: task.user || '—', metaCreated: date(task.startedAt), metaStatus: task.status || '—', metaUpdated: date(task.finishedAt), summaryProducts: new Set(task.records.map(row => row.product)).size, summaryQuantity: sum(task.records), summaryTargets: new Set(task.records.map(row => row.to)).size, summaryVariants: new Set(task.records.map(row => JSON.stringify([row.product, row.color]))).size })) get(id).textContent = value;
-            if (document.activeElement !== get('orderNotes')) get('orderNotes').value = localStorage.getItem(`transfer-order-note:${task.id}`) || '';
+            const note = await window.NebimAdapter.getOrderNote(task.id);
+            if (document.activeElement !== get('orderNotes')) get('orderNotes').value = note;
             get('saveNotes').disabled = false;
             document.title = `${task.orderId} nolu Emir | Transfer Edilen Ürünler`;
             const selected = get('target').value;
@@ -104,6 +105,6 @@
             render();
         } catch (error) { get('groups').replaceChildren(); get('export').disabled = true; get('status').textContent = error.message; }
     }
-    window.addEventListener('storage', event => { if (event.key === 'aiStockNebimData' || event.key === null) load(); });
+    window.addEventListener('stock:data-changed', event => { if (event.key === 'aiStockNebimData' || event.key === null) load(); });
     load();
 })();

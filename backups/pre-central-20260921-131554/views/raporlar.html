@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Raporlar | AI Stock Manager</title>
+
+    <link rel="stylesheet" href="/css/pages/raporlar-1.css">
+    <link rel="stylesheet" href="/css/report-detail.css">
+    <script src="/js/logout.js"></script>
+    <link rel="stylesheet" href="/css/logout.css">
+    <script src="/js/auth.js"></script>
+    <link rel="stylesheet" href="/css/pages/raporlar-2.css">
+<link rel="stylesheet" href="/css/auth.css">
+</head>
+
+
+<body>
+
+
+    <!-- =======================================================
+     SIDEBAR
+======================================================= -->
+
+    <%- include('partials/sidebar-shared-1.html', { active: '/Raporlar' }) %>
+
+
+
+    <!-- =======================================================
+     MAIN
+======================================================= -->
+
+    <main class="main">
+
+
+        <!-- ===================================================
+         TOPBAR
+    =================================================== -->
+
+        <div class="topbar">
+
+            <div class="search-wrapper">
+
+                <input type="search" id="globalSearch" class="search" placeholder="Ürün, kod veya mağaza ara...">
+
+                <span class="search-icon">
+                    ⌕
+                </span>
+
+            </div>
+
+
+            <div class="profile-area">
+
+                <button class="theme-btn" id="themeBtn" title="Tema değiştir">
+                    🌙
+                </button>
+
+                <button class="notification" id="notificationBtn" title="Bildirimler">
+                    ♧
+
+                    <span style="
+                        position:absolute;
+                        margin:-30px 0 0 25px;
+                        width:18px;
+                        height:18px;
+                        border-radius:50%;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        background:var(--purple-2);
+                        color:white;
+                        font-size:9px;
+                    " id="notificationCount">
+                        5
+                    </span>
+
+                </button>
+
+                <div class="user-area" id="userArea" tabindex="0">
+
+                    <div class="avatar" id="avatar">
+                        M
+                    </div>
+
+                    <div class="user-info">
+
+                        <div class="user-name" id="userName">
+                            Admin
+                        </div>
+
+                        <!-- DAKİKA SAYACI KALDIRILDI -->
+
+                        <div class="user-status">
+
+                            <span class="online-dot"></span>
+
+                            Çevrim içi
+
+                        </div>
+
+                    </div>
+
+                    <div class="user-arrow">
+                        ▾
+                    </div>
+
+
+                    <!-- ACCOUNT MENU -->
+
+                    <div class="account-menu" id="accountMenu">
+
+                        <div class="account-header">
+
+                            <div class="account-name" id="accountName">
+                                Admin
+                            </div>
+
+                            <div class="account-role">
+                                Sistem Yöneticisi
+                            </div>
+
+                            <!-- DAKİKA SAYACI KALDIRILDI -->
+
+                            <div class="account-online">
+                                ● Çevrim içi
+                            </div>
+
+                        </div>
+
+
+                        <a href="/Ayarlar" class="account-item">
+
+                            <span class="account-item-icon">
+                                ♙
+                            </span>
+
+                            Hesabım
+
+                        </a>
+
+
+                        <a href="/Ayarlar#guvenlik" class="account-item">
+
+                            <span class="account-item-icon">
+                                🔐
+                            </span>
+
+                            Giriş Güvenliği
+
+                        </a>
+
+
+                        <button class="account-item logout" id="logoutBtn" type="button">
+                            <span class="account-item-icon" aria-hidden="true">⇥</span>
+                            Güvenli Çıkış
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ===================================================
+         PAGE HEADER
+    =================================================== -->
+
+        <div class="page-header">
+
+            <div class="page-title">
+
+                <h1>
+                    Raporlar
+                </h1>
+
+                <p>
+                    Stok, satış, mağaza ve operasyon raporlarını yönetin ve inceleyin.
+                </p>
+
+            </div>
+
+
+            <div class="page-actions">
+
+                <button class="btn" id="refreshBtn" type="button">
+                    ↻ Yenile
+                </button>
+
+
+                <button class="btn btn-primary" id="createReportBtn" type="button">
+                    ＋ Rapor Oluştur
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ===================================================
+         SUMMARY
+    =================================================== -->
+
+        <section class="stats">
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Toplam Rapor
+                    </div>
+
+                    <div class="stat-icon">
+                        ▥
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    248
+                </div>
+
+                <div class="stat-description green">
+                    ↑ %12.4 geçen aya göre
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Bu Ay Oluşturulan
+                    </div>
+
+                    <div class="stat-icon">
+                        ✦
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    36
+                </div>
+
+                <div class="stat-description green">
+                    ↑ 8 yeni rapor
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Tamamlanan
+                    </div>
+
+                    <div class="stat-icon">
+                        ✓
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    231
+                </div>
+
+                <div class="stat-description green">
+                    %93.1 başarı oranı
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Bekleyen
+                    </div>
+
+                    <div class="stat-icon">
+                        ◷
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    17
+                </div>
+
+                <div class="stat-description yellow">
+                    İşlenmesi bekleniyor
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ===================================================
+         TOOLBAR
+    =================================================== -->
+
+        <div class="toolbar">
+
+            <div class="toolbar-left">
+
+                <input type="search" id="reportSearch" class="report-search" placeholder="Rapor adı ara...">
+
+
+                <select id="reportTypeFilter" class="filter-select">
+
+                    <option value="all">
+                        Tüm Raporlar
+                    </option>
+
+                    <option value="stok">
+                        Stok Raporları
+                    </option>
+
+                    <option value="satis">
+                        Satış Raporları
+                    </option>
+
+                    <option value="magaza">
+                        Mağaza Raporları
+                    </option>
+
+                    <option value="ai">
+                        AI Raporları
+                    </option>
+
+                </select>
+
+
+                <select id="periodFilter" class="filter-select">
+
+                    <option value="all">
+                        Tüm Dönemler
+                    </option>
+
+                    <option value="today">
+                        Bugün
+                    </option>
+
+                    <option value="week">
+                        Bu Hafta
+                    </option>
+
+                    <option value="month">
+                        Bu Ay
+                    </option>
+
+                    <option value="year">
+                        Bu Yıl
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ===================================================
+         REPORT CARDS
+    =================================================== -->
+
+        <section class="report-grid" id="reportGrid">
+
+
+            <!-- REPORT 1 -->
+
+            <article class="report-card" data-type="stok" data-period="month" data-name="Aylık Stok Durum Raporu">
+
+                <div class="report-card-header">
+
+                    <div class="report-icon">
+                        ◇
+                    </div>
+
+                    <span class="report-type">
+                        STOK
+                    </span>
+
+                </div>
+
+                <div class="report-title">
+                    Aylık Stok Durum Raporu
+                </div>
+
+                <div class="report-description">
+                    Mağazalardaki mevcut stok, düşük stok ve kritik stok durumlarını gösterir.
+                </div>
+
+                <div class="report-meta">
+
+                    <span class="report-date">
+                        31 Ağustos 2026
+                    </span>
+
+                    <button class="report-open" type="button" data-report="Aylık Stok Durum Raporu">
+                        Raporu Aç →
+                    </button>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- REPORT 2 -->
+
+            <article class="report-card" data-type="satis" data-period="month"
+                data-name="Aylık Satış Performans Raporu">
+
+                <div class="report-card-header">
+
+                    <div class="report-icon">
+                        ↗
+                    </div>
+
+                    <span class="report-type">
+                        SATIŞ
+                    </span>
+
+                </div>
+
+                <div class="report-title">
+                    Aylık Satış Performans Raporu
+                </div>
+
+                <div class="report-description">
+                    Mağaza ve ürün bazında satış performanslarını ve ciro değişimlerini analiz eder.
+                </div>
+
+                <div class="report-meta">
+
+                    <span class="report-date">
+                        31 Ağustos 2026
+                    </span>
+
+                    <button class="report-open" type="button" data-report="Aylık Satış Performans Raporu">
+                        Raporu Aç →
+                    </button>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- REPORT 3 -->
+
+            <article class="report-card" data-type="magaza" data-period="week" data-name="Mağaza Performans Raporu">
+
+                <div class="report-card-header">
+
+                    <div class="report-icon">
+                        ▣
+                    </div>
+
+                    <span class="report-type">
+                        MAĞAZA
+                    </span>
+
+                </div>
+
+                <div class="report-title">
+                    Mağaza Performans Raporu
+                </div>
+
+                <div class="report-description">
+                    Mağazaların stok, satış, kritik ürün ve operasyon performanslarını karşılaştırır.
+                </div>
+
+                <div class="report-meta">
+
+                    <span class="report-date">
+                        30 Ağustos 2026
+                    </span>
+
+                    <button class="report-open" type="button" data-report="Mağaza Performans Raporu">
+                        Raporu Aç →
+                    </button>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- REPORT 4 -->
+
+            <article class="report-card" data-type="ai" data-period="week" data-name="AI Stok Tahmin Raporu">
+
+                <div class="report-card-header">
+
+                    <div class="report-icon">
+                        ✦
+                    </div>
+
+                    <span class="report-type">
+                        AI
+                    </span>
+
+                </div>
+
+                <div class="report-title">
+                    AI Stok Tahmin Raporu
+                </div>
+
+                <div class="report-description">
+                    AI destekli talep tahmini, olası stok açıkları ve yeniden sipariş önerilerini içerir.
+                </div>
+
+                <div class="report-meta">
+
+                    <span class="report-date">
+                        29 Ağustos 2026
+                    </span>
+
+                    <button class="report-open" type="button" data-report="AI Stok Tahmin Raporu">
+                        Raporu Aç →
+                    </button>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- REPORT 5 -->
+
+            <article class="report-card" data-type="stok" data-period="today" data-name="Kritik Stok Raporu">
+
+                <div class="report-card-header">
+
+                    <div class="report-icon">
+                        ⚠
+                    </div>
+
+                    <span class="report-type">
+                        STOK
+                    </span>
+
+                </div>
+
+                <div class="report-title">
+                    Kritik Stok Raporu
+                </div>
+
+                <div class="report-description">
+                    Kritik seviyeye ulaşan ürünleri, mağazaları ve acil stok ihtiyaçlarını listeler.
+                </div>
+
+                <div class="report-meta">
+
+                    <span class="report-date">
+                        31 Ağustos 2026
+                    </span>
+
+                    <button class="report-open" type="button" data-report="Kritik Stok Raporu">
+                        Raporu Aç →
+                    </button>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- REPORT 6 -->
+
+            <article class="report-card" data-type="satis" data-period="week" data-name="Haftalık Satış Özeti">
+
+                <div class="report-card-header">
+
+                    <div class="report-icon">
+                        ₺
+                    </div>
+
+                    <span class="report-type">
+                        SATIŞ
+                    </span>
+
+                </div>
+
+                <div class="report-title">
+                    Haftalık Satış Özeti
+                </div>
+
+                <div class="report-description">
+                    Haftalık satış hacmini, toplam ciroyu ve önceki haftaya göre değişimleri gösterir.
+                </div>
+
+                <div class="report-meta">
+
+                    <span class="report-date">
+                        31 Ağustos 2026
+                    </span>
+
+                    <button class="report-open" type="button" data-report="Haftalık Satış Özeti">
+                        Raporu Aç →
+                    </button>
+
+                </div>
+
+            </article>
+
+        </section>
+
+
+
+        <!-- ===================================================
+         EMPTY STATE
+    =================================================== -->
+
+        <div class="empty-state" id="emptyState">
+
+            <div class="empty-icon">
+                ⌕
+            </div>
+
+            <h3>
+                Rapor bulunamadı
+            </h3>
+
+            <p>
+                Arama veya filtre kriterlerinizi değiştirerek tekrar deneyin.
+            </p>
+
+        </div>
+
+
+
+        <!-- ===================================================
+         RECENT REPORTS TABLE
+    =================================================== -->
+
+        <section class="report-table-card">
+
+            <div class="table-header">
+
+                <div>
+
+                    <div class="table-title">
+                        Son Oluşturulan Raporlar
+                    </div>
+
+                    <div class="table-subtitle">
+                        Sistem üzerinde son oluşturulan raporların özeti.
+                    </div>
+
+                </div>
+
+
+                <button class="btn" id="exportBtn" type="button">
+                    ↓ Dışa Aktar
+                </button>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Rapor
+                            </th>
+
+                            <th>
+                                Tür
+                            </th>
+
+                            <th>
+                                Oluşturan
+                            </th>
+
+                            <th>
+                                Tarih
+                            </th>
+
+                            <th>
+                                Durum
+                            </th>
+
+                            <th>
+                                İşlem
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <span class="table-report-name">
+                                    Aylık Stok Durum Raporu
+                                </span>
+                            </td>
+
+                            <td>
+                                Stok
+                            </td>
+
+                            <td>
+                                Admin
+                            </td>
+
+                            <td>
+                                31.08.2026
+                            </td>
+
+                            <td>
+
+                                <span class="table-status completed">
+                                    TAMAMLANDI
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <button class="table-action" type="button" data-table-report="Aylık Stok Durum Raporu">
+                                    Görüntüle
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                <span class="table-report-name">
+                                    Haftalık Satış Özeti
+                                </span>
+                            </td>
+
+                            <td>
+                                Satış
+                            </td>
+
+                            <td>
+                                Admin
+                            </td>
+
+                            <td>
+                                31.08.2026
+                            </td>
+
+                            <td>
+
+                                <span class="table-status completed">
+                                    TAMAMLANDI
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <button class="table-action" type="button" data-table-report="Haftalık Satış Özeti">
+                                    Görüntüle
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                <span class="table-report-name">
+                                    AI Stok Tahmin Raporu
+                                </span>
+                            </td>
+
+                            <td>
+                                AI
+                            </td>
+
+                            <td>
+                                Sistem
+                            </td>
+
+                            <td>
+                                31.08.2026
+                            </td>
+
+                            <td>
+
+                                <span class="table-status processing">
+                                    İŞLENİYOR
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <button class="table-action" type="button" data-table-report="AI Stok Tahmin Raporu">
+                                    Görüntüle
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                <span class="table-report-name">
+                                    Mağaza Performans Raporu
+                                </span>
+                            </td>
+
+                            <td>
+                                Mağaza
+                            </td>
+
+                            <td>
+                                Admin
+                            </td>
+
+                            <td>
+                                30.08.2026
+                            </td>
+
+                            <td>
+
+                                <span class="table-status completed">
+                                    TAMAMLANDI
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <button class="table-action" type="button" data-table-report="Mağaza Performans Raporu">
+                                    Görüntüle
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ===================================================
+         FOOTER
+    =================================================== -->
+
+        <div class="footer">
+
+            AI Stock Manager
+            •
+            Nebim V3 Entegrasyon Paneli
+
+        </div>
+
+    </main>
+
+
+
+    <!-- =======================================================
+     TOAST
+======================================================= -->
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+
+
+    <dialog id="reportDetail" class="rd-dialog" aria-labelledby="rdTitle" aria-describedby="rdDescription">
+        <header class="rd-header">
+            <button id="rdClose" class="rd-close" type="button" aria-label="Raporu kapat" autofocus>×</button>
+            <p class="rd-eyebrow">ANALİZ MERKEZİ / RAPOR DETAYI</p>
+            <h2 id="rdTitle"></h2>
+            <p id="rdDescription"></p>
+            <div class="rd-meta"><span id="rdType" class="rd-tag"></span><span id="rdPeriod"></span><span aria-hidden="true">·</span><span id="rdDate"></span><span class="rd-tag">Örnek veri</span></div>
+        </header>
+        <div class="rd-body">
+            <dl id="rdMetrics" class="rd-metrics"></dl>
+            <div class="rd-analysis">
+                <section class="rd-panel" aria-labelledby="rdChartTitle"><h3 id="rdChartTitle"></h3><div id="rdChart"></div></section>
+                <aside class="rd-panel rd-insight"><h3>✦ Rapor değerlendirmesi</h3><p id="rdNote"></p><small>Bu önizleme örnek veriler içerir. Seçili tarihe ait gerçek rapor sonuçlarını temsil etmez.</small></aside>
+            </div>
+            <h3 id="rdTableTitle">Detaylı döküm</h3>
+            <div class="rd-table-wrap"><table aria-labelledby="rdTableTitle"><thead><tr id="rdColumns"></tr></thead><tbody id="rdRows"></tbody></table></div>
+        </div>
+        <footer class="rd-footer"><p id="rdSource"></p><button id="rdDone" class="btn" type="button">Kapat</button></footer>
+    </dialog>
+    <script src="/js/report-detail.js"></script>
+    <script src="/js/nebim-adapter.js"></script>
+
+    <script src="/js/pages/raporlar-1.js"></script>
+
+</body>
+
+</html>

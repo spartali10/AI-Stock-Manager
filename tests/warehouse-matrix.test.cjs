@@ -1,6 +1,6 @@
 const fs = require('fs'), vm = require('vm'), assert = require('assert/strict');
 const root = require('path').join(__dirname, '..');
-const files = ['distribution-engine.js', 'warehouse-matrix.js', 'nebim-adapter.js'].map(f => fs.readFileSync(root + '/public/js/' + f, 'utf8'));
+const files = ['distribution-engine.js', 'warehouse-matrix.js', 'nebim-adapter.js'].map(f => (f === 'nebim-adapter.js' ? require('./helpers/inventory-source.cjs')() : fs.readFileSync(root + '/public/js/' + f, 'utf8')));
 const fixture = () => ({ stores: [{ id: 1, name: 'Main', type: 'finished_goods' }, { id: 2, name: 'A' }, { id: 3, name: 'B' }],
     products: [
         { id: 1, store: 'Main', code: '01', color: 'Red', size: 'M', fabric: 'Cotton', stock: 4 },

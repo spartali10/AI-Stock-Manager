@@ -951,6 +951,6 @@
         }
         chartPeriod.addEventListener('change', refreshProductPerformance);
         periodButtons.forEach(button => button.addEventListener('click', refreshProductPerformance));
-        window.addEventListener('storage', event => { if (event.key === 'aiStockNebimData') refreshProductPerformance(); });
+        window.addEventListener('stock:data-changed', event => { if (event.key === 'aiStockNebimData') refreshProductPerformance(); });
         window.addEventListener('focus', refreshProductPerformance);
         refreshProductPerformance();

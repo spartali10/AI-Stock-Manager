@@ -1,0 +1,1800 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title><%= typeof distributionPage !== 'undefined' ? 'Akıllı Dağıtım' : 'Transferler' %> | AI Stock Manager</title>
+
+    <link rel="stylesheet" href="/css/pages/transferler-1.css">
+    <link rel="stylesheet" href="/css/quick-transfer.css">
+    <link rel="stylesheet" href="/css/transfer-tasks.css">
+    <script src="/js/logout.js"></script>
+    <link rel="stylesheet" href="/css/logout.css">
+    <script src="/js/auth.js"></script>
+    <link rel="stylesheet" href="/css/pages/transferler-2.css">
+<link rel="stylesheet" href="/css/auth.css">
+    <link rel="stylesheet" href="/css/distribution-page.css">
+</head>
+
+
+<body class="<%= typeof distributionPage !== 'undefined' ? 'distribution-page' : '' %>">
+
+
+    <!-- =======================================================
+     SIDEBAR
+======================================================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                ◈
+            </div>
+
+            <div class="logo-text">
+
+                AI STOCK
+
+                <span>
+                    MANAGER
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="menu-title">
+            Yönetim
+        </div>
+
+
+        <a href="/Home" class="menu-item">
+
+            <span class="menu-icon">⌂</span>
+
+            <span class="menu-text">
+                Ana Sayfa
+            </span>
+
+        </a>
+
+
+        <a href="/Stok" class="menu-item">
+
+            <span class="menu-icon">◇</span>
+
+            <span class="menu-text">
+                Stok Yönetimi
+            </span>
+
+        </a>
+
+
+        <a href="/Transfer" class="menu-item active">
+
+            <span class="menu-icon">⇄</span>
+
+            <span class="menu-text">
+                Transferler
+            </span>
+
+        </a>
+
+
+        <a href="/AiOnerileri" class="menu-item">
+
+            <span class="menu-icon">✦</span>
+
+            <span class="menu-text">
+                AI Önerileri
+            </span>
+
+        </a>
+
+
+        <a href="/Magazalar" class="menu-item">
+
+            <span class="menu-icon">▣</span>
+
+            <span class="menu-text">
+                Mağazalar
+            </span>
+
+        </a>
+
+
+        <div class="menu-title">
+            Analiz
+        </div>
+
+
+        <a href="/Raporlar" class="menu-item">
+
+            <span class="menu-icon">▥</span>
+
+            <span class="menu-text">
+                Raporlar
+            </span>
+
+        </a>
+
+
+        <a href="/SatisAnalizi" class="menu-item">
+
+            <span class="menu-icon">↗</span>
+
+            <span class="menu-text">
+                Satış Analizi
+            </span>
+
+        </a>
+
+
+        <a href="/Bildirimler" class="menu-item">
+
+            <span class="menu-icon">♧</span>
+
+            <span class="menu-text">
+                Bildirimler
+            </span>
+
+        </a>
+
+
+        <div class="menu-title">
+            Sistem
+        </div>
+
+
+        <a href="/Ayarlar" class="menu-item">
+
+            <span class="menu-icon">⚙</span>
+
+            <span class="menu-text">
+                Ayarlar
+            </span>
+
+        </a>
+
+
+        <a href="/Kullanicilar" class="menu-item">
+
+            <span class="menu-icon">♙</span>
+
+            <span class="menu-text">
+                Kullanıcılar
+            </span>
+
+        </a>
+
+
+        <a href="/Entegrasyon" class="menu-item">
+
+            <span class="menu-icon">⌘</span>
+
+            <span class="menu-text">
+                Entegrasyon
+            </span>
+
+        </a>
+
+    </aside>
+
+
+    <!-- =======================================================
+     MAIN
+======================================================= -->
+
+    <main class="main">
+
+
+        <!-- ===================================================
+         TOPBAR
+    =================================================== -->
+
+        <div class="topbar">
+
+            <div class="search-wrapper">
+
+                <input type="search" id="globalSearch" class="search" placeholder="Transfer, ürün veya mağaza ara...">
+
+                <span class="search-icon">
+                    ⌕
+                </span>
+
+            </div>
+
+
+            <!-- =================================================
+             PROFILE AREA
+        ================================================= -->
+
+            <div class="profile-area">
+
+                <button class="theme-btn" id="themeBtn" title="Tema değiştir">
+                    🌙
+                </button>
+
+                <button class="notification" id="notificationBtn" title="Bildirimler">
+                    ♧
+
+                    <span style="
+                        position:absolute;
+                        margin:-30px 0 0 25px;
+                        width:18px;
+                        height:18px;
+                        border-radius:50%;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        background:var(--purple2);
+                        color:white;
+                        font-size:9px;
+                    " id="notificationCount">
+                        5
+                    </span>
+
+                </button>
+
+                <div class="user-area" id="userArea" tabindex="0">
+
+                    <div class="avatar" id="avatar">
+                        M
+                    </div>
+
+                    <div class="user-info">
+
+                        <div class="user-name" id="userName">
+                            Admin
+                        </div>
+
+                        <!-- DAKİKA SAYACI KALDIRILDI -->
+
+                        <div class="user-status">
+
+                            <span class="online-dot"></span>
+
+                            Çevrim içi
+
+                        </div>
+
+                    </div>
+
+                    <div class="user-arrow">
+                        ▾
+                    </div>
+
+
+                    <!-- ACCOUNT MENU -->
+
+                    <div class="account-menu" id="accountMenu">
+
+                        <div class="account-header">
+
+                            <div class="account-name" id="accountName">
+                                Admin
+                            </div>
+
+                            <div class="account-role">
+                                Sistem Yöneticisi
+                            </div>
+
+                            <!-- DAKİKA SAYACI KALDIRILDI -->
+
+                            <div class="account-online">
+                                ● Çevrim içi
+                            </div>
+
+                        </div>
+
+
+                        <a href="/Ayarlar" class="account-item">
+
+                            <span class="account-item-icon">
+                                ♙
+                            </span>
+
+                            Hesabım
+
+                        </a>
+
+
+                        <a href="/Ayarlar#guvenlik" class="account-item">
+
+                            <span class="account-item-icon">
+                                🔐
+                            </span>
+
+                            Giriş Güvenliği
+
+                        </a>
+
+
+                        <button class="account-item logout" id="logoutBtn" type="button">
+                            <span class="account-item-icon" aria-hidden="true">⇥</span>
+                            Güvenli Çıkış
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ===================================================
+         PAGE HEADER
+    =================================================== -->
+
+        <div class="page-header">
+
+            <div class="page-title">
+
+                <h1>
+                    Transferler
+                </h1>
+
+                <p>
+                    Mağazalar arası stok transferlerini oluşturun,
+                    takip edin ve yönetin.
+                </p>
+
+            </div>
+
+
+            <div class="page-actions">
+
+                <button class="btn" onclick="exportTransfers()" type="button">
+                    ⇩ Dışa Aktar
+                </button>
+
+                <button class="btn btn-primary" onclick="openModal()" type="button">
+                    ＋ Yeni Transfer
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ===================================================
+         STATS
+    =================================================== -->
+
+        <section class="stats">
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Toplam Transfer
+                    </div>
+
+                    <div class="stat-icon">
+                        ⇄
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    486
+                </div>
+
+                <div class="stat-description green">
+                    ↑ %12.4 geçen aya göre
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Bekleyen
+                    </div>
+
+                    <div class="stat-icon">
+                        ◷
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    28
+                </div>
+
+                <div class="stat-description yellow">
+                    Onay bekleyen transferler
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Yolda
+                    </div>
+
+                    <div class="stat-icon">
+                        ⇢
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    46
+                </div>
+
+                <div class="stat-description blue">
+                    Aktif sevkiyatlar
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Tamamlanan
+                    </div>
+
+                    <div class="stat-icon">
+                        ✓
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    412
+                </div>
+
+                <div class="stat-description green">
+                    %84.8 başarı oranı
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ===================================================
+         CONTENT
+    =================================================== -->
+
+        <div class="content-grid">
+
+
+            <!-- =================================================
+             LEFT
+        ================================================= -->
+
+            <div>
+
+                <!-- QUICK -->
+
+                <section class="panel distribution-panel" aria-labelledby="distTitle">
+                    <div class="panel-header"><div class="panel-title" id="distTitle">AKILLI DAĞITIM</div>
+                        <% if (typeof distributionPage !== 'undefined') { %>
+                        <a class="btn" href="/Transfer">← Transferlere Dön</a>
+                        <% } else { %>
+                        <a class="btn" id="distributionPageLink" href="/Transfer?view=distribution" target="_blank" rel="noopener">Tam Sayfada Aç ↗</a>
+                        <% } %>
+                    </div>
+                    <div class="distribution-body">
+                        <div class="distribution-modes" role="group" aria-label="Dağıtım modu">
+                            <button type="button" data-distribution-mode="chance" aria-pressed="true">❖ Şans Verelim</button>
+                            <button type="button" data-distribution-mode="sweep" aria-pressed="false">▤ Sil Süpür</button>
+                            <button type="button" data-distribution-mode="winner" aria-pressed="false">🏆 Çalışan Kazanır</button>
+                        </div>
+                        <p id="distDescription" class="distribution-description"></p>
+                        <p class="distribution-help">Kaynak, hedef, sezon/grup filtreleri ve satış tarihleri aşağıdaki Hızlı Transfer alanından alınır. Hedefleri seçtiğiniz sıra dağıtım önceliğidir.</p>
+                        <div id="distMainField"><label class="form-label" for="distMain">Mamül Depo</label><select id="distMain" class="form-select"></select></div>
+
+                        <section id="chanceMatrix" class="warehouse-matrix" aria-label="Mamül Depo dağıtım tablosu">
+                            <div class="wm-toolbar">
+                                <label class="wm-target" for="wmTargetStock">Mağaza / beden gönderim adedi <input id="wmTargetStock" type="number" min="1" step="1" value="2" inputmode="numeric" title="Mevcut mağaza stoğundan bağımsız, her bedene gönderilecek adet"></label>
+                                <button type="button" id="wmSmart" class="btn btn-primary">Akıllı Dağıt</button>
+                                <button type="button" id="wmRefresh" class="btn btn-primary">↻ Güncel Veriyi Çek</button>
+                                <button type="button" id="wmExport" class="btn">Excel Dışa Aktar</button>
+                                <button type="button" id="wmTemplate" class="btn">Excel Şablonu</button>
+                                <button type="button" id="wmImport" class="btn">Excel İçe Aktar</button>
+                                <input type="file" id="wmImportFile" accept=".xlsx" hidden>
+                                <button type="button" id="wmClear" class="btn">Adet Girişlerini Temizle</button>
+                            </div>
+                            <p id="wmSource" class="distribution-help" role="status" aria-live="polite"></p>
+                            <div class="wm-filters">
+                                <div class="wm-filter-field"><label for="wmSeason">Sezon</label><select id="wmSeason" class="form-select"><option value="">Tüm sezonlar</option><option value="SS">Yaz</option><option value="AW">Kış</option><option value="other">Diğer / Sezon belirtilmemiş</option></select></div>
+                                <div class="wm-filter-field"><label for="wmFabric">Kumaş cinsi</label><select id="wmFabric" class="form-select" multiple></select></div>
+                                <div class="wm-filter-field"><label for="wmCode">Ürün Adı</label><select id="wmCode" class="form-select" multiple></select></div>
+                                <div class="wm-filter-field"><label for="wmColor">Renk</label><select id="wmColor" class="form-select" multiple></select></div>
+                                <label>Beden<select id="wmSize" class="form-select"><option value="">Tümü</option></select></label>
+                                <button type="button" id="wmFilterReset" class="btn">Filtreleri Temizle</button>
+                            </div>
+                            <div class="wm-summary"><div><span>Mamül Depo toplam stok</span><strong id="wmStock">0</strong></div><div><span>Mağazalara dağıtılan</span><strong id="wmAllocated">0</strong></div><div><span>Depoda kalan</span><strong id="wmBalance">0</strong></div></div>
+                            <div class="wm-view-actions"><p id="wmCount" class="distribution-help"></p><div><button type="button" id="wmFit" class="btn" aria-pressed="false">Ekrana Sığdır</button> <button type="button" id="wmExpand" class="btn" aria-pressed="false">⛶ Tabloyu Büyüt</button></div></div>
+                            <div class="wm-scroll" tabindex="0" role="region" aria-label="Yatay kaydırılabilir dağıtım tablosu"><table class="wm-table"><caption>Mamül Depo stok ve mağaza dağıtım planı</caption><thead id="wmHead"></thead><tbody id="wmRows"></tbody></table></div>
+                            <p id="wmEmpty" class="distribution-description">Mamül Depo seçildiğinde stok satırları burada görünecek.</p>
+                            <p class="distribution-help">Hücreye gönderilecek adedi yazın. Mağaza altında mevcut → yeni stok gösterilir. Koyu turuncu hücreler, ilgili ürün ve bedende mağazanın mevcut stoğu olduğunu belirtir. Eksi kalan kırmızı olur; stok aşımı uygulanamaz. Eksik renk/beden kayıtları görünür, ancak dağıtıma kapalıdır. Genel toplamlar filtre dışındaki girişleri de içerir.</p>
+                            <p id="wmValidation" class="distribution-description" role="status" aria-live="polite"></p>
+                            <button type="button" id="wmApply" class="btn btn-primary" disabled>Dağıtımı Uygula</button>
+                            <button type="button" id="wmReceipt" class="btn" disabled>Fiş Olarak Gönder</button>
+                            <p>Excel İçe Aktar için Excel Şablonu veya Excel Dışa Aktar ile indirilen dosyayı kullanın. Kumaş cinsi, ürün adı, renk ve mağaza/beden başlıklarını koruyup mağaza hücrelerine dağıtılacak adetleri girin. Turuncu hücreler mevcut stoğu gösterir; içe aktarma hücrenin sayısal dağıtım değerini okur. Toplamlar ve depo stokları dosyadan stoklara yazılmaz.</p>
+                            <dialog id="wmReceiptDialog">
+                                <h3>Nebim transfer fişi önizlemesi</h3>
+                                <pre id="wmReceiptPreview"></pre>
+                                <p>Nebim fiş servisi ve mağaza/depo kod eşlemeleri henüz tanımlı değil. Bu taslak Nebim'e gönderilmedi; yerel stoklar değiştirilmedi.</p>
+                                <button type="button" id="wmReceiptDownload" class="btn">Fiş Taslağını İndir (JSON)</button>
+                                <button type="button" class="btn" disabled>Nebim'e Gönder — bağlantı bekleniyor</button>
+                                <button type="button" class="btn" onclick="document.getElementById('wmReceiptDialog').close()">Kapat</button>
+                            </dialog>
+                        </section>
+                        <div class="distribution-actions"><button type="button" class="btn" id="distBuild">Dağıtımı Önizle</button><button type="button" class="btn btn-primary" id="distApply" disabled>Önizlemedeki Dağıtımı Uygula</button></div>
+                        <p id="distStatus" role="status" aria-live="polite" class="distribution-description"></p>
+                        <div id="distPreview" hidden><p id="distCount" class="distribution-description"></p><div class="distribution-table"><table aria-label="Dağıtım önizlemesi"><thead><tr><th>Ürün Kodu</th><th>Renk</th><th>Beden</th><th>Kaynak</th><th>Hedef</th><th>Adet</th><th>Açıklama</th></tr></thead><tbody id="distRows"></tbody></table></div></div>
+                        <p class="distribution-help">Önizleme stok değiştirmez. Uygulama yalnızca bu tarayıcıdaki stokları günceller; Nebim'e gönderilmez.</p>
+                    </div>
+                </section>
+                <section class="panel transfer-templates" aria-labelledby="transferTemplateTitle">
+                    <h3 id="transferTemplateTitle">Transfer Şablonları</h3>
+                    <p>Dağıtım modu, tarih aralığı, kaynak/hedef seçim sırası ve dinamik filtreler bu tarayıcıda saklanır.</p>
+                    <label for="transferTemplateName">Şablon adı</label>
+                    <div class="transfer-template-controls"><input id="transferTemplateName" class="form-input" maxlength="80" placeholder="Şablon adı"><button id="transferTemplateSave" type="button" class="btn">Yeni Şablon Oluştur</button><button id="transferTemplateUpdate" type="button" class="btn" disabled>Seçili Şablonu Güncelle</button></div>
+                    <p>Kartı seçin, adını ve aşağıdaki transfer ayarlarını düzenleyin, ardından Seçili Şablonu Güncelle düğmesine basın.</p>
+                    <div class="transfer-template-heading"><h4>Kayıtlı Şablonlar</h4><button id="transferTemplateDelete" type="button" class="btn" disabled>Sil</button></div>
+                    <div id="transferTemplateCards" class="transfer-template-cards" role="group" aria-label="Kayıtlı şablonlar"></div>
+                    <p id="transferTemplateStatus" role="status" aria-live="polite"></p>
+                </section>
+                <div class="panel quick-transfer-panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ＋
+                            </span>
+
+                            HIZLI TRANSFER
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="quick-transfer">
+                        <div class="quick-sales-compact">
+                        <section class="quick-sales-period" aria-labelledby="quickSalesTitle">
+                            <h3 id="quickSalesTitle">Satış Tarih Aralığı</h3>
+                            <div class="quick-sales-buttons" role="group" aria-label="Satış dönemi">
+                                <button type="button" data-sales-period="week" aria-pressed="true" class="active">Haftalık</button>
+                                <button type="button" data-sales-period="month" aria-pressed="false">Aylık</button>
+                                <button type="button" data-sales-period="custom" aria-pressed="false">Özel</button>
+                            </div>
+                            <p id="quickSalesHint" role="status" aria-live="polite"></p>
+                        </section>
+                        <div class="quick-sales-date"><label class="form-label" for="quickSalesStart">Satış İlk</label><input class="form-input" id="quickSalesStart" type="date" required aria-describedby="quickSalesHint"></div>
+                        <div class="quick-sales-date"><label class="form-label" for="quickSalesEnd">Satış Son</label><input class="form-input" id="quickSalesEnd" type="date" required aria-describedby="quickSalesHint"></div>
+                        </div>
+
+
+                        <div class="form-group store-route-group source-store-group">
+
+                            <label class="form-label">
+                                Kaynak Mağaza
+                            </label>
+
+                            <select class="form-select" id="quickFrom" multiple aria-label="Kaynak mağaza">
+
+                                <option>
+                                    İstanbul Mağaza 01
+                                </option>
+
+                                <option>
+                                    İstanbul Mağaza 02
+                                </option>
+
+                                <option>
+                                    Ankara Mağaza 01
+                                </option>
+
+                                <option>
+                                    İzmir Mağaza 01
+                                </option>
+
+                                <option>
+                                    Bursa Mağaza 01
+                                </option>
+
+                            </select>
+                            <div id="distSourceStockRule" class="source-stock-rule" hidden>
+                                <label class="distribution-check"><input type="checkbox" id="distMinTwoStock" aria-describedby="distMinTwoHelp"> 2 ve üzeri kaynak stoklarını dağıt</label>
+                                <p id="distMinTwoHelp">Tüm ürün kodlarında renk/beden bazında uygulanır. Seçili dönemde kaynakta satılmayan ürünlerden, stoğu en az 2 olanlar alınır. Sıfır stoklu hedeflere en yüksek satıştan başlayarak birer adet verilir. Sezon/grup filtreleri korunur.</p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group store-route-group target-store-group">
+
+                            <label class="form-label">
+                                Hedef Mağaza
+                            </label>
+
+                            <select class="form-select" id="quickTo" multiple aria-label="Hedef mağaza">
+
+                                <option>
+                                    İzmir Mağaza 01
+                                </option>
+
+                                <option>
+                                    İstanbul Mağaza 01
+                                </option>
+
+                                <option>
+                                    İstanbul Mağaza 02
+                                </option>
+
+                                <option>
+                                    Ankara Mağaza 01
+                                </option>
+
+                                <option>
+                                    Bursa Mağaza 01
+                                </option>
+
+                            </select>
+                        <div id="distQuantitySettings" class="target-depot" hidden>
+                            <label class="form-label" for="distMinimumQuantity">Minimum Transfer Adedi</label>
+                            <p class="qf-note">Ürün, renk ve beden başına gönderilecek adet. Kaynakta daha az stok varsa mevcut adedin tamamı kullanılır.</p>
+                            <input id="distMinimumQuantity" class="form-input" type="number" min="1" step="1" value="1">
+                            <label class="distribution-check"><input id="distSendAllStock" type="checkbox"> Tüm stoğu gönder</label>
+                            <p class="qf-note">İşaretlendiğinde minimum adet uygulanmaz; kaynak kaydının tüm stoğu sıradaki uygun hedefe gönderilir.</p>
+                        </div>
+                        <div id="distRemainder" class="target-depot" hidden>
+                            <label class="distribution-check"><input type="checkbox" id="distSendRemainder"> Kalan ürünleri seçili depoya çık</label>
+                            <label class="form-label" for="distRemainderStore">Hedef Depo</label><select id="distRemainderStore" class="form-select" disabled></select>
+                        </div>
+
+                        </div>
+
+
+                        <p class="quick-route-note">Kaynak ve hedef mağazaları seçin. Kumaş Cinsi ve diğer filtrelerle eşleşen ürünler için Görev Listesi’nde bekleyen emir oluşturulur. Emir oluşturmak kaynak veya hedef stoklarını değiştirmez.</p>
+                        <section class="qf-section" aria-labelledby="qfTitle">
+                            <div class="qf-heading"><h3 id="qfTitle">⏷ Dinamik Filtreler</h3><div><button id="qfClear" type="button" disabled>Temizle</button> <button id="qfAdd" type="button">＋ Yeni Filtre</button></div></div>
+                            <p class="qf-note">Aynı filtrede seçilen değerlerden biri, farklı filtrelerin ise tümü eşleşmelidir. Değer seçilmeyen filtre uygulanmaz.</p>
+                            <div id="qfRows"></div>
+                            <p id="qfCount" role="status" aria-live="polite"></p>
+                            <p id="qfEmpty" class="qf-note" hidden>Eşleşen ürün yok. Kaynak mağazayı veya filtreleri değiştirin. Eksik özellikleri aşağıdan tanımlayabilirsiniz.</p>
+                            <details class="qf-editor"><summary>＋ Ürüne Özellik Tanımla</summary>
+                                <p class="qf-note">Kaynak mağazadaki bir ürüne sezon, yıl veya özel bir alan ekleyin. Değerler bu tarayıcıda kaydedilir.</p>
+                                <label>Ürün<select id="qfEditProduct"></select></label>
+                                <label>Filtre tipi<select id="qfEditType"><option value="hierarchy">Hierarchy</option><option value="attributes">Ürün özelliği</option></select></label>
+                                <label>Özellik<select id="qfEditKey"><option value="">Özellik seçiniz…</option></select></label>
+                                <p class="qf-value-label">Değerler</p><div id="qfEditValuePicker"></div>
+                                <label>Yeni değer ekle<input id="qfEditValues" maxlength="300" placeholder="Yeni değer yazın; birden fazlasını virgülle ayırın"></label>
+                                <button id="qfEditAddValue" type="button">＋ Değer Ekle</button>
+                                <p class="qf-note">Mevcut değerleri listeden seçin veya yeni değer ekleyin. Kaydedilen seçimler bu ürünün ilgili özellik değerlerinin yerini alır.</p>
+                                <button id="qfSave" type="button">Özelliği Kaydet</button><p id="qfEditStatus" role="status" aria-live="polite"></p>
+                            </details>
+                        </section>
+                        <div class="form-group">
+                            <p class="form-label">Kumaş Cinsine Göre Otomatik Transfer</p>
+                            <p class="qf-note">Kumaş Cinsi filtresindeki ürün adları ve diğer filtrelerle eşleşen tüm kaynak ürünler otomatik değerlendirilir. Ayrıca ürün veya adet seçmeniz gerekmez. Değer seçilmezse filtre tüm ürünleri kapsar.</p>
+                            <p class="qf-note">Filtreyle eşleşen kaynak ürünler, hedef mağazaları seçtiğiniz sırayla dönüşümlü dağıtılır. Her kaynak beden kaydının tüm adedi sıradaki uygun hedefe gider. İlgili bedende stok bulunan hedefler ve ürünün kaynak mağazası atlanır. Son hedeften sonra ilk hedefe dönülür. Satış ve tarih seçimi gerekmez.</p>
+                        </div>
+
+                        <button class="quick-btn" id="quickCreate" type="button">
+                            ⇄ TRANSFER OLUŞTUR
+                        </button>
+                        <p id="quickStatus" role="status" aria-live="polite"></p>
+
+                    </div>
+
+                </div>
+
+                <section class="panel transfer-tasks" aria-labelledby="transferTasksTitle">
+                    <div class="panel-header">
+                        <h2 id="transferTasksTitle" class="panel-title">☷ Görev Listesi</h2>
+                        <div class="task-actions">
+                            <button type="button" id="taskExportAll">Excel İndir</button>
+                            <button type="button" id="taskDeleteAll" class="task-danger">Tümünü Sil</button>
+                        </div>
+                    </div>
+                    <div class="task-table-wrap">
+                        <table aria-label="Transfer görevleri">
+                            <thead><tr><th>ID</th><th>Şablon Adı</th><th>Kullanıcı</th><th>Durum</th><th>Başlangıç</th><th>Bitiş</th><th>İlerleme</th><th>Son Mesaj</th><th>Transfer</th><th>Sil</th></tr></thead>
+                            <tbody id="transferTaskRows"></tbody>
+                        </table>
+                    </div>
+                    <p id="transferTasksEmpty">Henüz görev yok. Transfer oluşturduğunuzda emri burada görebilirsiniz.</p>
+                    <p id="transferTasksStatus" role="status" aria-live="polite"></p>
+                    <section id="taskOrderDetail" hidden aria-labelledby="taskOrderTitle">
+                        <div class="task-detail-header">
+                            <h3 id="taskOrderTitle" tabindex="-1"></h3>
+                            <div class="task-actions"><button type="button" id="taskExportOrder">Emri Excel İndir</button><button type="button" id="taskCloseOrder">Kapat</button></div>
+                        </div>
+                        <div class="task-table-wrap"><table aria-label="Emir detayları"><thead><tr><th>Ürün Kodu</th><th>Ürün Adı</th><th>Renk</th><th>Beden</th><th>Kaynak</th><th>Hedef</th><th>Adet</th></tr></thead><tbody id="taskOrderRows"></tbody></table></div>
+                    </section>
+                </section>
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ⇄
+                            </span>
+
+                            TRANSFER LİSTESİ
+
+                        </div>
+
+                        <span id="resultCount" style="
+                            color:#68646f;
+                            font-size:9px;
+                        ">
+                            486 transfer
+                        </span>
+
+                    </div>
+
+
+                    <div class="filters">
+
+                        <input id="transferSearch" class="filter-input" placeholder="Transfer ID veya mağaza...">
+
+
+                        <select id="statusFilter" class="filter-select">
+
+                            <option value="">
+                                Tüm Durumlar
+                            </option>
+
+                            <option value="completed">
+                                Tamamlandı
+                            </option>
+
+                            <option value="pending">
+                                Bekliyor
+                            </option>
+
+                            <option value="transit">
+                                Yolda
+                            </option>
+
+                            <option value="cancelled">
+                                İptal
+                            </option>
+
+                        </select>
+
+
+                        <select id="dateFilter" class="filter-select">
+
+                            <option value="">
+                                Tüm Tarihler
+                            </option>
+
+                            <option value="today">
+                                Bugün
+                            </option>
+
+                            <option value="week">
+                                Bu Hafta
+                            </option>
+
+                            <option value="month">
+                                Bu Ay
+                            </option>
+
+                        </select>
+
+
+                        <select id="storeFilter" class="filter-select">
+
+                            <option value="">
+                                Tüm Mağazalar
+                            </option>
+
+                            <option value="istanbul">
+                                İstanbul
+                            </option>
+
+                            <option value="ankara">
+                                Ankara
+                            </option>
+
+                            <option value="izmir">
+                                İzmir
+                            </option>
+
+                            <option value="bursa">
+                                Bursa
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="table-wrapper">
+
+                        <table id="transferTable">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        TRANSFER
+                                    </th>
+
+                                    <th>
+                                        GÜZERGAH
+                                    </th>
+
+                                    <th>
+                                        ÜRÜN
+                                    </th>
+
+                                    <th>
+                                        MİKTAR
+                                    </th>
+
+                                    <th>
+                                        DURUM
+                                    </th>
+
+                                    <th>
+                                        İŞLEM
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+
+                                <tr data-status="transit">
+
+                                    <td>
+
+                                        <div class="transfer-id">
+                                            TR-2026-0486
+                                        </div>
+
+                                        <div class="transfer-date">
+                                            30 Ağustos 2026 • 10:42
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="route">
+
+                                            <div class="store">
+
+                                                <div class="store-name">
+                                                    Ankara M01
+                                                </div>
+
+                                                <div class="store-city">
+                                                    Ankara
+                                                </div>
+
+                                            </div>
+
+                                            <div class="route-arrow">
+                                                →
+                                            </div>
+
+                                            <div class="store">
+
+                                                <div class="store-name">
+                                                    İzmir M01
+                                                </div>
+
+                                                <div class="store-city">
+                                                    İzmir
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="product-count">
+                                            14 ürün
+                                        </div>
+
+                                        <span class="product-label">
+                                            6 farklı SKU
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="product-count">
+                                            186
+                                        </div>
+
+                                        <span class="product-label">
+                                            adet
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <span class="status transit">
+                                            Yolda
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <button class="action-btn" onclick="showTransfer('TR-2026-0486')" type="button">
+                                            Detay
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+
+
+                                <tr data-status="pending">
+
+                                    <td>
+
+                                        <div class="transfer-id">
+                                            TR-2026-0485
+                                        </div>
+
+                                        <div class="transfer-date">
+                                            30 Ağustos 2026 • 09:18
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="route">
+
+                                            <div class="store">
+
+                                                <div class="store-name">
+                                                    Bursa M01
+                                                </div>
+
+                                                <div class="store-city">
+                                                    Bursa
+                                                </div>
+
+                                            </div>
+
+                                            <div class="route-arrow">
+                                                →
+                                            </div>
+
+                                            <div class="store">
+
+                                                <div class="store-name">
+                                                    İstanbul M02
+                                                </div>
+
+                                                <div class="store-city">
+                                                    İstanbul
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="product-count">
+                                            8 ürün
+                                        </div>
+
+                                        <span class="product-label">
+                                            4 farklı SKU
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="product-count">
+                                            94
+                                        </div>
+
+                                        <span class="product-label">
+                                            adet
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <span class="status pending">
+                                            Bekliyor
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <button class="action-btn" onclick="showTransfer('TR-2026-0485')" type="button">
+                                            Detay
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+
+
+                                <tr data-status="completed">
+
+                                    <td>
+
+                                        <div class="transfer-id">
+                                            TR-2026-0484
+                                        </div>
+
+                                        <div class="transfer-date">
+                                            29 Ağustos 2026 • 16:32
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="route">
+
+                                            <div class="store">
+
+                                                <div class="store-name">
+                                                    İstanbul M01
+                                                </div>
+
+                                                <div class="store-city">
+                                                    İstanbul
+                                                </div>
+
+                                            </div>
+
+                                            <div class="route-arrow">
+                                                →
+                                            </div>
+
+                                            <div class="store">
+
+                                                <div class="store-name">
+                                                    Ankara M01
+                                                </div>
+
+                                                <div class="store-city">
+                                                    Ankara
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="product-count">
+                                            21 ürün
+                                        </div>
+
+                                        <span class="product-label">
+                                            9 farklı SKU
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="product-count">
+                                            327
+                                        </div>
+
+                                        <span class="product-label">
+                                            adet
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <span class="status completed">
+                                            Tamamlandı
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <button class="action-btn" onclick="showTransfer('TR-2026-0484')" type="button">
+                                            Detay
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+
+
+                                <tr data-status="transit">
+
+                                    <td>
+
+                                        <div class="transfer-id">
+                                            TR-2026-0483
+                                        </div>
+
+                                        <div class="transfer-date">
+                                            29 Ağustos 2026 • 14:05
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="route">
+
+                                            <div class="store">
+
+                                                <div class="store-name">
+                                                    İstanbul M02
+                                                </div>
+
+                                                <div class="store-city">
+                                                    İstanbul
+                                                </div>
+
+                                            </div>
+
+                                            <div class="route-arrow">
+                                                →
+                                            </div>
+
+                                            <div class="store">
+
+                                                <div class="store-name">
+                                                    Bursa M01
+                                                </div>
+
+                                                <div class="store-city">
+                                                    Bursa
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="product-count">
+                                            12 ürün
+                                        </div>
+
+                                        <span class="product-label">
+                                            5 farklı SKU
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="product-count">
+                                            145
+                                        </div>
+
+                                        <span class="product-label">
+                                            adet
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <span class="status transit">
+                                            Yolda
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <button class="action-btn" onclick="showTransfer('TR-2026-0483')" type="button">
+                                            Detay
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+
+
+                                <tr data-status="cancelled">
+
+                                    <td>
+
+                                        <div class="transfer-id">
+                                            TR-2026-0482
+                                        </div>
+
+                                        <div class="transfer-date">
+                                            28 Ağustos 2026 • 11:24
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="route">
+
+                                            <div class="store">
+
+                                                <div class="store-name">
+                                                    İzmir M01
+                                                </div>
+
+                                                <div class="store-city">
+                                                    İzmir
+                                                </div>
+
+                                            </div>
+
+                                            <div class="route-arrow">
+                                                →
+                                            </div>
+
+                                            <div class="store">
+
+                                                <div class="store-name">
+                                                    Ankara M01
+                                                </div>
+
+                                                <div class="store-city">
+                                                    Ankara
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="product-count">
+                                            6 ürün
+                                        </div>
+
+                                        <span class="product-label">
+                                            3 farklı SKU
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="product-count">
+                                            52
+                                        </div>
+
+                                        <span class="product-label">
+                                            adet
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <span class="status cancelled">
+                                            İptal
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <button class="action-btn" onclick="showTransfer('TR-2026-0482')" type="button">
+                                            Detay
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                 AI ANALYSIS
+            ================================================= -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ✦
+                            </span>
+
+                            AI TRANSFER ANALİZİ
+
+                        </div>
+
+                        <span style="
+                            color:#00e676;
+                            font-size:9px;
+                        ">
+                            ● ANALİZ HAZIR
+                        </span>
+
+                    </div>
+
+
+                    <div class="ai-insight">
+
+                        <div class="ai-label">
+                            ✦ YAPAY ZEKA ÖNERİSİ
+                        </div>
+
+                        <p>
+
+                            Satış hızı ve mevcut stok seviyeleri analiz edildi.
+
+                            <br><br>
+
+                            <strong>İzmir Mağaza 01</strong>
+                            için önümüzdeki 7 gün içerisinde
+                            sweatshirt kategorisinde stok açığı
+                            oluşması bekleniyor.
+
+                            <br><br>
+
+                            Önerilen transfer:
+                            <strong>
+                                Ankara M01 → İzmir M01
+                            </strong>
+
+                            <br>
+
+                            Tahmini ihtiyaç:
+                            <strong>120 adet</strong>
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+             RIGHT
+        ================================================= -->
+
+            <div>
+
+
+                <!-- SUMMARY -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ◉
+                            </span>
+
+                            TRANSFER DURUMU
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="transfer-summary">
+
+                        <div class="summary-number">
+                            84.8%
+                        </div>
+
+                        <div class="summary-label">
+                            Transfer başarı oranı
+                        </div>
+
+
+                        <div class="summary-progress">
+
+                            <div class="summary-progress-bar"></div>
+
+                        </div>
+
+
+                        <div class="summary-row">
+
+                            <div class="summary-left">
+
+                                <span class="summary-dot green"></span>
+
+                                Tamamlandı
+
+                            </div>
+
+                            <div class="summary-value">
+                                412
+                            </div>
+
+                        </div>
+
+
+                        <div class="summary-row">
+
+                            <div class="summary-left">
+
+                                <span class="summary-dot blue"></span>
+
+                                Yolda
+
+                            </div>
+
+                            <div class="summary-value">
+                                46
+                            </div>
+
+                        </div>
+
+
+                        <div class="summary-row">
+
+                            <div class="summary-left">
+
+                                <span class="summary-dot yellow"></span>
+
+                                Bekliyor
+
+                            </div>
+
+                            <div class="summary-value">
+                                28
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- RECENT -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ◷
+                            </span>
+
+                            SON HAREKETLER
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="timeline">
+
+
+                        <div class="timeline-item">
+
+                            <div class="timeline-dot"></div>
+
+                            <div class="timeline-info">
+
+                                <div class="timeline-title">
+                                    TR-2026-0486 yola çıktı
+                                </div>
+
+                                <div class="timeline-meta">
+                                    Ankara M01 → İzmir M01
+                                </div>
+
+                            </div>
+
+                            <div class="timeline-time">
+                                10:42
+                            </div>
+
+                        </div>
+
+
+                        <div class="timeline-item">
+
+                            <div class="timeline-dot"></div>
+
+                            <div class="timeline-info">
+
+                                <div class="timeline-title">
+                                    TR-2026-0484 tamamlandı
+                                </div>
+
+                                <div class="timeline-meta">
+                                    İstanbul M01 → Ankara M01
+                                </div>
+
+                            </div>
+
+                            <div class="timeline-time">
+                                Dün
+                            </div>
+
+                        </div>
+
+
+                        <div class="timeline-item">
+
+                            <div class="timeline-dot"></div>
+
+                            <div class="timeline-info">
+
+                                <div class="timeline-title">
+                                    Yeni transfer oluşturuldu
+                                </div>
+
+                                <div class="timeline-meta">
+                                    Bursa M01 → İstanbul M02
+                                </div>
+
+                            </div>
+
+                            <div class="timeline-time">
+                                Dün
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ===================================================
+         FOOTER
+    =================================================== -->
+
+        <div class="footer">
+
+            AI Stock Manager
+            •
+            Nebim V3 Entegrasyon Paneli
+
+        </div>
+
+    </main>
+
+
+    <!-- =======================================================
+     MODAL
+======================================================= -->
+
+    <div class="modal" id="transferModal">
+
+        <div class="modal-box">
+
+            <div class="modal-header">
+
+                <h2>
+                    Yeni Transfer Oluştur
+                </h2>
+
+                <button class="close-btn" onclick="closeModal()" type="button">
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="modal-grid">
+
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Kaynak Mağaza
+                    </label>
+
+                    <select class="form-select" id="newTransferFrom">
+
+                        <option>
+                            İstanbul Mağaza 01
+                        </option>
+
+                        <option>
+                            İstanbul Mağaza 02
+                        </option>
+
+                        <option>
+                            Ankara Mağaza 01
+                        </option>
+
+                        <option>
+                            İzmir Mağaza 01
+                        </option>
+
+                        <option>
+                            Bursa Mağaza 01
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Hedef Mağaza
+                    </label>
+
+                    <select class="form-select" id="newTransferTo">
+
+                        <option>
+                            İzmir Mağaza 01
+                        </option>
+
+                        <option>
+                            İstanbul Mağaza 01
+                        </option>
+
+                        <option>
+                            Ankara Mağaza 01
+                        </option>
+
+                        <option>
+                            Bursa Mağaza 01
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Ürün Kodu
+                    </label>
+
+                    <input class="form-input" id="newTransferProduct" placeholder="SKU kodu">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Miktar
+                    </label>
+
+                    <input type="number" class="form-input" id="newTransferQuantity" placeholder="Adet" min="1">
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button class="btn" onclick="closeModal()" type="button">
+                    Vazgeç
+                </button>
+
+                <button class="btn btn-primary" onclick="createTransfer()" type="button">
+                    Transfer Oluştur
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script src="/js/distribution-engine.js"></script>
+    <script src="/js/warehouse-matrix.js"></script>
+    <script src="/js/nebim-adapter.js"></script>
+    <script src="/js/store-multiselect.js"></script>
+    <script src="/js/transfer-date-range.js"></script>
+    <script src="/js/quick-transfer.js"></script>
+    <script src="/js/distribution-ui.js"></script>
+    <script src="/vendor/exceljs.min.js"></script>
+    <script src="/js/distribution-excel.js"></script>
+    <script src="/js/warehouse-matrix-ui.js"></script>
+    <script src="/js/distribution-page.js"></script>
+    <script src="/js/transfer-templates.js"></script>
+    <script src="/js/transfer-tasks-excel.js"></script>
+    <script src="/js/transfer-tasks.js"></script>
+
+    <script src="/js/pages/transferler-1.js"></script>
+
+</body>
+
+</html>

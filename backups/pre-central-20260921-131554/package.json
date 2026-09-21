@@ -1,0 +1,20 @@
+{
+  "name": "ai-stock-manager",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI Stock Manager Express web application",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test tests/*.test.cjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "exceljs": "^4.4.0",
+    "express": "^5.1.0"
+  }
+}

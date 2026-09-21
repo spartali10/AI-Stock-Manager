@@ -1,7 +1,7 @@
 (() => {
     const form = document.getElementById('loginForm'), error = document.getElementById('error');
     const note = document.querySelector('.demo');
-    note.textContent = StockAuth.isSetup() ? 'İlk kurulum: Kullanıcı adı Admin. En az 8 karakterli bir şifre belirleyerek tam yetkili hesabı oluşturun.' : 'Admin veya size atanmış kullanıcı adı ve şifreyle giriş yapın.';
+    note.textContent = StockAuth.isSetup() ? 'Merkezi yönetici hesabı henüz kurulmadı. Sunucuda ADMIN_PASSWORD ortam değişkenini tanımlayıp sunucuyu yeniden başlatın.' : 'Merkezi hesabınızın kullanıcı adı ve şifresiyle giriş yapın.';
     form.addEventListener('submit', async event => {
         event.preventDefault(); const button = form.querySelector('button[type="submit"]') || form.querySelector('button');
         if (button.disabled) return; button.disabled = true;

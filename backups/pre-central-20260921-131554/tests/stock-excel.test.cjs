@@ -1,0 +1,97 @@
+const { test } = require('node:test');
+const assert = require('node:assert/strict');
+const ExcelJS = require('exceljs');
+require('../public/js/stock-excel.js');
+
+test('size 4 exports after size 3 and imports from both layouts while old files remain valid', () => {
+    const api = globalThis.StockExcel;
+    const book = api.build([{ code: '004', name: 'Test', store: 'Depo', quantities: [1, 1, 1, 1, -2, null] }], api.sizes, ExcelJS);
+    const sheet = book.worksheets[0];
+    const row = Object.fromEntries(api.headers.map((h, i) => [h, sheet.getCell(2, i + 1).value ?? '']));
+    assert.equal(api.headers[api.headers.indexOf('3') + 1], '4');
+    assert.equal(api.parse([row]).find(p => p.size === '4').stock, -2);
+    const detail = book.getWorksheet(api.detailName);
+    const detailRow = Object.fromEntries(api.detailHeaders.map((h, i) => [h, detail.getCell(6, i + 1).value ?? '']));
+    assert.equal(api.parse([detailRow])[0].size, '4');
+    assert.equal(api.parse([detailRow])[0].stock, -2);
+    delete row['4'];
+    assert(!api.parse([row]).some(p => p.size === '4'));
+});
+
+test('vertical size sheet round trips and takes precedence over the matrix', async () => {
+    const api = globalThis.StockExcel;
+    const records = ['Pamuk', 'Keten'].flatMap(fabric => ['Siyah', 'Beyaz'].map(color => ({ code: '001', name: 'Ürün', fabric, color, store: 'Depo', quantities: [0, 3, null, null, null, 2] })));
+    const book = api.build(records, api.sizes, ExcelJS);
+    const read = new ExcelJS.Workbook(); await read.xlsx.load(await book.xlsx.writeBuffer());
+    assert.deepEqual(read.worksheets.map(s => s.name), ['Stok Listesi', api.detailName]);
+    const detail = read.getWorksheet(api.detailName);
+    assert.deepEqual(detail.getRow(1).values.slice(1), api.detailHeaders);
+    assert.equal(detail.rowCount, 13);
+    detail.getCell('F2').value = 7;
+    const rows = [];
+    detail.eachRow((row, n) => { if (n > 1) rows.push(Object.fromEntries(api.detailHeaders.map((h, i) => [h, row.getCell(i + 1).value ?? '']))); });
+    const products = api.readWorkbook({ SheetNames: ['Stok Listesi', api.detailName], Sheets: { [api.detailName]: rows } }, { utils: { sheet_to_json: sheet => { assert.equal(sheet, rows); return sheet; } } });
+    assert.equal(products.length, 12);
+    assert.equal(products[0].code, '001');
+    assert.equal(products[0].size, '0');
+    assert.equal(products[0].stock, 7);
+    assert.equal(products[0].excelStock, 12);
+    assert.equal(products.reduce((n, p) => n + p.stock, 0), 27);
+    assert.equal(new Set(products.map(p => JSON.stringify([p.fabric, p.color]))).size, 4);
+    assert.throws(() => api.parse([rows[0], rows[0]]), /tekrar/);
+    for (const stock of [-1, '-12']) assert.equal(api.parse([{ ...rows[0], Stok: stock }])[0].stock, Number(stock));
+    for (const stock of ['', 1.5, 'abc']) assert.throws(() => api.parse([{ ...rows[0], Stok: stock }]), /Stok/);
+    assert.throws(() => api.parse([{ ...rows[0], Beden: 'M' }]), /beden/);
+    assert.throws(() => api.readWorkbook({ SheetNames: [api.detailName], Sheets: {} }, { utils: { sheet_to_json: () => [] } }), /satırı/);
+});
+test('stock Excel uses the same eleven columns for export and import', async () => {
+    const api = globalThis.StockExcel;
+    const book = api.build([{ code: '001', name: 'Ürün', fabric: 'Pamuk', color: '088 Nutria', store: 'Mağaza', status: 'low', quantities: [0, 4, null, null, null, 2] }], api.sizes, ExcelJS);
+    const read = new ExcelJS.Workbook(); await read.xlsx.load(await book.xlsx.writeBuffer());
+    const sheet = read.worksheets[0];
+    assert.deepEqual(sheet.getRow(1).values.slice(1), api.headers);
+    const row = Object.fromEntries(api.headers.map((h, i) => [h, sheet.getCell(2, i + 1).value ?? '']));
+    const products = api.parse([row]);
+    assert.equal(products[0].code, '001');
+    assert.equal(products[0].color, '088 Nutria');
+    assert(products.every(product => product.fabric === 'Pamuk'));
+    assert.equal(sheet.conditionalFormattings[0].ref, 'F2:K2');
+    const legacyRow = { ...row }; delete legacyRow['Kumaş Cinsi'];
+    assert.equal(api.parse([legacyRow])[0].fabric, '');
+    assert.equal(api.headers[2], 'Renk');
+    assert.deepEqual(products.map(p => [p.size, p.stock]), [['0', 0], ['1', 4], ['ONE SIZE', 2]]);
+    assert.equal(products[0].excelStatus, 'low');
+    assert.equal(api.parse([{ ...row, '0': -1 }])[0].stock, -1);
+    assert.equal(api.parse([{ ...row, '0': '-12' }])[0].stock, -12);
+    assert.throws(() => api.parse([{ ...row, '0': 1.5 }]));
+    assert.throws(() => api.parse([row, row]));
+    assert.equal(api.parse([{ ...row, '0': '', '1': '', 'ONE SIZE': '' }])[0].size, '');
+    assert.throws(() => api.build([{ code: 'A', quantities: [2] }], ['M'], ExcelJS));
+});
+test('different fabrics stay separate through export and import', async () => {
+    const api = globalThis.StockExcel;
+    const records = ['Pamuk', 'Keten'].map(fabric => ({ code: '001', name: 'Ürün', color: 'Siyah', store: 'Mağaza', fabric, quantities: [1, 2, null, null, null] }));
+    const book = api.build(records, api.sizes, ExcelJS);
+    const read = new ExcelJS.Workbook(); await read.xlsx.load(await book.xlsx.writeBuffer());
+    const sheet = read.worksheets[0];
+    assert.equal(sheet.rowCount, 3);
+    const rows = [2, 3].map(r => Object.fromEntries(api.headers.map((h, i) => [h, sheet.getCell(r, i + 1).value ?? ''])));
+    const products = api.parse(rows);
+    assert.deepEqual(products.map(p => p.fabric), ['Pamuk', 'Pamuk', 'Keten', 'Keten']);
+    assert.equal(products.reduce((sum, p) => sum + p.stock, 0), 6);
+});
+
+test('different colors stay separate and blank status and quantities can be imported', async () => {
+    const api = globalThis.StockExcel;
+    const records = ['900 Black', '101 Off White'].map(color => ({ code: 'NT1023', name: 'T-Shirt', color, store: 'İstanbul', quantities: [1, 2, 0, null, null, 4] }));
+    const book = api.build(records, api.sizes, ExcelJS);
+    const read = new ExcelJS.Workbook(); await read.xlsx.load(await book.xlsx.writeBuffer());
+    const sheet = read.worksheets[0];
+    assert.equal(sheet.rowCount, 3);
+    const rows = [2, 3].map(r => Object.fromEntries(api.headers.map((h, i) => [h, sheet.getCell(r, i + 1).value ?? ''])));
+    const products = api.parse(rows);
+    assert.equal(products.length, 8);
+    assert.deepEqual([...new Set(products.map(p => p.color))], ['900 Black', '101 Off White']);
+    assert.equal(products.reduce((sum, p) => sum + p.stock, 0), 14);
+    assert.equal(rows[0].Durum, '');
+});

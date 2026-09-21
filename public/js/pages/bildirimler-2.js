@@ -115,7 +115,7 @@
            NOTIFICATION DATA
         ========================================================= */
 
-        const notificationItems =
+        let notificationItems =
             document.querySelectorAll(
                 ".notification-item"
             );
@@ -132,28 +132,31 @@
                 .trim();
         }
 
-        NebimAdapter.getNotifications().then(function (existing) {
-
-            const existingTitles =
-                new Set(existing.map(n => n.title));
-
-            notificationItems.forEach(function (item) {
-
-                const title = getNotificationTitle(item);
-
-                if (!existingTitles.has(title)) {
-
-                    NebimAdapter.addNotification({
-                        title: title,
-                        description: "",
-                        read: !item.classList.contains("unread")
-                    });
-
-                }
-
-            });
-
-        });
+        // Static examples are presentation templates, never seed data.
+        const centralNotificationTemplate = notificationItems[0].cloneNode(true);
+        document.getElementById('notificationList').replaceChildren();
+        notificationItems = [];
+        async function loadCentralNotifications() {
+            try {
+                const list = await NebimAdapter.getNotifications(), container = document.getElementById('notificationList');
+                container.replaceChildren();
+                list.forEach(n => {
+                    const item = centralNotificationTemplate.cloneNode(true);
+                    item.classList.toggle('unread', !n.read); item.dataset.type = n.type || 'system'; item.dataset.search = (n.title || '') + ' ' + (n.description || '');
+                    item.querySelector('.notification-title').textContent = n.title || '';
+                    item.querySelector('.notification-text').textContent = n.description || '';
+                    item.querySelector('.notification-time').textContent = n.createdAt ? new Date(n.createdAt).toLocaleString('tr-TR') : 'Merkezi kayıt';
+                    item.querySelectorAll('[onclick]').forEach(button => button.removeAttribute('onclick'));
+                    item.addEventListener('click', async () => { if (n.read) return; try { await NebimAdapter.markNotificationRead(n.id); await loadCentralNotifications(); } catch(e) { showToast(e.message); } });
+                    container.append(item);
+                });
+                notificationItems = container.querySelectorAll('.notification-item');
+                document.getElementById('totalCount').textContent = list.length;
+                updateUnreadCount(); filterNotifications();
+            } catch(error) { showToast(error.message); }
+        }
+        document.addEventListener('DOMContentLoaded', loadCentralNotifications);
+        window.addEventListener('stock:data-changed', loadCentralNotifications);
 
         function markNotificationReadInStore(title) {
 
@@ -362,7 +365,7 @@
 
             const badge =
                 document.getElementById(
-                    "notificationBadge"
+                    "notificationCount"
                 );
 
 
@@ -450,44 +453,9 @@
            MARK ALL READ
         ========================================================= */
 
-        function markAllAsRead() {
-
-            notificationItems.forEach(
-                function (item) {
-
-                    markNotificationReadInStore(
-                        getNotificationTitle(item)
-                    );
-
-                    item.classList.remove(
-                        "unread"
-                    );
-
-
-                    const dot =
-                        item.querySelector(
-                            ".unread-dot"
-                        );
-
-
-                    if (dot) {
-
-                        dot.remove();
-
-                    }
-
-                }
-            );
-
-
-            updateUnreadCount();
-
-            filterNotifications();
-
-            showToast(
-                "Tüm bildirimler okundu olarak işaretlendi."
-            );
-
+        async function markAllAsRead() {
+            try { const list = await NebimAdapter.getNotifications(); for (const n of list.filter(n => !n.read)) await NebimAdapter.markNotificationRead(n.id); await loadCentralNotifications(); showToast('Tüm bildirimler okundu olarak işaretlendi.'); }
+            catch(error) { showToast(error.message); }
         }
 
 

@@ -1,0 +1,720 @@
+
+
+        /* =========================================================
+           THEME SYSTEM
+        ========================================================= */
+
+        (function () {
+
+            const savedTheme =
+                localStorage.getItem("aiStockTheme");
+
+            if (savedTheme === "light") {
+
+                document.body.classList.add(
+                    "light-theme"
+                );
+
+            }
+
+        })();
+
+
+        const themeBtn =
+            document.getElementById("themeBtn");
+
+
+        function updateThemeButton() {
+
+            const isLight =
+                document.body.classList.contains(
+                    "light-theme"
+                );
+
+            themeBtn.textContent =
+                isLight ? "☀️" : "🌙";
+
+            themeBtn.title =
+                isLight
+                    ? "Karanlık temaya geç"
+                    : "Açık temaya geç";
+
+            themeBtn.setAttribute(
+                "aria-label",
+                themeBtn.title
+            );
+
+        }
+
+
+        updateThemeButton();
+
+
+        themeBtn.addEventListener(
+            "click",
+            function () {
+
+                const isLight =
+                    document.body.classList.toggle(
+                        "light-theme"
+                    );
+
+                localStorage.setItem(
+                    "aiStockTheme",
+                    isLight
+                        ? "light"
+                        : "dark"
+                );
+
+                updateThemeButton();
+
+            }
+        );
+
+
+        const userArea =
+            document.getElementById("userArea");
+
+        const accountMenu =
+            document.getElementById("accountMenu");
+
+        if (userArea && accountMenu) {
+
+            function setUserMenu(isOpen) {
+                userArea.classList.toggle("open", isOpen);
+                userArea.setAttribute("aria-expanded", isOpen ? "true" : "false");
+            }
+
+            userArea.addEventListener("click", function (event) {
+                if (event.target.closest(".account-menu")) {
+                    return;
+                }
+                setUserMenu(!userArea.classList.contains("open"));
+            });
+
+            userArea.addEventListener("keydown", function (event) {
+                if (event.target.closest(".account-menu") && event.key !== "Escape") return;
+                if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    setUserMenu(!userArea.classList.contains("open"));
+                }
+                if (event.key === "Escape") {
+                    setUserMenu(false);
+                }
+            });
+
+            document.addEventListener("click", function (event) {
+                if (!userArea.contains(event.target)) {
+                    setUserMenu(false);
+                }
+            });
+        }
+
+
+        /* =========================================================
+           NOTIFICATION DATA
+        ========================================================= */
+
+        const notificationItems =
+            document.querySelectorAll(
+                ".notification-item"
+            );
+
+        /* =========================================================
+           NEBIM V3 ADAPTER - SENKRONİZASYON
+        ========================================================= */
+
+        function getNotificationTitle(item) {
+
+            return item
+                .querySelector(".notification-title")
+                .textContent
+                .trim();
+        }
+
+        NebimAdapter.getNotifications().then(function (existing) {
+
+            const existingTitles =
+                new Set(existing.map(n => n.title));
+
+            notificationItems.forEach(function (item) {
+
+                const title = getNotificationTitle(item);
+
+                if (!existingTitles.has(title)) {
+
+                    NebimAdapter.addNotification({
+                        title: title,
+                        description: "",
+                        read: !item.classList.contains("unread")
+                    });
+
+                }
+
+            });
+
+        });
+
+        function markNotificationReadInStore(title) {
+
+            NebimAdapter.getNotifications().then(function (list) {
+
+                const match =
+                    list.find(n => n.title === title);
+
+                if (match) {
+                    NebimAdapter.markNotificationRead(match.id);
+                }
+
+            });
+        }
+
+        const filterButtons =
+            document.querySelectorAll(
+                ".filter-btn"
+            );
+
+        const globalSearch =
+            document.getElementById(
+                "globalSearch"
+            );
+
+        const emptyState =
+            document.getElementById(
+                "emptyState"
+            );
+
+        const resultCount =
+            document.getElementById(
+                "resultCount"
+            );
+
+
+        let currentFilter = "all";
+
+
+        /* =========================================================
+           FILTER SYSTEM
+        ========================================================= */
+
+        function filterNotifications() {
+
+            const search =
+                globalSearch.value
+                    .toLocaleLowerCase("tr-TR")
+                    .trim();
+
+            let visibleCount = 0;
+
+
+            notificationItems.forEach(
+                function (item) {
+
+                    const type =
+                        item.dataset.type;
+
+                    const text =
+                        item.dataset.search
+                            .toLocaleLowerCase("tr-TR");
+
+                    const unread =
+                        item.classList.contains(
+                            "unread"
+                        );
+
+
+                    let filterMatch = true;
+
+
+                    if (currentFilter === "unread") {
+
+                        filterMatch =
+                            unread;
+
+                    }
+
+                    else if (
+                        currentFilter === "critical"
+                    ) {
+
+                        filterMatch =
+                            type === "critical";
+
+                    }
+
+                    else if (
+                        currentFilter === "ai"
+                    ) {
+
+                        filterMatch =
+                            type === "ai";
+
+                    }
+
+                    else if (
+                        currentFilter === "system"
+                    ) {
+
+                        filterMatch =
+                            type === "system";
+
+                    }
+
+
+                    const searchMatch =
+                        !search ||
+                        text.includes(search);
+
+
+                    const visible =
+                        filterMatch &&
+                        searchMatch;
+
+
+                    item.style.display =
+                        visible
+                            ? ""
+                            : "none";
+
+
+                    if (visible) {
+
+                        visibleCount++;
+
+                    }
+
+                }
+            );
+
+
+            resultCount.textContent =
+                visibleCount +
+                " bildirim";
+
+
+            emptyState.style.display =
+                visibleCount === 0
+                    ? "block"
+                    : "none";
+
+        }
+
+
+        filterButtons.forEach(
+            function (button) {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        filterButtons.forEach(
+                            function (btn) {
+
+                                btn.classList.remove(
+                                    "active"
+                                );
+
+                            }
+                        );
+
+
+                        button.classList.add(
+                            "active"
+                        );
+
+
+                        currentFilter =
+                            button.dataset.filter;
+
+
+                        filterNotifications();
+
+                    }
+                );
+
+            }
+        );
+
+
+        globalSearch.addEventListener(
+            "input",
+            filterNotifications
+        );
+
+
+        /* =========================================================
+           UNREAD COUNT
+        ========================================================= */
+
+        function updateUnreadCount() {
+
+            const unread =
+                document.querySelectorAll(
+                    ".notification-item.unread"
+                ).length;
+
+
+            document.getElementById(
+                "unreadCount"
+            ).textContent =
+                unread;
+
+
+            const badge =
+                document.getElementById(
+                    "notificationBadge"
+                );
+
+
+            badge.textContent =
+                unread;
+
+
+            if (unread === 0) {
+
+                badge.style.display =
+                    "none";
+
+            } else {
+
+                badge.style.display =
+                    "flex";
+
+            }
+
+        }
+
+
+        /* =========================================================
+           MARK SINGLE AS READ
+        ========================================================= */
+
+        notificationItems.forEach(
+            function (item) {
+
+                item.addEventListener(
+                    "click",
+                    function (event) {
+
+                        if (
+                            event.target.closest(
+                                "button"
+                            )
+                        ) {
+                            return;
+                        }
+
+
+                        if (
+                            item.classList.contains(
+                                "unread"
+                            )
+                        ) {
+
+                            item.classList.remove(
+                                "unread"
+                            );
+
+
+                            const dot =
+                                item.querySelector(
+                                    ".unread-dot"
+                                );
+
+
+                            if (dot) {
+
+                                dot.remove();
+
+                            }
+
+
+                            updateUnreadCount();
+
+                            showToast(
+                                "Bildirim okundu olarak işaretlendi."
+                            );
+
+                            filterNotifications();
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+
+        /* =========================================================
+           MARK ALL READ
+        ========================================================= */
+
+        function markAllAsRead() {
+
+            notificationItems.forEach(
+                function (item) {
+
+                    markNotificationReadInStore(
+                        getNotificationTitle(item)
+                    );
+
+                    item.classList.remove(
+                        "unread"
+                    );
+
+
+                    const dot =
+                        item.querySelector(
+                            ".unread-dot"
+                        );
+
+
+                    if (dot) {
+
+                        dot.remove();
+
+                    }
+
+                }
+            );
+
+
+            updateUnreadCount();
+
+            filterNotifications();
+
+            showToast(
+                "Tüm bildirimler okundu olarak işaretlendi."
+            );
+
+        }
+
+
+        document
+            .getElementById("markAllBtn")
+            .addEventListener(
+                "click",
+                markAllAsRead
+            );
+
+
+        document
+            .getElementById("clearBtn")
+            .addEventListener(
+                "click",
+                markAllAsRead
+            );
+
+
+        /* =========================================================
+           BUTTON ACTION
+        ========================================================= */
+
+        function notificationAction(
+            button,
+            message
+        ) {
+
+            const item =
+                button.closest(
+                    ".notification-item"
+                );
+
+
+            if (
+                item &&
+                item.classList.contains(
+                    "unread"
+                )
+            ) {
+
+                item.classList.remove(
+                    "unread"
+                );
+
+
+                const dot =
+                    item.querySelector(
+                        ".unread-dot"
+                    );
+
+
+                if (dot) {
+
+                    dot.remove();
+
+                }
+
+
+                updateUnreadCount();
+
+            }
+
+
+            showToast(message);
+
+        }
+
+
+        /* =========================================================
+           SETTINGS
+        ========================================================= */
+
+        document
+            .getElementById(
+                "notificationSettingsBtn"
+            )
+            .addEventListener(
+                "click",
+                function () {
+
+                    showToast(
+                        "Bildirim ayarları ekranı açılacak."
+                    );
+
+                }
+            );
+
+
+        /* =========================================================
+           GLOBAL SEARCH
+        ========================================================= */
+
+        globalSearch.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "Escape"
+                ) {
+
+                    globalSearch.value = "";
+
+                    filterNotifications();
+
+                    globalSearch.blur();
+
+                }
+
+            }
+        );
+
+
+        /* =========================================================
+           TOAST
+        ========================================================= */
+
+        let toastTimer;
+
+
+        function showToast(message) {
+
+            const toast =
+                document.getElementById(
+                    "toast"
+                );
+
+
+            toast.textContent =
+                message;
+
+
+            toast.classList.add(
+                "show"
+            );
+
+
+            clearTimeout(
+                toastTimer
+            );
+
+
+            toastTimer =
+                setTimeout(
+                    function () {
+
+                        toast.classList.remove(
+                            "show"
+                        );
+
+                    },
+                    2500
+                );
+
+        }
+
+
+        /* =========================================================
+           AUTOMATIC ACTIVE MENU
+        ========================================================= */
+
+        (function () {
+
+            const currentPage =
+                window.location.pathname
+                    .split("/")
+                    .pop()
+                    .toLowerCase();
+
+
+            document
+                .querySelectorAll(
+                    ".menu-item"
+                )
+                .forEach(
+                    function (item) {
+
+                        const href =
+                            item
+                                .getAttribute(
+                                    "href"
+                                )
+                                .split("/")
+                                .pop()
+                                .toLowerCase();
+
+
+                        if (
+                            currentPage === href
+                        ) {
+
+                            document
+                                .querySelectorAll(
+                                    ".menu-item"
+                                )
+                                .forEach(
+                                    menu =>
+                                        menu.classList
+                                            .remove(
+                                                "active"
+                                            )
+                                );
+
+
+                            item.classList.add(
+                                "active"
+                            );
+
+                        }
+
+                    }
+                );
+
+        })();
+
+
+        /* =========================================================
+           INITIALIZE
+        ========================================================= */
+
+        updateUnreadCount();
+
+        filterNotifications();
+
+
+        /* =========================================================
+           LOGOUT
+        ========================================================= */
+
+    

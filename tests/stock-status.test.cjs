@@ -41,7 +41,7 @@ test('dashboard counts groups independently by store and color and follows stock
     const products = [...variants([2, 1, 2, 1]), ...variants([1, 0, 1, 1], 'B'), ...variants([1, 0, 0, 1], 'A', 'Blue'), ...variants([0, 0, 0, 0], 'C')];
     const db = { products, notifications: [], stores: [], users: [], transfers: [] };
     const window = { StockSizeView };
-    vm.runInNewContext(fs.readFileSync(require.resolve('../public/js/nebim-adapter'), 'utf8'), { window, localStorage: { getItem: () => JSON.stringify(db) } });
+    vm.runInNewContext(require('./helpers/inventory-source.cjs')(), { window, localStorage: { getItem: () => JSON.stringify(db) } });
     let stats = await window.NebimAdapter.getStats();
     assert.deepEqual([stats.normalStock, stats.lowStock, stats.criticalStock, stats.depletedStock], [1, 1, 1, 1]);
     products[0].stock = 0;

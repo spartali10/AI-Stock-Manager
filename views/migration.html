@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="tr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Veri Taşıma | AI Stock Manager</title>
+<script src="/js/auth.js"></script><link rel="stylesheet" href="/css/transfer-order.css"></head>
+<body><main><h1>Merkezi veri taşıma ve yedekleme</h1><p><a href="/Home">Ana sayfaya dön</a></p>
+<section class="products-card"><h2>1. Eski tarayıcı verisini yedekle</h2>
+<p>Gerçek veriyi yüklediğiniz tarayıcıda ve aynı adres/port üzerinde çalıştırın. Hiçbir eski kayıt silinmez veya değiştirilmez. İndirdiğiniz dosyayı güvenli bir yerde saklayın.</p>
+<label><input id="includeAccounts" type="checkbox"> Eski giriş hesaplarını da yedekle (dosya şifre hashleri veya eski şifreler içerebilir)</label><p><button id="exportLegacy">Eski tarayıcı yedeğini indir</button> <button id="exportCentral">Merkezi veri yedeğini indir</button></p></section>
+<section class="products-card"><h2>2. Kaydetmeden kontrol et</h2><p>Mevcut Excel yapısı korunur. Bu araç JSON yedeği içindir; normal Excel yüklemesi Stok ekranındadır.</p>
+<input id="migrationFile" type="file" accept=".json,application/json"><button id="preview">Yedeği kontrol et</button><pre id="previewResult" style="white-space:pre-wrap"></pre></section>
+<section class="products-card"><h2>3. Boş merkezi veritabanına aktar</h2><p>Aktarım öncesi sunucu mevcut durumun yedeğini alır. Merkezi ürün, mağaza, transfer veya diğer iş kayıtları varsa üzerine yazılmaz. Aynı adlı merkezi giriş hesapları korunur; yalnızca eksik hesaplar eklenir.</p>
+<label><input id="backupSaved" type="checkbox"> Kaynak yedeği indirdim ve kayıt adetlerini kontrol ettim.</label><p><button id="import" disabled>Önizlenen yedeği merkezi veritabanına aktar</button></p></section>
+<p id="migrationStatus" role="status" aria-live="polite"></p></main><script src="/js/migration.js"></script></body></html>

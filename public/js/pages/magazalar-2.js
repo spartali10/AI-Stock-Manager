@@ -237,11 +237,9 @@
                     elapsed / 60000
                 );
 
-            onlineMinutes.textContent =
-                minutes;
+            if (onlineMinutes) onlineMinutes.textContent = minutes;
 
-            accountOnlineMinutes.textContent =
-                minutes;
+            if (accountOnlineMinutes) accountOnlineMinutes.textContent = minutes;
 
         }
 

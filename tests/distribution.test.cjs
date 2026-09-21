@@ -3,7 +3,7 @@ const vm = require('vm');
 const assert = require('assert/strict');
 const root = require('path').join(__dirname, '..');
 const engine = fs.readFileSync(root + '/public/js/distribution-engine.js', 'utf8');
-const adapter = fs.readFileSync(root + '/public/js/nebim-adapter.js', 'utf8');
+const adapter = require('./helpers/inventory-source.cjs')();
 const ctx = { window: {} }; vm.runInNewContext(engine, ctx);
 const build = ctx.window.DistributionEngine.build;
 const product = (id, store, stock, color = 'Red') => ({ id, store, stock, code: 'SKU', color, size: 'M', hierarchy: { Sezon: ['YAZ'] } });

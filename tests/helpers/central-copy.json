@@ -1,0 +1,10 @@
+{
+  "Yerel yedek yalnızca bu tarayıcıdaki iş verilerini indirir.": "Merkezi yedek ortak veritabanındaki iş verilerini indirir.",
+  "Yerel Yedeği İndir": "Merkezi Yedeği İndir",
+  "mevcut işlemler yerelde kalır.": "mevcut işlemler merkezi uygulama veritabanında kalır.",
+  "yerel stoklar değiştirilmedi.": "stoklar değiştirilmedi.",
+  "Uygulama yalnızca bu tarayıcıdaki stokları günceller;": "Uygulama ortak veritabanındaki stokları günceller;",
+  "dinamik filtreler bu tarayıcıda saklanır.": "dinamik filtreler merkezi veritabanında saklanır.",
+  "Değerler bu tarayıcıda kaydedilir.": "Değerler merkezi veritabanına kaydedilir.",
+  "Kayıt bu tarayıcıda saklanır.": "Kayıt merkezi veritabanında saklanır."
+}

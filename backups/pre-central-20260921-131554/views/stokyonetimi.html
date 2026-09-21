@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stok Yönetimi | AI Stock Manager</title>
+
+    <link rel="stylesheet" href="/css/pages/stokyonetimi-1.css">
+    <script src="/js/logout.js"></script>
+    <link rel="stylesheet" href="/css/logout.css">
+    <script src="/js/auth.js"></script>
+    <link rel="stylesheet" href="/css/pages/stokyonetimi-2.css">
+<link rel="stylesheet" href="/css/auth.css">
+</head>
+
+
+<body>
+
+    <!-- =======================================================
+     SIDEBAR
+======================================================= -->
+
+    <%- include('partials/sidebar-shared-2.html', { active: '/Stok' }) %>
+
+
+
+    <!-- =======================================================
+     MAIN
+======================================================= -->
+
+    <main class="main">
+
+
+        <!-- TOPBAR -->
+
+        <div class="topbar">
+
+            <div class="search-wrapper">
+
+                <input type="search" id="globalSearch" class="search" placeholder="Ürün, kod veya mağaza ara...">
+
+                <span class="search-icon">
+                    ⌕
+                </span>
+
+            </div>
+
+
+            <div class="profile-area">
+
+                <button class="theme-btn" id="themeBtn" title="Tema değiştir">
+                    🌙
+                </button>
+
+                <button class="notification" id="notificationBtn" title="Bildirimler">
+                    ♧
+
+                    <span style="
+                        position:absolute;
+                        margin:-30px 0 0 25px;
+                        width:18px;
+                        height:18px;
+                        border-radius:50%;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        background:var(--purple-2);
+                        color:white;
+                        font-size:9px;
+                    " id="notificationCount">
+                        5
+                    </span>
+
+                </button>
+
+                <div class="user-area" id="userArea" tabindex="0">
+
+                    <div class="avatar" id="avatar">
+                        M
+                    </div>
+
+                    <div class="user-info">
+
+                        <div class="user-name" id="userName">
+                            Admin
+                        </div>
+
+                        <!-- DAKİKA SAYACI KALDIRILDI -->
+
+                        <div class="user-status">
+
+                            <span class="online-dot"></span>
+
+                            Çevrim içi
+
+                        </div>
+
+                    </div>
+
+                    <div class="user-arrow">
+                        ▾
+                    </div>
+
+                    <div class="account-menu" id="accountMenu">
+
+                        <div class="account-header">
+
+                            <div class="account-name" id="accountName">
+                                Admin
+                            </div>
+
+                            <div class="account-role">
+                                Sistem Yöneticisi
+                            </div>
+
+                            <!-- DAKİKA SAYACI KALDIRILDI -->
+
+                            <div class="account-online">
+                                ● Çevrim içi
+                            </div>
+
+                        </div>
+
+                        <a href="/Ayarlar" class="account-item">
+                            <span class="account-item-icon">
+                                ♙
+                            </span>
+
+                            Hesabım
+                        </a>
+
+                        <a href="/Ayarlar#guvenlik" class="account-item">
+                            <span class="account-item-icon">
+                                🔐
+                            </span>
+
+                            Giriş Güvenliği
+                        </a>
+
+                        <button class="account-item logout" id="logoutBtn" type="button">
+                            <span class="account-item-icon" aria-hidden="true">⇥</span>
+                            Güvenli Çıkış
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- PAGE HEADER -->
+
+        <div class="page-header">
+
+            <div class="page-title">
+
+                <h1>
+                    Stok Yönetimi
+                </h1>
+
+                <p>
+                    Tüm ürün stoklarınızı ve mağaza bazlı stok durumunu yönetin.
+                </p>
+
+            </div>
+
+
+            <div class="page-actions">
+
+                <button class="btn" id="exportBtn" type="button">
+                    ⇩ Dışa Aktar
+                </button>
+
+
+                <button class="btn btn-primary" id="addStockBtn" type="button">
+                    ＋ Stok İşlemi
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ===================================================
+         STATISTICS
+    =================================================== -->
+
+        <section class="stats">
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Toplam Stok
+                    </div>
+
+                    <div class="stat-icon">
+                        ◇
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    125.420
+                </div>
+
+                <div class="stat-description green">
+                    ↑ %4.8 geçen aya göre
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Normal Stok
+                    </div>
+
+                    <div class="stat-icon">
+                        ✓
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    97.840
+                </div>
+
+                <div class="stat-description green">
+                    %78.0 toplam stok
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Düşük Stok
+                    </div>
+
+                    <div class="stat-icon">
+                        !
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    18.240
+                </div>
+
+                <div class="stat-description yellow">
+                    342 ürün kontrol edilmeli
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Kritik Stok
+                    </div>
+
+                    <div class="stat-icon">
+                        ⚠
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    87
+                </div>
+
+                <div class="stat-description red">
+                    Acil aksiyon gerekli
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ===================================================
+         CONTENT
+    =================================================== -->
+
+        <div class="content-grid">
+
+
+            <!-- LEFT -->
+
+            <div>
+
+
+                <!-- STOCK TABLE -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ◇
+                            </span>
+
+                            ÜRÜN STOKLARI
+
+                        </div>
+
+                        <span style="
+                            color:var(--muted-2);
+                            font-size:9px;
+                        ">
+                            1.248 ürün
+                        </span>
+
+                    </div>
+
+
+                    <!-- FILTERS -->
+
+                    <div class="filters">
+
+                        <input id="productSearch" class="filter-input" placeholder="Ürün adı veya kodu...">
+
+
+                        <select id="storeFilter" class="filter-select">
+
+                            <option value="">
+                                Tüm Mağazalar
+                            </option>
+
+                            <option>
+                                İstanbul Mağaza 01
+                            </option>
+
+                            <option>
+                                İstanbul Mağaza 02
+                            </option>
+
+                            <option>
+                                Ankara Mağaza 01
+                            </option>
+
+                            <option>
+                                İzmir Mağaza 01
+                            </option>
+
+                            <option>
+                                Bursa Mağaza 01
+                            </option>
+
+                        </select>
+
+
+                        <select id="statusFilter" class="filter-select">
+
+                            <option value="">
+                                Tüm Durumlar
+                            </option>
+
+                            <option value="normal">
+                                Normal
+                            </option>
+
+                            <option value="low">
+                                Düşük
+                            </option>
+
+                            <option value="critical">
+                                Kritik
+                            </option>
+
+                        </select>
+
+
+                        <select id="categoryFilter" class="filter-select">
+
+                            <option value="">
+                                Tüm Kategoriler
+                            </option>
+
+                            <option>
+                                T-Shirt
+                            </option>
+
+                            <option>
+                                Pantolon
+                            </option>
+
+                            <option>
+                                Ayakkabı
+                            </option>
+
+                            <option>
+                                Aksesuar
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- TABLE -->
+
+                    <div class="table-wrapper">
+
+                        <table id="stockTable">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>ÜRÜN</th>
+
+                                    <th>MAĞAZA</th>
+
+                                    <th>MEVCUT STOK</th>
+
+                                    <th>MİN. STOK</th>
+
+                                    <th>DURUM</th>
+
+                                    <th>İŞLEM</th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+
+                                <tr data-status="normal" data-category="T-Shirt">
+
+                                    <td>
+
+                                        <div class="product">
+
+                                            <div class="product-image">
+                                                👕
+                                            </div>
+
+                                            <div>
+
+                                                <div class="product-name">
+                                                    Nike T-Shirt 1023
+                                                </div>
+
+                                                <div class="product-code">
+                                                    NT1023
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+                                        İstanbul Mağaza 01
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="stock-info">
+
+                                            <div class="stock-number">
+
+                                                <strong>
+                                                    480
+                                                </strong>
+
+                                                <span>
+                                                    / 600
+                                                </span>
+
+                                            </div>
+
+                                            <div class="progress">
+
+                                                <div class="progress-bar" style="width:80%"></div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+                                        120
+                                    </td>
+
+
+                                    <td>
+                                        <span class="status normal">
+                                            Normal
+                                        </span>
+                                    </td>
+
+
+                                    <td>
+
+                                        <button class="action-btn" onclick="showDetail('Nike T-Shirt 1023')"
+                                            type="button">
+                                            Detay
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+
+
+
+                                <tr data-status="low" data-category="Pantolon">
+
+                                    <td>
+
+                                        <div class="product">
+
+                                            <div class="product-image">
+                                                👖
+                                            </div>
+
+                                            <div>
+
+                                                <div class="product-name">
+                                                    Pantolon 2045
+                                                </div>
+
+                                                <div class="product-code">
+                                                    PN2045
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+                                        İstanbul Mağaza 02
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="stock-info">
+
+                                            <div class="stock-number">
+
+                                                <strong>
+                                                    74
+                                                </strong>
+
+                                                <span>
+                                                    / 250
+                                                </span>
+
+                                            </div>
+
+                                            <div class="progress">
+
+                                                <div class="progress-bar warning" style="width:30%"></div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+                                        100
+                                    </td>
+
+
+                                    <td>
+                                        <span class="status low">
+                                            Düşük
+                                        </span>
+                                    </td>
+
+
+                                    <td>
+
+                                        <button class="action-btn" onclick="showDetail('Pantolon 2045')" type="button">
+                                            Detay
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+
+
+
+                                <tr data-status="critical" data-category="T-Shirt">
+
+                                    <td>
+
+                                        <div class="product">
+
+                                            <div class="product-image">
+                                                🧥
+                                            </div>
+
+                                            <div>
+
+                                                <div class="product-name">
+                                                    Sweatshirt 3021
+                                                </div>
+
+                                                <div class="product-code">
+                                                    SW3021
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+                                        İzmir Mağaza 01
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="stock-info">
+
+                                            <div class="stock-number">
+
+                                                <strong>
+                                                    18
+                                                </strong>
+
+                                                <span>
+                                                    / 200
+                                                </span>
+
+                                            </div>
+
+                                            <div class="progress">
+
+                                                <div class="progress-bar danger" style="width:9%"></div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+                                        80
+                                    </td>
+
+
+                                    <td>
+
+                                        <span class="status critical">
+                                            Kritik
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <button class="action-btn" onclick="showDetail('Sweatshirt 3021')"
+                                            type="button">
+                                            Detay
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+
+
+
+                                <tr data-status="normal" data-category="Ayakkabı">
+
+                                    <td>
+
+                                        <div class="product">
+
+                                            <div class="product-image">
+                                                👟
+                                            </div>
+
+                                            <div>
+
+                                                <div class="product-name">
+                                                    Ayakkabı 4012
+                                                </div>
+
+                                                <div class="product-code">
+                                                    AY4012
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+                                        Ankara Mağaza 01
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="stock-info">
+
+                                            <div class="stock-number">
+
+                                                <strong>
+                                                    320
+                                                </strong>
+
+                                                <span>
+                                                    / 400
+                                                </span>
+
+                                            </div>
+
+                                            <div class="progress">
+
+                                                <div class="progress-bar" style="width:80%"></div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+                                        100
+                                    </td>
+
+
+                                    <td>
+
+                                        <span class="status normal">
+                                            Normal
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <button class="action-btn" onclick="showDetail('Ayakkabı 4012')" type="button">
+                                            Detay
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+
+
+
+                                <tr data-status="low" data-category="Aksesuar">
+
+                                    <td>
+
+                                        <div class="product">
+
+                                            <div class="product-image">
+                                                👜
+                                            </div>
+
+                                            <div>
+
+                                                <div class="product-name">
+                                                    Çanta 5015
+                                                </div>
+
+                                                <div class="product-code">
+                                                    CN5015
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+                                        Bursa Mağaza 01
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="stock-info">
+
+                                            <div class="stock-number">
+
+                                                <strong>
+                                                    42
+                                                </strong>
+
+                                                <span>
+                                                    / 180
+                                                </span>
+
+                                            </div>
+
+                                            <div class="progress">
+
+                                                <div class="progress-bar warning" style="width:23%"></div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+                                        70
+                                    </td>
+
+
+                                    <td>
+
+                                        <span class="status low">
+                                            Düşük
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <button class="action-btn" onclick="showDetail('Çanta 5015')" type="button">
+                                            Detay
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- AI INSIGHT -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ✦
+                            </span>
+
+                            AI STOK ANALİZİ
+
+                        </div>
+
+                        <span style="
+                            color:var(--green);
+                            font-size:9px;
+                        ">
+                            ● ANALİZ HAZIR
+                        </span>
+
+                    </div>
+
+
+                    <div class="ai-insight">
+
+                        <div class="ai-label">
+                            ✦ YAPAY ZEKA ÖNERİSİ
+                        </div>
+
+                        <p>
+
+                            Son satış hızlarına göre
+                            <strong>İzmir Mağaza 01</strong>
+                            stok seviyelerinde kritik düşüş
+                            tespit edildi.
+
+                            <br><br>
+
+                            Özellikle
+                            <strong>Sweatshirt 3021</strong>
+                            ürününün mevcut stok seviyesi
+                            minimum stok seviyesinin altında.
+
+                            <br><br>
+
+                            Önerilen aksiyon:
+                            <strong>
+                                Ankara Mağaza 01 → İzmir Mağaza 01
+                            </strong>
+
+                            arasında transfer oluşturulması.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- RIGHT -->
+
+            <div>
+
+
+                <!-- STOCK HEALTH -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ◉
+                            </span>
+
+                            STOK SAĞLIĞI
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stock-health">
+
+                        <div class="health-circle">
+
+                            <div class="health-score">
+                                82%
+                            </div>
+
+                            <div class="health-label">
+                                Sağlıklı
+                            </div>
+
+                        </div>
+
+
+                        <div class="health-list">
+
+
+                            <div class="health-row">
+
+                                <div class="health-left">
+
+                                    <span class="dot green"></span>
+
+                                    Normal
+
+                                </div>
+
+                                <div class="health-count">
+                                    1.024
+                                </div>
+
+                            </div>
+
+
+                            <div class="health-row">
+
+                                <div class="health-left">
+
+                                    <span class="dot yellow"></span>
+
+                                    Düşük
+
+                                </div>
+
+                                <div class="health-count">
+                                    137
+                                </div>
+
+                            </div>
+
+
+                            <div class="health-row">
+
+                                <div class="health-left">
+
+                                    <span class="dot red"></span>
+
+                                    Kritik
+
+                                </div>
+
+                                <div class="health-count">
+                                    87
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- LOW STOCK -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon" style="color:var(--red)">
+                                ⚠
+                            </span>
+
+                            KRİTİK STOKLAR
+
+                        </div>
+
+                        <a href="#" onclick="return false;" style="
+                            color:var(--purple-2);
+                            font-size:9px;
+                            text-decoration:none;
+                        ">
+                            Tümünü Gör
+                        </a>
+
+                    </div>
+
+
+                    <div class="low-stock-list">
+
+
+                        <div class="low-item">
+
+                            <div class="low-icon">
+                                🧥
+                            </div>
+
+                            <div class="low-info">
+
+                                <div class="low-name">
+                                    Sweatshirt 3021
+                                </div>
+
+                                <div class="low-store">
+                                    İzmir Mağaza 01
+                                </div>
+
+                            </div>
+
+                            <div class="low-count">
+                                18
+                            </div>
+
+                        </div>
+
+
+                        <div class="low-item">
+
+                            <div class="low-icon">
+                                👕
+                            </div>
+
+                            <div class="low-info">
+
+                                <div class="low-name">
+                                    Basic T-Shirt 1102
+                                </div>
+
+                                <div class="low-store">
+                                    Bursa Mağaza 01
+                                </div>
+
+                            </div>
+
+                            <div class="low-count">
+                                24
+                            </div>
+
+                        </div>
+
+
+                        <div class="low-item">
+
+                            <div class="low-icon">
+                                👟
+                            </div>
+
+                            <div class="low-info">
+
+                                <div class="low-name">
+                                    Sneaker 4031
+                                </div>
+
+                                <div class="low-store">
+                                    İstanbul Mağaza 02
+                                </div>
+
+                            </div>
+
+                            <div class="low-count">
+                                31
+                            </div>
+
+                        </div>
+
+
+                        <div class="low-item">
+
+                            <div class="low-icon">
+                                👜
+                            </div>
+
+                            <div class="low-info">
+
+                                <div class="low-name">
+                                    Çanta 5015
+                                </div>
+
+                                <div class="low-store">
+                                    Bursa Mağaza 01
+                                </div>
+
+                            </div>
+
+                            <div class="low-count">
+                                42
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="footer">
+
+            AI Stock Manager
+            •
+            Nebim V3 Entegrasyon Paneli
+
+        </div>
+
+    </main>
+
+
+    <!-- TOAST -->
+
+    <div id="toast" class="toast"></div>
+
+
+
+    <script src="/js/pages/stokyonetimi-1.js"></script>
+
+</body>
+
+</html>

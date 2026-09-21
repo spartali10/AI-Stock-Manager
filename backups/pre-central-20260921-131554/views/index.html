@@ -1,0 +1,636 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ana Sayfa | AI Stock Manager</title>
+
+    <link rel="stylesheet" href="/css/pages/index-1.css">
+    <script src="/js/logout.js"></script>
+    <link rel="stylesheet" href="/css/logout.css">
+    <script src="/js/auth.js"></script>
+    <link rel="stylesheet" href="/css/pages/index-2.css">
+<link rel="stylesheet" href="/css/auth.css">
+</head>
+
+
+<body>
+
+
+    <!-- =========================================================
+     SIDEBAR
+========================================================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                ◈
+            </div>
+
+            <div class="logo-text">
+                AI STOCK
+                <span>MANAGER</span>
+            </div>
+
+        </div>
+
+
+        <div class="menu-title">
+            Yönetim
+        </div>
+
+
+        <a href="/Home" class="menu-item">
+            <span class="menu-icon">⌂</span>
+            <span class="menu-text">Ana Sayfa</span>
+        </a>
+
+        <a href="/Stok" class="menu-item">
+            <span class="menu-icon">◇</span>
+            <span class="menu-text">Stok Yönetimi</span>
+        </a>
+
+        <a href="/Transfer" class="menu-item">
+            <span class="menu-icon">⇄</span>
+            <span class="menu-text">Transferler</span>
+        </a>
+
+        <a href="/AiOnerileri" class="menu-item">
+            <span class="menu-icon">✦</span>
+            <span class="menu-text">AI Önerileri</span>
+        </a>
+
+        <a href="/Magazalar" class="menu-item">
+            <span class="menu-icon">▣</span>
+            <span class="menu-text">Mağazalar</span>
+        </a>
+
+
+        <div class="menu-title">
+            Analiz
+        </div>
+
+        <a href="/Raporlar" class="menu-item">
+            <span class="menu-icon">▥</span>
+            <span class="menu-text">Raporlar</span>
+        </a>
+
+        <a href="/SatisAnalizi" class="menu-item">
+            <span class="menu-icon">↗</span>
+            <span class="menu-text">Satış Analizi</span>
+        </a>
+
+        <a href="/Bildirimler" class="menu-item">
+            <span class="menu-icon">♧</span>
+            <span class="menu-text">Bildirimler</span>
+        </a>
+
+
+        <div class="menu-title">
+            Sistem
+        </div>
+
+        <a href="/Ayarlar" class="menu-item">
+            <span class="menu-icon">⚙</span>
+            <span class="menu-text">Ayarlar</span>
+        </a>
+
+        <a href="/Kullanicilar" class="menu-item">
+            <span class="menu-icon">♙</span>
+            <span class="menu-text">Kullanıcılar</span>
+        </a>
+
+        <a href="/Entegrasyon" class="menu-item">
+            <span class="menu-icon">⌘</span>
+            <span class="menu-text">Entegrasyon</span>
+        </a>
+
+    </aside>
+
+
+    <!-- =========================================================
+     MAIN
+========================================================= -->
+
+    <main class="main">
+
+
+        <!-- TOPBAR -->
+
+        <div class="topbar">
+
+            <div class="search-wrapper">
+
+                <input type="search" id="globalSearch" class="search" placeholder="Ürün, kod veya mağaza ara..."
+                    autocomplete="off">
+
+                <span class="search-icon">
+                    ⌕
+                </span>
+
+            </div>
+
+
+            <div class="profile-area">
+
+                <button class="theme-btn" id="themeBtn" title="Tema değiştir">
+                    🌙
+                </button>
+
+                <button class="notification" id="notificationBtn" title="Bildirimler">
+                    ♧
+
+                    <span style="
+                        position:absolute;
+                        margin:-30px 0 0 25px;
+                        width:18px;
+                        height:18px;
+                        border-radius:50%;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        background:var(--purple-2);
+                        color:white;
+                        font-size:9px;
+                    " id="notificationCount">
+                        5
+                    </span>
+
+                </button>
+
+                <div class="user-area" id="userArea" tabindex="0">
+
+                    <div class="avatar" id="avatar">
+                        M
+                    </div>
+
+                    <div class="user-info">
+
+                        <div class="user-name" id="userName">
+                            Admin
+                        </div>
+
+                        <!-- DAKİKA SAYACI KALDIRILDI -->
+
+                        <div class="user-status">
+
+                            <span class="online-dot"></span>
+
+                            Çevrim içi
+
+                        </div>
+
+                    </div>
+
+                    <div class="user-arrow">
+                        ▾
+                    </div>
+
+
+                    <!-- ACCOUNT MENU -->
+
+                    <div class="account-menu" id="accountMenu">
+
+                        <div class="account-header">
+
+                            <div class="account-name" id="accountName">
+                                Admin
+                            </div>
+
+                            <div class="account-role">
+                                Sistem Yöneticisi
+                            </div>
+
+                            <!-- DAKİKA SAYACI KALDIRILDI -->
+
+                            <div class="account-online">
+                                ● Çevrim içi
+                            </div>
+
+                        </div>
+
+
+                        <a href="/Ayarlar" class="account-item">
+
+                            <span class="account-item-icon">
+                                ♙
+                            </span>
+
+                            Hesabım
+
+                        </a>
+
+
+                        <a href="/Ayarlar#guvenlik" class="account-item">
+
+                            <span class="account-item-icon">
+                                🔐
+                            </span>
+
+                            Giriş Güvenliği
+
+                        </a>
+
+
+                        <button class="account-item logout" id="logoutBtn" type="button">
+                            <span class="account-item-icon" aria-hidden="true">⇥</span>
+                            Güvenli Çıkış
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PAGE HEADER -->
+
+        <div class="page-header">
+
+            <div class="page-title">
+
+                <h1>
+                    Ana Sayfa
+                </h1>
+
+                <p>
+                    AI Stock Manager genel bakış ve operasyon merkezi.
+                </p>
+
+            </div>
+
+
+            <div class="page-actions">
+
+                <button class="btn" id="refreshBtn" type="button">
+                    ↻ Yenile
+                </button>
+
+                <button class="btn btn-primary" id="quickStockBtn" type="button">
+                    ＋ Stok İşlemi
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- STATS -->
+
+        <section class="stats" id="statsContainer"></section>
+
+
+        <!-- DASHBOARD -->
+
+        <div class="dashboard-grid">
+
+
+            <!-- LEFT -->
+
+            <div>
+
+
+                <!-- CHART -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ↗
+                            </span>
+
+                            SATIŞ PERFORMANSI
+
+                        </div>
+
+
+                        <select id="chartPeriod" class="btn" aria-label="Grafik dönemi" style="
+                            padding:7px 10px;
+                            font-size:9px;
+                            background:var(--input);
+                            color:var(--text-secondary);
+                            outline:none;
+                        ">
+
+                            <option value="7">
+                                Son 7 Gün
+                            </option>
+
+                            <option value="30">
+                                Son 30 Gün
+                            </option>
+
+                            <option value="90">
+                                Son 3 Ay
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="chart-container">
+
+                        <div class="chart-top">
+
+                            <div>
+
+                                <div class="chart-total" id="chartTotal">
+                                    ₺ 486.240
+                                </div>
+
+                                <div class="chart-subtitle" id="chartSubtitle">
+                                    Bu haftanın toplam satış cirosu
+                                </div>
+
+                            </div>
+
+                            <div class="chart-change" id="chartChange">
+                                ↑ %18.6
+                            </div>
+
+                        </div>
+
+
+                        <div class="chart" id="salesChart">
+
+                            <div class="chart-grid">
+
+                                <div class="chart-line"></div>
+                                <div class="chart-line"></div>
+                                <div class="chart-line"></div>
+                                <div class="chart-line"></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="chart-labels" id="chartLabels"></div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ACTIVITY -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ◉
+                            </span>
+
+                            SON AKTİVİTELER
+
+                        </div>
+
+                        <a href="/Bildirimler" style="
+                            color:var(--purple-2);
+                            font-size:9px;
+                            text-decoration:none;
+                        ">
+                            Tümünü Gör
+                        </a>
+
+                    </div>
+
+
+                    <div class="activity-list" id="activityList"></div>
+
+                </div>
+
+
+                <!-- AI -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ✦
+                            </span>
+
+                            AI ÖNERİSİ
+
+                        </div>
+
+                        <span style="
+                            color:var(--green);
+                            font-size:9px;
+                        ">
+                            ● ANALİZ HAZIR
+                        </span>
+
+                    </div>
+
+
+                    <div class="ai-insight">
+
+                        <div class="ai-label">
+                            ✦ YAPAY ZEKA ANALİZİ
+                        </div>
+
+                        <p id="aiInsightText"></p>
+
+                        <button class="ai-action" id="aiActionBtn" type="button">
+                            ✦ Öneriyi İncele
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RIGHT -->
+
+            <div>
+
+
+                <!-- QUICK ACTIONS -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ✦
+                            </span>
+
+                            HIZLI İŞLEMLER
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="quick-actions">
+
+                        <a href="/Stok" class="quick-action">
+
+                            <div class="quick-icon">
+                                ◇
+                            </div>
+
+                            <div class="quick-title">
+                                Stok Yönetimi
+                            </div>
+
+                            <div class="quick-description">
+                                Ürün stoklarını yönet
+                            </div>
+
+                        </a>
+
+
+                        <a href="/Transfer" class="quick-action">
+
+                            <div class="quick-icon">
+                                ⇄
+                            </div>
+
+                            <div class="quick-title">
+                                Transfer
+                            </div>
+
+                            <div class="quick-description">
+                                Yeni transfer oluştur
+                            </div>
+
+                        </a>
+
+
+                        <a href="/Raporlar" class="quick-action">
+
+                            <div class="quick-icon">
+                                ▥
+                            </div>
+
+                            <div class="quick-title">
+                                Raporlar
+                            </div>
+
+                            <div class="quick-description">
+                                Raporları görüntüle
+                            </div>
+
+                        </a>
+
+
+                        <a href="/AiOnerileri" class="quick-action">
+
+                            <div class="quick-icon">
+                                ✦
+                            </div>
+
+                            <div class="quick-title">
+                                AI Önerileri
+                            </div>
+
+                            <div class="quick-description">
+                                Akıllı önerileri gör
+                            </div>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <!-- STORES -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ▣
+                            </span>
+
+                            MAĞAZA PERFORMANSI
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="store-list" id="storeList"></div>
+
+                </div>
+
+
+                <!-- ALERTS -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon" style="color:var(--red)">
+                                ⚠
+                            </span>
+
+                            ÖNEMLİ UYARILAR
+
+                        </div>
+
+                        <span id="alertCount" style="
+                            color:var(--red);
+                            font-size:9px;
+                        ">
+                            3 UYARI
+                        </span>
+
+                    </div>
+
+
+                    <div class="alert-list" id="alertList"></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer">
+            AI Stock Manager
+            •
+            Nebim V3 Entegrasyon Paneli
+        </div>
+
+    </main>
+
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+
+    <script src="/js/pages/index-1.js"></script>
+
+</body>
+
+</html>

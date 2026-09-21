@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kullanıcılar | AI Stock Manager</title>
+
+    <link rel="stylesheet" href="/css/pages/kullanicilar-1.css">
+    <script src="/js/logout.js"></script>
+    <link rel="stylesheet" href="/css/logout.css">
+    <script src="/js/auth.js"></script>
+    <link rel="stylesheet" href="/css/pages/kullanicilar-2.css">
+<link rel="stylesheet" href="/css/auth.css">
+</head>
+
+
+<body>
+
+    <!-- =======================================================
+     SIDEBAR
+======================================================= -->
+
+    <%- include('partials/sidebar-shared-2.html', { active: '/Kullanicilar' }) %>
+
+
+
+    <!-- =======================================================
+     MAIN
+======================================================= -->
+
+    <main class="main">
+
+
+        <!-- TOPBAR -->
+
+        <div class="topbar">
+
+            <div class="search-wrapper">
+
+                <input type="search" id="globalSearch" class="search" placeholder="Ürün, kullanıcı veya mağaza ara...">
+
+                <span class="search-icon">
+                    ⌕
+                </span>
+
+            </div>
+
+
+            <div class="profile-area">
+
+                <button class="theme-btn" id="themeBtn" title="Tema değiştir">
+                    🌙
+                </button>
+
+                <button class="notification" id="notificationBtn" title="Bildirimler">
+                    ♧
+
+                    <span style="
+                        position:absolute;
+                        margin:-30px 0 0 25px;
+                        width:18px;
+                        height:18px;
+                        border-radius:50%;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        background:var(--purple-2);
+                        color:white;
+                        font-size:9px;
+                    " id="notificationCount">
+                        5
+                    </span>
+
+                </button>
+
+                <div class="user-area" id="userArea" tabindex="0">
+
+                    <div class="avatar" id="avatar">
+                        M
+                    </div>
+
+                    <div class="user-info">
+
+                        <div class="user-name" id="userName">
+                            Admin
+                        </div>
+
+                        <!-- DAKİKA SAYACI KALDIRILDI -->
+
+                        <div class="user-status">
+
+                            <span class="online-dot"></span>
+
+                            Çevrim içi
+
+                        </div>
+
+                    </div>
+
+                    <div class="user-arrow">
+                        ▾
+                    </div>
+
+
+                    <!-- ACCOUNT MENU -->
+
+                    <div class="account-menu" id="accountMenu">
+
+                        <div class="account-header">
+
+                            <div class="account-name" id="accountName">
+                                Admin
+                            </div>
+
+                            <div class="account-role">
+                                Sistem Yöneticisi
+                            </div>
+
+                            <!-- DAKİKA SAYACI KALDIRILDI -->
+
+                            <div class="account-online">
+                                ● Çevrim içi
+                            </div>
+
+                        </div>
+
+
+                        <a href="/Ayarlar" class="account-item">
+
+                            <span class="account-item-icon">
+                                ♙
+                            </span>
+
+                            Hesabım
+
+                        </a>
+
+
+                        <a href="/Ayarlar#guvenlik" class="account-item">
+
+                            <span class="account-item-icon">
+                                🔐
+                            </span>
+
+                            Giriş Güvenliği
+
+                        </a>
+
+
+                        <button class="account-item logout" id="logoutBtn" type="button">
+                            <span class="account-item-icon" aria-hidden="true">⇥</span>
+                            Güvenli Çıkış
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ===================================================
+         PAGE HEADER
+    =================================================== -->
+
+        <div class="page-header">
+
+            <div class="page-title">
+
+                <h1>
+                    Kullanıcılar
+                </h1>
+
+                <p>
+                    Sistem kullanıcılarını, rollerini ve erişim yetkilerini yönetin.
+                </p>
+
+            </div>
+
+
+            <div class="page-actions">
+
+                <button class="btn" id="permissionBtn" type="button">
+                    🔐 Yetki Matrisi
+                </button>
+
+
+                <button class="btn btn-primary" id="addUserBtn" type="button">
+                    ＋ Kullanıcı Ekle
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ===================================================
+         STATISTICS
+    =================================================== -->
+
+        <section class="stats">
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Toplam Kullanıcı
+                    </div>
+
+                    <div class="stat-icon">
+                        ♙
+                    </div>
+
+                </div>
+
+                <div class="stat-value" id="totalUsers">
+                    24
+                </div>
+
+                <div class="stat-description">
+                    Sisteme kayıtlı kullanıcı
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Aktif Kullanıcı
+                    </div>
+
+                    <div class="stat-icon">
+                        ✓
+                    </div>
+
+                </div>
+
+                <div class="stat-value" id="activeUsers">
+                    21
+                </div>
+
+                <div class="stat-description green">
+                    %87,5 aktiflik oranı
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Adminler
+                    </div>
+
+                    <div class="stat-icon">
+                        ◈
+                    </div>
+
+                </div>
+
+                <div class="stat-value" id="adminUsers">
+                    4
+                </div>
+
+                <div class="stat-description">
+                    Tam sistem yetkisine sahip
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-title">
+                        Son 24 Saat
+                    </div>
+
+                    <div class="stat-icon">
+                        ↗
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    17
+                </div>
+
+                <div class="stat-description green">
+                    Başarılı giriş
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ===================================================
+         CONTENT GRID
+    =================================================== -->
+
+        <div class="content-grid">
+
+
+            <!-- =================================================
+             LEFT COLUMN
+        ================================================= -->
+
+            <div>
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ♙
+                            </span>
+
+                            SİSTEM KULLANICILARI
+
+                        </div>
+
+                        <span id="userCountLabel" style="
+                            color:var(--muted-2);
+                            font-size:9px;
+                        ">
+                            24 kullanıcı
+                        </span>
+
+                    </div>
+
+
+                    <!-- FILTERS -->
+
+                    <div class="filters">
+
+                        <input id="userSearch" class="filter-input" placeholder="Ad, e-posta veya kullanıcı adı...">
+
+
+                        <select id="roleFilter" class="filter-select">
+
+                            <option value="">
+                                Tüm Roller
+                            </option>
+
+                            <option value="admin">
+                                Admin
+                            </option>
+
+                            <option value="supervisor">
+                                Yönetici
+                            </option>
+
+                            <option value="manager">
+                                Müdür
+                            </option>
+
+                            <option value="editor">
+                                Operasyon
+                            </option>
+
+                            <option value="viewer">
+                                Görüntüleyici
+                            </option>
+
+                        </select>
+
+
+                        <select id="statusFilter" class="filter-select">
+
+                            <option value="">
+                                Tüm Durumlar
+                            </option>
+
+                            <option value="active">
+                                Aktif
+                            </option>
+
+                            <option value="passive">
+                                Pasif
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- TABLE -->
+
+                    <div class="table-wrapper">
+
+                        <table id="usersTable">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>KULLANICI</th>
+
+                                    <th>ROL</th>
+
+                                    <th>MAĞAZA / BİRİM</th>
+
+                                    <th>DURUM</th>
+
+                                    <th>SON GİRİŞ</th>
+
+                                    <th>İŞLEMLER</th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="usersBody"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+             RIGHT COLUMN
+        ================================================= -->
+
+            <div>
+
+
+                <!-- PERMISSIONS SUMMARY -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                🔐
+                            </span>
+
+                            YETKİ DAĞILIMI
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="permission-list">
+
+
+                        <div class="permission-item">
+
+                            <div class="permission-info">
+
+                                <div class="permission-icon">
+                                    ◈
+                                </div>
+
+                                <div>
+
+                                    <div class="permission-name">
+                                        Sistem Yönetimi
+                                    </div>
+
+                                    <div class="permission-description">
+                                        Tüm sistem ayarları
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="permission-value">
+                                4 kişi
+                            </div>
+
+                        </div>
+
+
+                        <div class="permission-item">
+
+                            <div class="permission-info">
+
+                                <div class="permission-icon">
+                                    ◇
+                                </div>
+
+                                <div>
+
+                                    <div class="permission-name">
+                                        Stok Yönetimi
+                                    </div>
+
+                                    <div class="permission-description">
+                                        Stok oluşturma ve düzenleme
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="permission-value">
+                                12 kişi
+                            </div>
+
+                        </div>
+
+
+                        <div class="permission-item">
+
+                            <div class="permission-info">
+
+                                <div class="permission-icon">
+                                    ↗
+                                </div>
+
+                                <div>
+
+                                    <div class="permission-name">
+                                        Rapor & Analiz
+                                    </div>
+
+                                    <div class="permission-description">
+                                        Raporları görüntüleme
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="permission-value">
+                                18 kişi
+                            </div>
+
+                        </div>
+
+
+                        <div class="permission-item">
+
+                            <div class="permission-info">
+
+                                <div class="permission-icon">
+                                    ⇄
+                                </div>
+
+                                <div>
+
+                                    <div class="permission-name">
+                                        Transfer İşlemleri
+                                    </div>
+
+                                    <div class="permission-description">
+                                        Mağazalar arası transfer
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="permission-value">
+                                9 kişi
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- SECURITY -->
+
+                <div class="panel">
+
+                    <div class="security-card">
+
+                        <div class="security-title">
+
+                            <span>
+                                ●
+                            </span>
+
+                            GÜVENLİK DURUMU
+
+                        </div>
+
+                        <p>
+                            Kullanıcı yetkileri merkezi olarak
+                            yönetilmektedir. Son 30 gün içerisinde
+                            yetki değişikliği yapılan kullanıcılar
+                            sistem kayıtlarında tutulur.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- QUICK ROLES -->
+
+                <div class="panel" id="roleSummary">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <span class="panel-title-icon">
+                                ✦
+                            </span>
+
+                            ROLLER
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="permission-list">
+
+                        <div class="permission-item">
+
+                            <div class="permission-info">
+
+                                <div class="permission-icon">
+                                    A
+                                </div>
+
+                                <div>
+                                    <div class="permission-name">
+                                        Admin
+                                    </div>
+                                    <div class="permission-description">
+                                        Tam sistem erişimi
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <span class="role admin" data-role-count="admin">
+                                4
+                            </span>
+
+                        </div>
+
+                        <div class="permission-item">
+                            <div class="permission-info">
+                                <div class="permission-icon">Y</div>
+                                <div>
+                                    <div class="permission-name">Yönetici</div>
+                                    <div class="permission-description">Atanan bölüm yetkileri; sistem ayarlarına erişemez</div>
+                                </div>
+                            </div>
+                            <span class="role supervisor" data-role-count="supervisor">0</span>
+                        </div>
+
+
+                        <div class="permission-item">
+
+                            <div class="permission-info">
+
+                                <div class="permission-icon">
+                                    M
+                                </div>
+
+                                <div>
+                                    <div class="permission-name">
+                                        Müdür
+                                    </div>
+                                    <div class="permission-description">
+                                        Mağaza yönetimi
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <span class="role manager" data-role-count="manager">
+                                7
+                            </span>
+
+                        </div>
+
+
+                        <div class="permission-item">
+
+                            <div class="permission-info">
+
+                                <div class="permission-icon">
+                                    O
+                                </div>
+
+                                <div>
+                                    <div class="permission-name">
+                                        Operasyon
+                                    </div>
+                                    <div class="permission-description">
+                                        Günlük işlemler
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <span class="role editor" data-role-count="editor">
+                                8
+                            </span>
+
+                        </div>
+
+
+                        <div class="permission-item">
+
+                            <div class="permission-info">
+
+                                <div class="permission-icon">
+                                    G
+                                </div>
+
+                                <div>
+                                    <div class="permission-name">
+                                        Görüntüleyici
+                                    </div>
+                                    <div class="permission-description">
+                                        Sadece görüntüleme
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <span class="role viewer" data-role-count="viewer">
+                                5
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="footer">
+
+            AI Stock Manager
+            •
+            Kullanıcı ve Yetki Yönetim Paneli
+            •
+            Nebim V3 Entegrasyon Paneli
+
+        </div>
+
+    </main>
+
+
+
+    <!-- =======================================================
+     USER MODAL
+======================================================= -->
+
+    <div class="modal-overlay" id="userModal">
+
+        <div class="modal">
+
+            <div class="modal-header">
+
+                <div class="modal-title">
+
+                    <span class="modal-title-icon" id="userModalIcon">
+                        ♙
+                    </span>
+
+                    <span id="userModalTitle">
+                        Yeni Kullanıcı Ekle
+                    </span>
+
+                </div>
+
+
+                <button class="modal-close" type="button" onclick="closeModal('userModal')">
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Ad Soyad
+                        </label>
+
+                        <input id="formName" class="form-control" type="text" placeholder="Örn. Ahmet Yılmaz">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            E-posta
+                        </label>
+
+                        <input id="formEmail" class="form-control" type="email" placeholder="ornek@aistock.com">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Kullanıcı Adı
+                        </label>
+
+                        <input id="formUsername" class="form-control" type="text" placeholder="ahmet.yilmaz">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Rol
+                        </label>
+
+                        <select id="formRole" class="form-control">
+
+                            <option value="admin">
+                                Admin
+                            </option>
+
+                            <option value="supervisor">
+                                Yönetici
+                            </option>
+
+                            <option value="manager">
+                                Müdür
+                            </option>
+
+                            <option value="editor">
+                                Operasyon
+                            </option>
+
+                            <option value="viewer">
+                                Görüntüleyici
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Mağaza / Birim
+                        </label>
+
+                        <select id="formStore" class="form-control">
+
+                            <option>
+                                Merkez Ofis
+                            </option>
+
+                            <option>
+                                İstanbul Mağaza 01
+                            </option>
+
+                            <option>
+                                İstanbul Mağaza 02
+                            </option>
+
+                            <option>
+                                Ankara Mağaza 01
+                            </option>
+
+                            <option>
+                                İzmir Mağaza 01
+                            </option>
+
+                            <option>
+                                Bursa Mağaza 01
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Durum
+                        </label>
+
+                        <select id="formStatus" class="form-control">
+
+                            <option value="active">
+                                Aktif
+                            </option>
+
+                            <option value="passive">
+                                Pasif
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group full" id="passwordGroup">
+
+                        <label class="form-label">
+                            Geçici Şifre
+                        </label>
+
+                        <input id="formPassword" class="form-control" type="password"
+                            placeholder="Geçici kullanıcı şifresi">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button class="btn" type="button" onclick="closeModal('userModal')">
+                    Vazgeç
+                </button>
+
+                <button class="btn btn-primary" type="button" onclick="saveUser()">
+                    ✓ Kullanıcıyı Kaydet
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =======================================================
+     PERMISSION MODAL
+======================================================= -->
+
+    <div class="modal-overlay" id="permissionModal">
+
+        <div class="modal">
+
+            <div class="modal-header">
+
+                <div class="modal-title">
+
+                    <span class="modal-title-icon">
+                        🔐
+                    </span>
+
+                    <span>
+                        Kullanıcı Yetkilendirme
+                    </span>
+
+                </div>
+
+
+                <button class="modal-close" type="button" onclick="closeModal('permissionModal')">
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <div id="permissionUserName" style="
+                    color:var(--purple-2);
+                    font-size:12px;
+                    font-weight:700;
+                    margin-bottom:15px;
+                ">
+                    Kullanıcı
+                </div>
+
+
+                <div class="permission-grid">
+
+
+                    <label class="permission-box">
+
+                        <input type="checkbox" checked>
+
+                        <span>
+
+                            <strong>
+                                Dashboard
+                            </strong>
+
+                            <small>
+                                Ana sayfa erişimi
+                            </small>
+
+                        </span>
+
+                    </label>
+
+
+                    <label class="permission-box">
+
+                        <input type="checkbox" checked>
+
+                        <span>
+
+                            <strong>
+                                Stok Yönetimi
+                            </strong>
+
+                            <small>
+                                Stok görüntüleme ve düzenleme
+                            </small>
+
+                        </span>
+
+                    </label>
+
+
+                    <label class="permission-box">
+
+                        <input type="checkbox" checked>
+
+                        <span>
+
+                            <strong>
+                                Transferler
+                            </strong>
+
+                            <small>
+                                Transfer oluşturma
+                            </small>
+
+                        </span>
+
+                    </label>
+
+
+                    <label class="permission-box">
+
+                        <input type="checkbox">
+
+                        <span>
+
+                            <strong>
+                                AI Önerileri
+                            </strong>
+
+                            <small>
+                                AI analizlerini görüntüleme
+                            </small>
+
+                        </span>
+
+                    </label>
+
+
+                    <label class="permission-box">
+
+                        <input type="checkbox" checked>
+
+                        <span>
+
+                            <strong>
+                                Raporlar
+                            </strong>
+
+                            <small>
+                                Raporları görüntüleme
+                            </small>
+
+                        </span>
+
+                    </label>
+
+
+                    <label class="permission-box">
+
+                        <input type="checkbox" checked>
+
+                        <span>
+
+                            <strong>
+                                Satış Analizi
+                            </strong>
+
+                            <small>
+                                Satış verilerini görüntüleme
+                            </small>
+
+                        </span>
+
+                    </label>
+
+
+                    <label class="permission-box">
+
+                        <input type="checkbox">
+
+                        <span>
+
+                            <strong>
+                                Mağazalar
+                            </strong>
+
+                            <small>
+                                Mağaza yönetimi
+                            </small>
+
+                        </span>
+
+                    </label>
+
+
+                    <label class="permission-box">
+
+                        <input type="checkbox">
+
+                        <span>
+
+                            <strong>
+                                Bildirimler
+                            </strong>
+
+                            <small>
+                                Sistem bildirimleri
+                            </small>
+
+                        </span>
+
+                    </label>
+
+
+                    <label class="permission-box">
+
+                        <input type="checkbox">
+
+                        <span>
+
+                            <strong>
+                                Kullanıcı Yönetimi
+                            </strong>
+
+                            <small>
+                                Kullanıcı ekleme ve silme
+                            </small>
+
+                        </span>
+
+                    </label>
+
+
+                    <label class="permission-box">
+
+                        <input type="checkbox">
+
+                        <span>
+
+                            <strong>
+                                Sistem Ayarları
+                            </strong>
+
+                            <small>
+                                Sistem yapılandırması
+                            </small>
+
+                        </span>
+
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button class="btn" type="button" onclick="closeModal('permissionModal')">
+                    Vazgeç
+                </button>
+
+                <button class="btn btn-primary" type="button" onclick="savePermissions()">
+                    ✓ Yetkileri Kaydet
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =======================================================
+     DELETE MODAL
+======================================================= -->
+
+    <div class="modal-overlay" id="deleteModal">
+
+        <div class="modal delete-modal">
+
+            <div class="delete-icon">
+                ⚠
+            </div>
+
+            <h3>
+                Kullanıcı Silinsin mi?
+            </h3>
+
+            <p>
+                <strong id="deleteUserName">
+                    Kullanıcı
+                </strong>
+                sistemden kaldırılacaktır.
+                Bu işlem geri alınamaz.
+            </p>
+
+
+            <div class="delete-actions">
+
+                <button class="btn" type="button" onclick="closeModal('deleteModal')">
+                    Vazgeç
+                </button>
+
+                <button class="btn btn-danger" type="button" onclick="confirmDelete()">
+                    Kullanıcıyı Sil
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- TOAST -->
+
+    <div id="toast" class="toast"></div>
+
+
+
+    <script src="/js/nebim-adapter.js"></script>
+
+    <script src="/js/pages/kullanicilar-1.js"></script>
+
+<script src="/js/users-admin.js"></script>
+</body>
+
+</html>

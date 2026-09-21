@@ -2,7 +2,7 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
-const source = fs.readFileSync(require('node:path').join(__dirname, '../public/js/nebim-adapter.js'), 'utf8');
+const source = require('./helpers/inventory-source.cjs')();
 function setup() {
     let data = JSON.stringify({ products: [
         { id: 1, code: 'SKU', name: 'Tişört', store: 'A', color: 'Red', size: 'M', stock: 20, capacity: 100 },

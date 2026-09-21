@@ -4,6 +4,7 @@
     const dialog = get('newStoreDialog');
     const form = get('newStoreForm');
     const template = grid.querySelector('.store-card').cloneNode(true);
+    grid.querySelectorAll('.store-card').forEach(card => card.remove());
     const normalize = value => value.trim().toLocaleLowerCase('tr-TR');
     let pending = false;
 
@@ -61,7 +62,7 @@
         get('totalStoreCount').textContent = cards.length;
         get('totalStoreCount').nextElementSibling.textContent = '● ' + cards.filter(card => card.dataset.status === 'online').length + ' mağaza aktif';
     }
-    function renderStore(store) {
+    function renderStore(store, products = []) {
         if (window.NebimAdapter.isWarehouse(store)) return;
         if ([...grid.querySelectorAll('.store-card')].some(card => normalize(card.dataset.name) === normalize(store.name))) return;
         const card = template.cloneNode(true);
@@ -70,13 +71,17 @@
         card.dataset.status = 'online';
         card.style.display = '';
         card.querySelector('.store-name').textContent = store.name;
-        card.querySelector('.store-location').textContent = store.cityLabel + ' • ' + store.district;
+        card.querySelector('.store-location').textContent = [store.cityLabel, store.district].filter(Boolean).join(' • ') || store.name;
         card.querySelector('.status').textContent = 'AKTİF';
         card.querySelector('.status').className = 'status online';
-        card.querySelector('.performance-value').textContent = '%0';
-        card.querySelector('.progress-bar').style.width = '0%';
-        card.querySelectorAll('.metric-value').forEach((item, index) => { item.textContent = index === 1 ? '₺0' : '0'; });
-        card.querySelector('.last-sync').textContent = 'Yeni mağaza • Henüz senkronize edilmedi';
+        const stock = products.filter(p => p.store === store.name);
+        const counts = window.StockSizeView.counts(stock);
+        const percent = Math.max(0, Math.min(100, Number(store.percent) || 0));
+        card.querySelector('.performance-value').textContent = '%' + percent;
+        card.querySelector('.progress-bar').style.width = percent + '%';
+        const metrics = [stock.reduce((n, p) => n + Number(p.stock), 0).toLocaleString('tr-TR'), store.sales == null ? '—' : '₺' + Number(store.sales).toLocaleString('tr-TR'), counts.low, counts.critical];
+        card.querySelectorAll('.metric-value').forEach((item, index) => { item.textContent = metrics[index] ?? '—'; });
+        card.querySelector('.last-sync').textContent = 'Merkezi veritabanı';
         const detail = card.querySelector('.detail-btn');
         detail.dataset.store = store.name;
         detail.setAttribute('aria-haspopup', 'dialog');
@@ -121,7 +126,7 @@
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3000);
         } catch (error) {
-            get('newStoreError').textContent = 'Mağaza kaydedilemedi. Tarayıcı depolama iznini kontrol edip tekrar deneyin.';
+            get('newStoreError').textContent = 'Mağaza kaydedilemedi: ' + error.message;
             console.warn('Mağaza eklenemedi.', error);
         } finally {
             pending = false;
@@ -133,9 +138,7 @@
         try {
             const stores = await window.NebimAdapter.getStores();
             const warehouses = stores.filter(window.NebimAdapter.isWarehouse);
-            grid.querySelectorAll('.store-card').forEach(card => {
-                if (window.NebimAdapter.isWarehouse({ name: card.dataset.name }) || warehouses.some(s => s.name === card.dataset.name)) card.remove();
-            });
+            grid.querySelectorAll('.store-card').forEach(card => card.remove());
             let section = get('warehouseLocations');
             if (!section) {
                 section = document.createElement('section'); section.id = 'warehouseLocations';
@@ -148,7 +151,7 @@
                 section.append(window.WarehouseDetails.create(store, products));
             });
             section.hidden = !warehouses.length;
-            stores.filter(store => store.userCreated).forEach(renderStore);
+            stores.forEach(store => renderStore(store, products));
         } catch (error) {
             console.warn('Kaydedilen mağazalar yüklenemedi.', error);
         }
@@ -156,4 +159,5 @@
         filterStores();
     }
     loadStores();
+    window.addEventListener('stock:data-changed', loadStores);
 })();

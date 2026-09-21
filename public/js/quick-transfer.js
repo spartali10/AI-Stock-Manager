@@ -238,7 +238,7 @@
             get('quickCreate').disabled = false;
         } catch (error) { get('quickStatus').textContent = 'Mağaza ve ürün verileri yüklenemedi. Sayfayı yenileyip tekrar deneyin.'; }
     }
-    window.addEventListener('storage', event => { if (event.key === 'aiStockNebimData') load(); });
+    window.addEventListener('stock:data-changed', event => { if (event.key === 'aiStockNebimData') load(); });
     window.QuickTransferContext = {
         restore(config) {
             if (busy || get('quickCreate').disabled) throw Error('Mevcut işlemin veya veri yüklemesinin bitmesini bekleyin.');

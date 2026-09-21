@@ -7,7 +7,7 @@ test('Mamül Depo is classified separately, including warehouses only present in
         const db = { stores: [{ id: 1, name: 'İstanbul' }, ...(registered ? [{ id: 2, name: 'Mamül Depo', userCreated: true }] : [])], products: [{ id: 1, code: '001', store: 'Mamül Depo', stock: 12 }], meta: {} };
         let saved = JSON.stringify(db);
         const context = { window: {}, localStorage: { getItem: () => saved, setItem: (key, value) => { saved = value; } } };
-        vm.runInNewContext(fs.readFileSync(require('node:path').join(__dirname, '../public/js/nebim-adapter.js'), 'utf8'), context);
+        vm.runInNewContext(require('./helpers/inventory-source.cjs')(), context);
         const api = context.window.NebimAdapter;
         const retail = await api.getRetailStores(), warehouses = await api.getWarehouses();
         assert.equal(retail.length, 1);

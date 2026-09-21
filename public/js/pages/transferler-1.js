@@ -634,7 +634,7 @@
            CREATE TRANSFER
         ========================================================= */
 
-        function createTransfer() {
+        async function createTransfer() {
 
             const from =
                 document.getElementById("newTransferFrom").value;
@@ -657,13 +657,13 @@
                 return;
             }
 
-            NebimAdapter.addTransfer({
+            try { await NebimAdapter.addTransfer({
                 from: from,
                 to: to,
                 product: product,
                 quantity: Number(quantity),
                 status: "Bekliyor"
-            });
+            }); } catch(error) { alert(error.message); return; }
 
             closeModal();
 

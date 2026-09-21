@@ -100,10 +100,47 @@
                 "categoryFilter"
             );
 
-        const rows =
+        let rows =
             document.querySelectorAll(
                 "#stockTable tbody tr"
             );
+
+        const centralRowTemplate = rows[0].cloneNode(true);
+        document.querySelector('#stockTable tbody').replaceChildren();
+        rows = [];
+        async function loadCentralStock() {
+            try {
+                const products = await NebimAdapter.getProducts();
+                const body = document.querySelector('#stockTable tbody'); body.replaceChildren();
+                products.forEach(p => {
+                    const row = centralRowTemplate.cloneNode(true), cells = row.querySelectorAll('td');
+                    const state = StockSizeView.status(p);
+                    row.dataset.status = state; row.dataset.category = p.category || 'Genel';
+                    row.querySelector('.product-name').textContent = p.name || p.code;
+                    row.querySelector('.product-code').textContent = [p.code, p.color, p.size].filter(Boolean).join(' · ');
+                    row.querySelector('.product-image').textContent = p.icon || '◇';
+                    cells[1].textContent = p.store;
+                    row.querySelector('.stock-number strong').textContent = Number(p.stock).toLocaleString('tr-TR');
+                    row.querySelector('.stock-number span').textContent = '/ ' + (p.capacity || '—');
+                    row.querySelector('.progress-bar').style.width = Math.max(0, Math.min(100, Number(p.stock) / (Number(p.capacity) || 1) * 100)) + '%';
+                    cells[3].textContent = p.min || 0;
+                    const badge = row.querySelector('.status'); badge.className = 'status ' + state; badge.textContent = StockSizeView.statusText(state);
+                    row.querySelectorAll('[onclick]').forEach(button => { button.removeAttribute('onclick'); button.addEventListener('click', () => showDetail(p.name || p.code)); });
+                    body.append(row);
+                });
+                rows = body.querySelectorAll('tr');
+                const selectedStore = storeFilter.value, selectedCategory = categoryFilter.value;
+                storeFilter.replaceChildren(new Option('Tüm Mağazalar', ''), ...[...new Set(products.map(p => p.store))].map(s => new Option(s, s)));
+                categoryFilter.replaceChildren(new Option('Tüm Kategoriler', ''), ...[...new Set(products.map(p => p.category || 'Genel'))].map(s => new Option(s, s)));
+                storeFilter.value = selectedStore; categoryFilter.value = selectedCategory;
+                const counts = StockSizeView.counts(products), values = [products.reduce((n, p) => n + Number(p.stock), 0), counts.normal, counts.low, counts.critical];
+                document.querySelectorAll('.stat-value').forEach((node, i) => { node.textContent = (values[i] || 0).toLocaleString('tr-TR'); });
+                filterProducts();
+            } catch (error) { showToast(error.message); }
+        }
+        window.addEventListener('stock:data-changed', loadCentralStock);
+        // Wait until this page's filter bindings and toast variables are initialized.
+        document.addEventListener('DOMContentLoaded', loadCentralStock);
 
 
         function filterProducts() {

@@ -1,13 +1,19 @@
 # AI Stock Manager
 
-Mevcut uygulamanın Node.js + Express sürümü. HTML uzantıları korunur; EJS yalnızca sunucuda ortak HTML partial'larını birleştirir.
+Node.js + Express ve merkezi veritabanı kullanan AI Stock Manager. HTML uzantıları korunur; EJS yalnızca sunucuda ortak HTML partial'larını birleştirir.
+
+## Merkezi veri kurulumu
+
+Ürün, mağaza, stok, transfer ve giriş hesapları artık backend tarafından yönetilir. Render için PostgreSQL; yerel geliştirme için sunucuda SQLite kullanılır. Tarayıcıdaki eski veriler otomatik aktarılmaz veya silinmez.
+
+**Önce [kurulum, yedek ve migration rehberini](docs/central-data.md) izleyin.** `.env.example` dosyasını `.env` olarak kopyalayın, kendi `ADMIN_PASSWORD` değerinizi belirleyin ve `npm run start:env` çalıştırın. Ortam değişkenleri zaten tanımlıysa aşağıdaki mevcut başlatma komutu kullanılabilir.
 
 ## Çalıştırma
 cd "C:\Users\Muzaffer\OneDrive\Desktop\AI-Stock-Manager"
 $env:Path = "C:\Program Files\nodejs;" + $env:Path
 npm.cmd start
 
-Node.js 20 veya üzeri gerekir.
+Node.js 22.13 veya üzeri gerekir.
 
 ```sh
 npm install
@@ -44,8 +50,10 @@ Hiçbir özgün dosya silinmedi. `backups/pre-express` 43 özgün dosyanın bire
 
 ## Veriler ve doğrulama
 
-Giriş, yetkiler ve iş verileri önceki uygulamadaki gibi localStorage kullanır; sunucuda yeni bir veri tabanı veya kimlik doğrulama sistemi kurulmamıştır. Eski uygulama başka protokol/host/port üzerinde çalışıyorsa localStorage yeni origin'e otomatik geçmez. Eski tarayıcı verilerini silmeyin; aynı origin'i kullanın veya verileri ayrıca taşıyın.
+- Veri katmanı: `backend/repository.js`; iş kuralları: `backend/inventory-service.js`; API/yetkiler: `backend/api.js`, `backend/auth-service.js`.
+- Render kurulumu: `render.yaml`; gizli bilgiler yalnızca environment variables.
+- Eski kayıtları koruyan taşıma ekranı: `/Migration` (Admin). Önizleme veri yazmaz; import yalnızca boş merkezi iş verisine yapılır.
+- Kod değişikliği öncesi 97 dosyalık SHA-256 yedeği: `backups/pre-central-20260921-131554`.
+- `npm test`: mevcut işlevler, iki ayrı oturumda ortak veri, eşzamanlı transfer, yetkiler, migration, yedek/rollback, PostgreSQL sorguları ve sayfaların API ile DOM kontrolleri.
 
-`npm test`: 6 kontrol geçti. Tüm 15 route, eski URL yönlendirmeleri, yerel CSS/JS bağlantıları ve JS sözdizimi kontrol edildi. Sunucunun ürettiği içerikler, çıkarılan CSS/JS tekrar yerleştirilerek yedeklerle karşılaştırıldı; route dönüşümü, gradyan adresi, eski kullanılmayan menü karşılaştırması ve BOM/satır sonu farkları dışında HTML/CSS/JS eşdeğerliği doğrulandı. Giriş, kullanıcı yetkileri, çıkış, dağıtım ve depo transferi testleri geçti. Tarayıcıda görsel etkileşim ve dış entegrasyon servisleri için uçtan uca doğrulama yapılmadı.
-
-Statik dosya sunumu Express'in [resmi kullanımına](https://expressjs.com/en/5x/starter/static-files/) göre yalnızca `public` klasörüyle sınırlandırılmıştır.
+Gerçek Render dağıtımı ve kullanıcı verisinin import'u otomatik yapılmaz. Bütün cihazlar aynı merkezi sunucu adresine bağlanmalıdır. Nebim'e gerçek bağlantı veya yazma işlemi yoktur. Ayrıntılar: [merkezi veri rehberi](docs/central-data.md).

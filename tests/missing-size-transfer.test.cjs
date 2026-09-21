@@ -122,7 +122,7 @@ function setup(ranked = false, modify = () => {}) {
     }
     const initial = JSON.parse(stored); modify(initial); stored = JSON.stringify(initial);
     const env = { window: {}, localStorage: { getItem: () => stored, setItem: (_, value) => { stored = value; } } };
-    vm.runInNewContext(fs.readFileSync(require.resolve('../public/js/nebim-adapter'), 'utf8'), env);
+    vm.runInNewContext(require('./helpers/inventory-source.cjs')(), env);
     return { api: env.window.NebimAdapter, read: () => JSON.parse(stored) };
 }
 test('highest-selling zero-stock target wins; source sales and missing coverage block allocation', async () => {

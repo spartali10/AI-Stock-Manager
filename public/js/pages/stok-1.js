@@ -411,19 +411,9 @@
            NEBIM V3 ADAPTER - MEVCUT SATIRLARI DEPOYA KAYDET
         ========================================================= */
 
-        NebimAdapter.seedProductsIfMissing(
-            rows.map(function (row) {
-                return {
-                    code: row.dataset.code,
-                    name: row.dataset.product,
-                    store: row.dataset.store,
-                    category: row.dataset.category,
-                    stock: Number(row.dataset.stock),
-                    capacity: Number(row.dataset.capacity),
-                    min: Number(row.dataset.min)
-                };
-            })
-        );
+        // Static example rows are not imported into central storage.
+        table.querySelector('tbody').replaceChildren();
+        rows = [];
 
 
         function escapeHtml(value) {
@@ -2112,4 +2102,4 @@
 
     
 
-window.addEventListener("storage", event => { if (event.key === "aiStockNebimData") NebimAdapter.getProducts().then(renderProducts); });
+window.addEventListener('stock:data-changed', event => { if (event.key === "aiStockNebimData") NebimAdapter.getProducts().then(renderProducts); });

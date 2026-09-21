@@ -537,7 +537,7 @@
                             <dialog id="wmReceiptDialog">
                                 <h3>Nebim transfer fişi önizlemesi</h3>
                                 <pre id="wmReceiptPreview"></pre>
-                                <p>Nebim fiş servisi ve mağaza/depo kod eşlemeleri henüz tanımlı değil. Bu taslak Nebim'e gönderilmedi; yerel stoklar değiştirilmedi.</p>
+                                <p>Nebim fiş servisi ve mağaza/depo kod eşlemeleri henüz tanımlı değil. Bu taslak Nebim'e gönderilmedi; stoklar değiştirilmedi.</p>
                                 <button type="button" id="wmReceiptDownload" class="btn">Fiş Taslağını İndir (JSON)</button>
                                 <button type="button" class="btn" disabled>Nebim'e Gönder — bağlantı bekleniyor</button>
                                 <button type="button" class="btn" onclick="document.getElementById('wmReceiptDialog').close()">Kapat</button>
@@ -546,12 +546,12 @@
                         <div class="distribution-actions"><button type="button" class="btn" id="distBuild">Dağıtımı Önizle</button><button type="button" class="btn btn-primary" id="distApply" disabled>Önizlemedeki Dağıtımı Uygula</button></div>
                         <p id="distStatus" role="status" aria-live="polite" class="distribution-description"></p>
                         <div id="distPreview" hidden><p id="distCount" class="distribution-description"></p><div class="distribution-table"><table aria-label="Dağıtım önizlemesi"><thead><tr><th>Ürün Kodu</th><th>Renk</th><th>Beden</th><th>Kaynak</th><th>Hedef</th><th>Adet</th><th>Açıklama</th></tr></thead><tbody id="distRows"></tbody></table></div></div>
-                        <p class="distribution-help">Önizleme stok değiştirmez. Uygulama yalnızca bu tarayıcıdaki stokları günceller; Nebim'e gönderilmez.</p>
+                        <p class="distribution-help">Önizleme stok değiştirmez. Uygulama ortak veritabanındaki stokları günceller; Nebim'e gönderilmez.</p>
                     </div>
                 </section>
                 <section class="panel transfer-templates" aria-labelledby="transferTemplateTitle">
                     <h3 id="transferTemplateTitle">Transfer Şablonları</h3>
-                    <p>Dağıtım modu, tarih aralığı, kaynak/hedef seçim sırası ve dinamik filtreler bu tarayıcıda saklanır.</p>
+                    <p>Dağıtım modu, tarih aralığı, kaynak/hedef seçim sırası ve dinamik filtreler merkezi veritabanında saklanır.</p>
                     <label for="transferTemplateName">Şablon adı</label>
                     <div class="transfer-template-controls"><input id="transferTemplateName" class="form-input" maxlength="80" placeholder="Şablon adı"><button id="transferTemplateSave" type="button" class="btn">Yeni Şablon Oluştur</button><button id="transferTemplateUpdate" type="button" class="btn" disabled>Seçili Şablonu Güncelle</button></div>
                     <p>Kartı seçin, adını ve aşağıdaki transfer ayarlarını düzenleyin, ardından Seçili Şablonu Güncelle düğmesine basın.</p>
@@ -681,7 +681,7 @@
                             <p id="qfCount" role="status" aria-live="polite"></p>
                             <p id="qfEmpty" class="qf-note" hidden>Eşleşen ürün yok. Kaynak mağazayı veya filtreleri değiştirin. Eksik özellikleri aşağıdan tanımlayabilirsiniz.</p>
                             <details class="qf-editor"><summary>＋ Ürüne Özellik Tanımla</summary>
-                                <p class="qf-note">Kaynak mağazadaki bir ürüne sezon, yıl veya özel bir alan ekleyin. Değerler bu tarayıcıda kaydedilir.</p>
+                                <p class="qf-note">Kaynak mağazadaki bir ürüne sezon, yıl veya özel bir alan ekleyin. Değerler merkezi veritabanına kaydedilir.</p>
                                 <label>Ürün<select id="qfEditProduct"></select></label>
                                 <label>Filtre tipi<select id="qfEditType"><option value="hierarchy">Hierarchy</option><option value="attributes">Ürün özelliği</option></select></label>
                                 <label>Özellik<select id="qfEditKey"><option value="">Özellik seçiniz…</option></select></label>

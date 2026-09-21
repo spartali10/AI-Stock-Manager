@@ -1,9 +1,10 @@
 (() => {
-    const get = id => document.getElementById(id), key = 'aiStockQuickTransferTemplates';
+    const get = id => document.getElementById(id);
     const status = message => { get('transferTemplateStatus').textContent = message; };
-    let selectedId = '';
+    let selectedId = '', templates = [];
+    async function reload() { templates = await window.NebimAdapter.getTemplates(); refresh(); }
     function read() {
-        const list = JSON.parse(localStorage.getItem(key) || '[]');
+        const list = templates;
         if (!Array.isArray(list)) throw Error('Şablon kayıtları okunamadı.');
         return list;
     }
@@ -35,8 +36,8 @@
             cards.append(button);
         });
     }
-    const safe = fn => () => { try { fn(); } catch (error) { status(error.message); } };
-    function saveTemplate(update = false) {
+    const safe = fn => async () => { try { await fn(); } catch (error) { status(error.message); } };
+    async function saveTemplate(update = false) {
         const name = get('transferTemplateName').value.trim();
         if (!name) throw Error('Şablon adı girin.');
         const config = window.QuickTransferContext.get();
@@ -49,7 +50,7 @@
         if (update && !existing) throw Error('Güncellenecek şablon kartını seçin.');
         if (list.some(t => t.id !== existing?.id && t.name.trim().toLocaleLowerCase('tr-TR') === name.toLocaleLowerCase('tr-TR'))) throw Error('Bu adla bir şablon var. Mevcut kartı seçip Seçili Şablonu Güncelle düğmesini kullanın veya farklı ad girin.');
         const record = { ...(existing || { id: crypto.randomUUID(), createdAt: new Date().toISOString() }), name, config, updatedAt: new Date().toISOString() };
-        localStorage.setItem(key, JSON.stringify(update ? list.map(t => t.id === record.id ? record : t) : [...list, record])); refresh(record.id);
+        await window.NebimAdapter.saveTemplate(record); templates = await window.NebimAdapter.getTemplates(); refresh(record.id);
         status(`${name} ${update ? 'güncellendi' : 'kaydedildi'}.`);
     }
     get('transferTemplateSave').addEventListener('click', safe(() => saveTemplate()));
@@ -74,12 +75,12 @@
         status(`${template.name} yüklendi. Adı veya transfer ayarlarını değiştirip Seçili Şablonu Güncelle ile kaydedebilirsiniz.`);
         if (restored?.missingStores.length) status(`${template.name} mevcut mağazalarla yüklendi. Listede bulunmadığı için seçilemeyen mağazalar: ${restored.missingStores.join(', ')}. Kaynak ve hedef seçimlerini kontrol edin; kayıtlı şablon güncellemedikçe değişmez.`);
     }
-    get('transferTemplateDelete').addEventListener('click', safe(() => {
+    get('transferTemplateDelete').addEventListener('click', safe(async () => {
         const list = read(), id = selectedId, record = list.find(t => t.id === id);
         if (!record || !confirm(`“${record.name}” şablonunu silmek istiyor musunuz?`)) return;
-        localStorage.setItem(key, JSON.stringify(list.filter(t => t.id !== id))); refresh(''); status('Şablon silindi.');
+        await window.NebimAdapter.deleteTemplate(id); templates = await window.NebimAdapter.getTemplates(); refresh(''); status('Şablon silindi.');
     }));
     window.TransferTemplates = { selected: () => read().find(t => t.id === selectedId) || null };
-    window.addEventListener('storage', event => { if (event.key === key) safe(() => refresh())(); });
-    safe(() => refresh())();
+    window.addEventListener('stock:data-changed', safe(reload));
+    safe(reload)();
 })();

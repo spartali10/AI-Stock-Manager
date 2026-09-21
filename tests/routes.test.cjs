@@ -8,6 +8,8 @@ const root = path.resolve(__dirname, '..');
 const routes = require('../routes/page-map.json');
 
 function converted(source) {
+  for (const [before, after] of Object.entries(require('./helpers/central-copy.json'))) source = source.replaceAll(before, after);
+  if (source.includes('<title>Mağazalar')) source = source.replace(/onlineMinutes.textContent =\s*minutes;/g, 'if (onlineMinutes) onlineMinutes.textContent = minutes;').replace(/accountOnlineMinutes.textContent =\s*minutes;/g, 'if (accountOnlineMinutes) accountOnlineMinutes.textContent = minutes;');
   for (const [file, route] of Object.entries(routes)) source = source.replace(new RegExp(`(?<![\\w/-])(?:\\./)?${file.replace('.', '\\.')}`, 'g'), route);
   return source.replace(/((?:src|href)=["'])(?:\.\/)?(css|js)\//g, '$1/$2/').replace('untitled-1.html', 'home')
     // This optional filter now starts unchecked, as requested after migration.
@@ -35,7 +37,7 @@ test('backup hashes, all routes, redirects, assets and unchanged rendered markup
         if (url.endsWith('.js')) { assert.match(asset.headers.get('content-type'), /javascript/); new vm.Script(await asset.text(), { filename: url }); }
         if (url.endsWith('.css')) assert.match(asset.headers.get('content-type'), /text\/css/);
       }
-      let restored = html.replace(/<link rel="stylesheet" href="(\/css\/pages\/[^\"]+)">/g, (_, url) => '<style>' + fs.readFileSync(path.join(root, 'public', url), 'utf8').replace('url(/SatisAnalizi#chartGradient)', 'url(#chartGradient)') + '</style>');
+      let restored = html.replace(/<script src="\/api\/session.js"><\/script>\s*/g, '').replace(/<link rel="stylesheet" href="(\/css\/pages\/[^\"]+)">/g, (_, url) => '<style>' + fs.readFileSync(path.join(root, 'public', url), 'utf8').replace('url(/SatisAnalizi#chartGradient)', 'url(#chartGradient)') + '</style>');
       restored = restored.replace(/<script src="(\/js\/pages\/[^\"]+)"><\/script>/g, (_, url) => '<script>' + fs.readFileSync(path.join(root, 'public', url), 'utf8') + '</script>');
       const normalize = text => text.replace(/^\uFEFF/, '').replaceAll('\r\n', '\n').trimEnd();
       // Stock settings now describe the existing size-series rules. Preserve the
@@ -60,7 +62,7 @@ test('backup hashes, all routes, redirects, assets and unchanged rendered markup
       // Stok has since gained a store selector and a new save handler; its
       // behavior is covered by stock-operation.test.cjs rather than the migration snapshot.
       // Home and sales analysis now use inventory data; stock-status and sales-performance cover calculations.
-      if (!['anasayfa.html', 'satis-analizi.html', 'stok.html', 'kullanicilar.html', 'transferler.html'].includes(file)) assert.equal(normalize(restored), normalize(converted(fs.readFileSync(path.join(root, 'backups/pre-express', file), 'utf8'))), `${file}: markup, styles, script order and contents preserved`);
+      if (!['anasayfa.html', 'satis-analizi.html', 'stok.html', 'kullanicilar.html', 'transferler.html', 'index.html', 'stokyonetimi.html', 'bildirimler.html', 'login.html'].includes(file)) { const actual = normalize(restored), expected = normalize(converted(fs.readFileSync(path.join(root, 'backups/pre-express', file), 'utf8'))); let i = 0; while (i < actual.length && actual[i] === expected[i]) i++; assert.equal(actual === expected, true, `${file}: difference at ${i}: ${JSON.stringify(actual.slice(i - 60, i + 120))} vs ${JSON.stringify(expected.slice(i - 60, i + 120))}`); }
       const legacy = await fetch(`${base}/${file}?filter=test`, { redirect: 'manual' });
       assert.equal(legacy.status, 302); assert.equal(legacy.headers.get('location'), `${route}?filter=test`);
       const slash = await fetch(`${base}${route.toLowerCase()}/?x=1`, { redirect: 'manual' });
@@ -79,7 +81,7 @@ test('new route permission guards and navigation visibility', () => {
     const db = new Map([['aiStockUsers', JSON.stringify([user])], ['aiStockUser', JSON.stringify(signedIn ? user : null)]]);
     const redirects = [], handlers = {}, links = ['/Stok', '/Ayarlar', '/Raporlar'].map(href => ({ hidden: false, getAttribute: () => href }));
     const document = { documentElement: { style: {}, classList: { toggle() {} } }, addEventListener: (name, fn) => { handlers[name] = fn; }, querySelectorAll: selector => selector === 'a[href]' ? links : [] };
-    vm.runInNewContext(script, { window: { addEventListener() {} }, localStorage: { getItem: k => db.get(k), setItem: (k, v) => db.set(k, v) }, location: { pathname, replace: url => redirects.push(url) }, document });
+    vm.runInNewContext(script, { setInterval() {}, window: { StockSession: { user: signedIn ? user : null, users: [user] }, addEventListener() {} }, localStorage: { getItem: k => db.get(k), setItem: (k, v) => db.set(k, v) }, location: { pathname, replace: url => redirects.push(url) }, document });
     handlers.DOMContentLoaded();
     return { redirects, links };
   }

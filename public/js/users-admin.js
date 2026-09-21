@@ -50,11 +50,11 @@
             closeModal('userModal'); render(); showToast('Kullanıcı kaydedildi.');
         } catch (error) { showToast(error.message); } finally { saving = false; }
     };
-    window.savePermissions = () => {
-        try { A.setPermissions(permissionId, [...document.querySelectorAll('#permissionModal input:checked')].map(n => n.value)); closeModal('permissionModal'); render(); showToast('Yetkiler kaydedildi.'); } catch (e) { showToast(e.message); }
+    window.savePermissions = async () => {
+        try { await A.setPermissions(permissionId, [...document.querySelectorAll('#permissionModal input:checked')].map(n => n.value)); closeModal('permissionModal'); render(); showToast('Yetkiler kaydedildi.'); } catch (e) { showToast(e.message); }
     };
-    window.confirmDelete = () => {
-        try { A.removeUser(deletingId); closeModal('deleteModal'); render(); showToast('Kullanıcı silindi.'); } catch (e) { showToast(e.message); }
+    window.confirmDelete = async () => {
+        try { await A.removeUser(deletingId); closeModal('deleteModal'); render(); showToast('Kullanıcı silindi.'); } catch (e) { showToast(e.message); }
     };
     render();
 })();

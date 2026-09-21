@@ -12,7 +12,7 @@ test('order inventories preserve pre-transfer size stock despite later product u
     ], stores: [{ name: 'Source' }, { name: 'Target' }], transfers: [] });
     const window = {}, env = { window, localStorage: { getItem: () => data, setItem: (_, value) => { data = value; } } };
     for (const file of ['distribution-engine', 'nebim-adapter', 'transfer-order-matrix']) {
-        vm.runInNewContext(fs.readFileSync(require.resolve(`../public/js/${file}.js`), 'utf8'), env);
+        vm.runInNewContext((file === 'nebim-adapter' ? require('./helpers/inventory-source.cjs')() : fs.readFileSync(require.resolve(`../public/js/${file}.js`), 'utf8')), env);
     }
     const api = window.NebimAdapter;
     const records = await api.transferStock(1, ['Target'], 1);

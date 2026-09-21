@@ -49,7 +49,7 @@
                 [task.id, task.templateName, task.user].forEach(value => tr.append(el('td', value)));
                 const status = el('td'); status.append(el('span', task.status, 'task-status')); tr.append(status);
                 [date(task.startedAt), date(task.finishedAt)].forEach(value => tr.append(el('td', value)));
-                const progressCell = el('td'), progress = el('progress'); progress.max = 100; progress.value = task.progress;
+                const progressCell = el('td'), progress = el('progress'); progress.max = 100; progress.value = Number(task.progress) || 0;
                 if (task.status === 'Emir hazır · Gönderilmedi') progressCell.title = 'Emir hazırlığı tamamlandı. Bu yüzde ürünlerin gönderildiği anlamına gelmez.';
                 progress.setAttribute('aria-label', `${task.id} nolu görevin ilerlemesi`);
                 progressCell.append(progress, el('span', `${task.progress}%`, 'task-percent')); tr.append(progressCell, el('td', task.lastMessage));
@@ -85,6 +85,6 @@
     bind('taskExportOrder', () => exportTasks(tasks.filter(task => task.id === selectedId)));
     bind('taskCloseOrder', () => { selectedId = null; get('taskOrderDetail').hidden = true; });
     window.addEventListener('transfer-tasks-changed', refresh);
-    window.addEventListener('storage', event => { if (event.key === 'aiStockNebimData' || event.key === null) refresh(); });
+    window.addEventListener('stock:data-changed', event => { if (event.key === 'aiStockNebimData' || event.key === null) refresh(); });
     refresh();
 })();

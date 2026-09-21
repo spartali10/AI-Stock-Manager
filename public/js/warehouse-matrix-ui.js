@@ -223,7 +223,7 @@
             get('distMain').replaceChildren(new Option('Mamül Depo seçin', ''), ...warehouses.map(s => new Option(s.name, s.name)));
             get('distMain').value = warehouses.some(s => s.name === previous) ? previous : warehouses.length === 1 ? warehouses[0].name : '';
             prepare(true);
-            get('wmSource').textContent = warehouses.length ? `Son okuma: ${new Date(result.fetchedAt).toLocaleString('tr-TR')} · ${result.sourceLabel || 'Yerel kayıtlar; canlı Nebim bağlantısı henüz yok.'}` : 'Mamül Depo verisi bekleniyor. Entegrasyon tamamlandığında depo ve tüm stokları burada listelenecek.';
+            get('wmSource').textContent = warehouses.length ? `Son okuma: ${new Date(result.fetchedAt).toLocaleString('tr-TR')} · ${result.sourceLabel || 'Merkezi veritabanı; canlı Nebim bağlantısı henüz yok.'}` : 'Mamül Depo kaydı bulunamadı. Merkezi sisteme Excel veya veri yedeği yükleyin.';
         } catch (error) { stale = true; get('wmSource').textContent = 'Veri alınamadı: ' + error.message; }
         finally { busy = false; get('wmRefresh').disabled = false; render(); }
     }
@@ -354,6 +354,6 @@
         } catch (error) { stale = true; get('wmSource').textContent = error.message; }
         finally { busy = false; render(); }
     });
-    window.addEventListener('storage', e => { if (e.key === 'aiStockNebimData') { stale = true; recalculate(); } });
+    window.addEventListener('stock:data-changed', e => { if (e.key === 'aiStockNebimData') { stale = true; recalculate(); } });
     refresh();
 })();

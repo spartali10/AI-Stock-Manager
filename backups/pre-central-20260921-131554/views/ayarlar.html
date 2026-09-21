@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ayarlar | AI Stock Manager</title>
+
+    <link rel="stylesheet" href="/css/pages/ayarlar-1.css">
+    <script src="/js/logout.js"></script>
+    <link rel="stylesheet" href="/css/logout.css">
+    <script src="/js/auth.js"></script>
+    <link rel="stylesheet" href="/css/pages/ayarlar-2.css">
+<link rel="stylesheet" href="/css/auth.css">
+<link rel="stylesheet" href="/css/integration-settings.css">
+</head>
+
+
+<body>
+
+
+    <!-- =======================================================
+     SIDEBAR
+======================================================= -->
+
+    <%- include('partials/sidebar-shared-1.html', { active: '/Ayarlar' }) %>
+
+
+
+    <!-- =======================================================
+     MAIN
+======================================================= -->
+
+    <main class="main">
+
+
+        <!-- TOPBAR -->
+
+        <div class="topbar">
+
+            <div class="search-wrapper">
+
+                <input type="search" id="globalSearch" class="search" placeholder="Ürün, kod veya mağaza ara...">
+
+                <span class="search-icon">
+                    ⌕
+                </span>
+
+            </div>
+
+
+            <div class="profile-area">
+
+                <button class="theme-btn" id="themeBtn" title="Tema değiştir">
+                    🌙
+                </button>
+
+                <button class="notification" id="notificationBtn" title="Bildirimler">
+                    ♧
+
+                    <span style="
+                        position:absolute;
+                        margin:-30px 0 0 25px;
+                        width:18px;
+                        height:18px;
+                        border-radius:50%;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        background:var(--purple-2);
+                        color:white;
+                        font-size:9px;
+                    " id="notificationCount">
+                        5
+                    </span>
+
+                </button>
+
+                <div class="user-area" id="userArea" tabindex="0">
+
+                    <div class="avatar" id="avatar">
+                        M
+                    </div>
+
+                    <div class="user-info">
+
+                        <div class="user-name" id="userName">
+                            Admin
+                        </div>
+
+                        <!-- DAKİKA SAYACI KALDIRILDI -->
+
+                        <div class="user-status">
+
+                            <span class="online-dot"></span>
+
+                            Çevrim içi
+
+                        </div>
+
+                    </div>
+
+                    <div class="user-arrow">
+                        ▾
+                    </div>
+
+
+                    <!-- ACCOUNT MENU -->
+
+                    <div class="account-menu" id="accountMenu">
+
+                        <div class="account-header">
+
+                            <div class="account-name" id="accountName">
+                                Admin
+                            </div>
+
+                            <div class="account-role">
+                                Sistem Yöneticisi
+                            </div>
+
+                            <!-- DAKİKA SAYACI KALDIRILDI -->
+
+                            <div class="account-online">
+                                ● Çevrim içi
+                            </div>
+
+                        </div>
+
+
+                        <a href="/Ayarlar" class="account-item">
+
+                            <span class="account-item-icon">
+                                ♙
+                            </span>
+
+                            Hesabım
+
+                        </a>
+
+
+                        <a href="/Ayarlar#guvenlik" class="account-item">
+
+                            <span class="account-item-icon">
+                                🔐
+                            </span>
+
+                            Giriş Güvenliği
+
+                        </a>
+
+
+                        <button class="account-item logout" id="logoutBtn" type="button">
+                            <span class="account-item-icon" aria-hidden="true">⇥</span>
+                            Güvenli Çıkış
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- PAGE HEADER -->
+
+        <div class="page-header">
+
+            <div class="page-title">
+
+                <h1>
+                    Ayarlar
+                </h1>
+
+                <p>
+                    AI Stock Manager sistem ayarlarını ve kullanıcı tercihlerini yönetin.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ===================================================
+         SETTINGS
+    =================================================== -->
+
+        <div class="settings-layout">
+
+
+            <!-- SETTINGS NAV -->
+
+            <nav class="settings-nav">
+
+                <div class="settings-nav-title">
+                    Ayarlar
+                </div>
+
+
+                <button class="settings-nav-item active" data-section="general" type="button">
+
+                    <span class="settings-nav-icon">
+                        ⚙
+                    </span>
+
+                    Genel Ayarlar
+
+                </button>
+
+
+                <button class="settings-nav-item" data-section="stock" type="button">
+
+                    <span class="settings-nav-icon">
+                        ◇
+                    </span>
+
+                    Stok Ayarları
+
+                </button>
+
+
+                <button class="settings-nav-item" data-section="notifications" type="button">
+
+                    <span class="settings-nav-icon">
+                        ♧
+                    </span>
+
+                    Bildirimler
+
+                </button>
+
+
+                <button class="settings-nav-item" data-section="ai" type="button">
+
+                    <span class="settings-nav-icon">
+                        ✦
+                    </span>
+
+                    AI Ayarları
+
+                </button>
+
+
+                <button class="settings-nav-item" data-section="integration" type="button">
+
+                    <span class="settings-nav-icon">
+                        ⌘
+                    </span>
+
+                    Entegrasyonlar
+
+                </button>
+
+
+                <button class="settings-nav-item" data-section="security" type="button">
+
+                    <span class="settings-nav-icon">
+                        ◉
+                    </span>
+
+                    Güvenlik
+
+                </button>
+
+            </nav>
+
+
+
+            <!-- SETTINGS CONTENT -->
+
+            <div class="settings-content">
+
+
+                <!-- =================================================
+                 GENERAL
+            ================================================= -->
+
+                <section class="settings-section active" id="general">
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+
+                            <div class="panel-title">
+
+                                <span class="panel-title-icon">
+                                    ⚙
+                                </span>
+
+                                Genel Ayarlar
+
+                            </div>
+
+                            <span class="panel-subtitle">
+                                Sistem tercihleri
+                            </span>
+
+                        </div>
+
+
+                        <div class="form-body">
+
+                            <div class="form-grid">
+
+
+                                <div class="form-group">
+
+                                    <label class="form-label">
+                                        Sistem Adı
+                                    </label>
+
+                                    <input class="form-input" id="systemName" value="AI Stock Manager">
+
+                                    <span class="form-help">
+                                        Panel üzerinde gösterilecek sistem adı.
+                                    </span>
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label class="form-label">
+                                        Varsayılan Dil
+                                    </label>
+
+                                    <select class="form-select" id="language">
+
+                                        <option selected>
+                                            Türkçe
+                                        </option>
+
+                                        <option>
+                                            English
+                                        </option>
+
+                                        <option>
+                                            Deutsch
+                                        </option>
+
+                                    </select>
+
+                                    <span class="form-help">
+                                        Yönetim panelinin varsayılan dili.
+                                    </span>
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label class="form-label">
+                                        Para Birimi
+                                    </label>
+
+                                    <select class="form-select" id="currency">
+
+                                        <option selected>
+                                            Türk Lirası (₺)
+                                        </option>
+
+                                        <option>
+                                            Euro (€)
+                                        </option>
+
+                                        <option>
+                                            US Dollar ($)
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label class="form-label">
+                                        Zaman Dilimi
+                                    </label>
+
+                                    <select class="form-select" id="timezone">
+
+                                        <option selected>
+                                            Europe/Istanbul
+                                        </option>
+
+                                        <option>
+                                            Europe/London
+                                        </option>
+
+                                        <option>
+                                            Europe/Berlin
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <div class="form-group full">
+
+                                    <label class="form-label">
+                                        Sistem Açıklaması
+                                    </label>
+
+                                    <textarea class="form-textarea"
+                                        id="systemDescription">Nebim V3 Entegrasyon ve Akıllı Stok Yönetim Paneli</textarea>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="actions">
+
+                            <button class="btn" type="button" onclick="resetGeneral()">
+                                Sıfırla
+                            </button>
+
+                            <button class="btn btn-primary" type="button" onclick="saveSettings('Genel ayarlar')">
+                                ✓ Değişiklikleri Kaydet
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- DISPLAY -->
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+
+                            <div class="panel-title">
+
+                                <span class="panel-title-icon">
+                                    ◐
+                                </span>
+
+                                Görünüm
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="setting-list">
+
+
+                            <div class="setting-row">
+
+                                <div class="setting-info">
+
+                                    <div class="setting-name">
+                                        Animasyonlar
+                                    </div>
+
+                                    <div class="setting-description">
+                                        Panel geçişleri ve hover efektlerini etkinleştir.
+                                    </div>
+
+                                </div>
+
+                                <div class="toggle active" data-setting="animations" onclick="toggleSetting(this)">
+                                </div>
+
+                            </div>
+
+
+                            <div class="setting-row">
+
+                                <div class="setting-info">
+
+                                    <div class="setting-name">
+                                        Kompakt görünüm
+                                    </div>
+
+                                    <div class="setting-description">
+                                        Tablo ve kartlarda daha fazla veriyi aynı anda göster.
+                                    </div>
+
+                                </div>
+
+                                <div class="toggle" data-setting="compact" onclick="toggleSetting(this)"></div>
+
+                            </div>
+
+
+                            <div class="setting-row">
+
+                                <div class="setting-info">
+
+                                    <div class="setting-name">
+                                        Grafik animasyonları
+                                    </div>
+
+                                    <div class="setting-description">
+                                        Satış ve stok grafiklerindeki hareketli geçişleri göster.
+                                    </div>
+
+                                </div>
+
+                                <div class="toggle active" data-setting="chartAnimations" onclick="toggleSetting(this)">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                 STOCK
+            ================================================= -->
+
+                <section class="settings-section" id="stock">
+
+                    <div class="panel">
+                        <div class="panel-header">
+                            <div class="panel-title">
+                                <span class="panel-title-icon">◇</span>
+                                Stok Durumu Kuralları
+                            </div>
+                            <span class="panel-subtitle">Beden serisine göre değerlendirme</span>
+                        </div>
+                        <div class="form-body">
+                            <div class="form-grid">
+                                <div class="form-group full">
+                                    <span class="form-label">Geçerli beden serisi: 0 · 1 · 2 · 3</span>
+                                    <span class="form-help">Her mağaza, ürün kodu, renk ve kumaş grubu ayrı değerlendirilir. Bir bedende stok yoksa veya o bedenin kaydı bulunmuyorsa beden eksik sayılır.</span>
+                                </div>
+                                <div class="form-group">
+                                    <span class="form-label">Normal — Eksik beden yok</span>
+                                    <span class="form-help">0, 1, 2 ve 3 bedenlerinin her birinde en az 1 adet stok bulunur.</span>
+                                </div>
+                                <div class="form-group">
+                                    <span class="form-label">Düşük — 1 beden eksik</span>
+                                    <span class="form-help">Dört bedenin yalnızca birinde stok yoktur.</span>
+                                </div>
+                                <div class="form-group">
+                                    <span class="form-label">Kritik — En az 2 beden eksik</span>
+                                    <span class="form-help">Toplam stok sıfırdan büyüktür ancak seride en az iki beden eksiktir.</span>
+                                </div>
+                                <div class="form-group">
+                                    <span class="form-label">Tükendi — Toplam stok 0</span>
+                                    <span class="form-help">Grupta hiç stok kalmadığında eksik beden sayısından bağımsız olarak Tükendi gösterilir.</span>
+                                </div>
+                                <div class="form-group full">
+                                    <span class="form-label">ONE SIZE ve numaralı beden içermeyen ürünler</span>
+                                    <span class="form-help">0, 1, 2 veya 3 bedenlerinden hiçbirini içermeyen gruplarda toplam stok varsa Normal, yoksa Tükendi gösterilir.</span>
+                                </div>
+                                <div class="form-group full">
+                                    <span class="form-help">Bu panel sistemde uygulanan kuralları gösterir. Stok durumları mevcut stok verilerinden otomatik hesaplanır; burada kaydedilecek bir ayar bulunmaz.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+
+                            <div class="panel-title">
+
+                                <span class="panel-title-icon">
+                                    ⇄
+                                </span>
+
+                                Otomatik Stok İşlemleri
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="setting-list">
+
+
+                            <div class="setting-row">
+
+                                <div class="setting-info">
+
+                                    <div class="setting-name">
+                                        Otomatik transfer önerisi
+                                    </div>
+
+                                    <div class="setting-description">
+                                        Fazla stok bulunan mağazalardan düşük stoklu mağazalara otomatik transfer
+                                        önerileri oluştur.
+                                    </div>
+
+                                </div>
+
+                                <div class="toggle active" onclick="toggleSetting(this)"></div>
+
+                            </div>
+
+
+                            <div class="setting-row">
+
+                                <div class="setting-info">
+
+                                    <div class="setting-name">
+                                        Kritik stok uyarısı
+                                    </div>
+
+                                    <div class="setting-description">
+                                        Ürün kritik seviyeye düştüğünde anlık bildirim oluştur.
+                                    </div>
+
+                                </div>
+
+                                <div class="toggle active" onclick="toggleSetting(this)"></div>
+
+                            </div>
+
+
+                            <div class="setting-row">
+
+                                <div class="setting-info">
+
+                                    <div class="setting-name">
+                                        Fazla stok tespiti
+                                    </div>
+
+                                    <div class="setting-description">
+                                        Uzun süre satılmayan ve fazla stoklanan ürünleri belirle.
+                                    </div>
+
+                                </div>
+
+                                <div class="toggle active" onclick="toggleSetting(this)"></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                 NOTIFICATIONS
+            ================================================= -->
+
+                <section class="settings-section" id="notifications">
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+
+                            <div class="panel-title">
+
+                                <span class="panel-title-icon">
+                                    ♧
+                                </span>
+
+                                Bildirim Tercihleri
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="setting-list">
+
+
+                            <div class="setting-row">
+
+                                <div class="setting-info">
+
+                                    <div class="setting-name">
+                                        Kritik stok bildirimleri
+                                    </div>
+
+                                    <div class="setting-description">
+                                        Kritik seviyeye düşen ürünlerde bildirim göster.
+                                    </div>
+
+                                </div>
+
+                                <div class="toggle active" onclick="toggleSetting(this)"></div>
+
+                            </div>
+
+
+                            <div class="setting-row">
+
+                                <div class="setting-info">
+
+                                    <div class="setting-name">
+                                        AI önerileri
+                                    </div>
+
+                                    <div class="setting-description">
+                                        AI tarafından oluşturulan stok ve satış önerilerini bildir.
+                                    </div>
+
+                                </div>
+
+                                <div class="toggle active" onclick="toggleSetting(this)"></div>
+
+                            </div>
+
+
+                            <div class="setting-row">
+
+                                <div class="setting-info">
+
+                                    <div class="setting-name">
+                                        Transfer bildirimleri
+                                    </div>
+
+                                    <div class="setting-description">
+                                        Yeni transfer talepleri ve transfer durum değişikliklerinde bildirim al.
+                                    </div>
+
+                                </div>
+
+                                <div class="toggle active" onclick="toggleSetting(this)"></div>
+
+                            </div>
+
+
+                            <div class="setting-row">
+
+                                <div class="setting-info">
+
+                                    <div class="setting-name">
+                                        Günlük rapor
+                                    </div>
+
+                                    <div class="setting-description">
+                                        Her gün stok ve satış özeti oluştur.
+                                    </div>
+
+                                </div>
+
+                                <div class="toggle" onclick="toggleSetting(this)"></div>
+
+                            </div>
+
+
+                            <div class="setting-row">
+
+                                <div class="setting-info">
+
+                                    <div class="setting-name">
+                                        Bildirim yoğunluğu
+                                    </div>
+
+                                    <div class="setting-description">
+                                        Sistem bildirimlerinin öncelik seviyesini belirleyin.
+                                    </div>
+
+                                </div>
+
+                                <select class="inline-select">
+
+                                    <option>
+                                        Tüm bildirimler
+                                    </option>
+
+                                    <option selected>
+                                        Önemli bildirimler
+                                    </option>
+
+                                    <option>
+                                        Sadece kritik
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                 AI
+            ================================================= -->
+
+                <section class="settings-section" id="ai">
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+
+                            <div class="panel-title">
+
+                                <span class="panel-title-icon">
+                                    ✦
+                                </span>
+
+                                AI Ayarları
+
+                            </div>
+
+                            <span class="panel-subtitle">
+                                Akıllı analiz sistemi
+                            </span>
+
+                        </div>
+
+
+                        <div class="status-box">
+
+                            <div class="status-icon">
+                                ✓
+                            </div>
+
+                            <div>
+
+                                <div class="status-title">
+                                    AI Analiz Motoru Aktif
+                                </div>
+
+                                <div class="status-text">
+                                    Stok ve satış verileri analiz edilmeye hazır.
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="setting-list">
+
+
+                            <div class="setting-row">
+
+                                <div class="setting-info">
+
+                                    <div class="setting-name">
+                                        Otomatik AI analizi
+                                    </div>
+
+                                    <div class="setting-description">
+                                        Stok ve satış verilerini belirli aralıklarla otomatik analiz et.
+                                    </div>
+
+                                </div>
+
+                                <div class="toggle active" onclick="toggleSetting(this)"></div>
+
+                            </div>
+
+
+                            <div class="setting-row">
+
+                                <div class="setting-info">
+
+                                    <div class="setting-name">
+                                        Satış tahmini
+                                    </div>
+
+                                    <div class="setting-description">
+                                        Geçmiş satış verilerini kullanarak gelecekteki talebi tahmin et.
+                                    </div>
+
+                                </div>
+
+                                <div class="toggle active" onclick="toggleSetting(this)"></div>
+
+                            </div>
+
+
+                            <div class="setting-row">
+
+                                <div class="setting-info">
+
+                                    <div class="setting-name">
+                                        Transfer optimizasyonu
+                                    </div>
+
+                                    <div class="setting-description">
+                                        Mağazalar arasındaki stok dağılımını analiz ederek transfer önerileri üret.
+                                    </div>
+
+                                </div>
+
+                                <div class="toggle active" onclick="toggleSetting(this)"></div>
+
+                            </div>
+
+
+                            <div class="setting-row">
+
+                                <div class="setting-info">
+
+                                    <div class="setting-name">
+                                        Öneri hassasiyeti
+                                    </div>
+
+                                    <div class="setting-description">
+                                        AI önerilerinin ne kadar erken oluşturulacağını belirleyin.
+                                    </div>
+
+                                </div>
+
+                                <select class="inline-select">
+
+                                    <option>
+                                        Düşük
+                                    </option>
+
+                                    <option selected>
+                                        Dengeli
+                                    </option>
+
+                                    <option>
+                                        Yüksek
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="actions">
+
+                            <button class="btn btn-primary" type="button" onclick="saveSettings('AI ayarları')">
+                                ✓ AI Ayarlarını Kaydet
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                 INTEGRATION
+            ================================================= -->
+
+                <section class="settings-section" id="integration">
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+
+                            <div class="panel-title">
+
+                                <span class="panel-title-icon">
+                                    ⌘
+                                </span>
+
+                                Entegrasyonlar
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="integration-grid">
+
+
+                            <div class="integration-card">
+
+                                <div class="integration-top">
+
+                                    <div class="integration-icon">
+                                        N
+                                    </div>
+
+                                    <span class="connection warning">AYARLANMADI</span>
+
+                                </div>
+
+                                <div class="integration-name">
+                                    Nebim V3
+                                </div>
+
+                                <div class="integration-description">
+                                    Ürün, stok, mağaza ve satış verilerinin senkronizasyonu.
+                                </div>
+
+                                <div class="integration-actions">
+
+                                    <button class="btn" type="button">
+                                        Ayarlar
+                                    </button>
+
+                                    <button class="btn" type="button">
+                                        Test Et
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="integration-card">
+
+                                <div class="integration-top">
+
+                                    <div class="integration-icon">
+                                        ☁
+                                    </div>
+
+                                    <span class="connection warning">AYARLANMADI</span>
+
+                                </div>
+
+                                <div class="integration-name">
+                                    Bulut Yedekleme
+                                </div>
+
+                                <div class="integration-description">
+                                    Sistem ayarlarının ve raporların güvenli şekilde yedeklenmesi.
+                                </div>
+
+                                <div class="integration-actions">
+
+                                    <button class="btn" type="button">
+                                        Ayarlar
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="integration-card">
+
+                                <div class="integration-top">
+
+                                    <div class="integration-icon">
+                                        ✉
+                                    </div>
+
+                                    <span class="connection warning">
+                                        AYARLANMADI
+                                    </span>
+
+                                </div>
+
+                                <div class="integration-name">
+                                    E-Posta
+                                </div>
+
+                                <div class="integration-description">
+                                    Sistem ve kritik stok bildirimlerinin e-posta üzerinden gönderilmesi.
+                                </div>
+
+                                <div class="integration-actions">
+
+                                    <button class="btn btn-primary" type="button">
+                                        Yapılandır
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="integration-card">
+
+                                <div class="integration-top">
+
+                                    <div class="integration-icon">
+                                        API
+                                    </div>
+
+                                    <span class="connection warning">AYARLANMADI</span>
+
+                                </div>
+
+                                <div class="integration-name">
+                                    REST API
+                                </div>
+
+                                <div class="integration-description">
+                                    Harici sistemlerin AI Stock Manager verilerine erişmesini sağlar.
+                                </div>
+
+                                <div class="integration-actions">
+
+                                    <button class="btn" type="button">
+                                        API Anahtarları
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                 SECURITY
+            ================================================= -->
+
+                <section class="settings-section" id="security">
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+
+                            <div class="panel-title">
+
+                                <span class="panel-title-icon">
+                                    ◉
+                                </span>
+
+                                Güvenlik
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="security-card">
+
+
+                            <div class="security-item">
+
+                                <div class="security-icon">
+                                    🔐
+                                </div>
+
+                                <div class="security-info">
+
+                                    <div class="security-name">
+                                        İki faktörlü doğrulama
+                                    </div>
+
+                                    <div class="security-detail">
+                                        Hesap girişlerinde ekstra güvenlik katmanı kullan.
+                                    </div>
+
+                                </div>
+
+                                <div class="toggle active" onclick="toggleSetting(this)"></div>
+
+                            </div>
+
+
+                            <div class="security-item">
+
+                                <div class="security-icon">
+                                    ◷
+                                </div>
+
+                                <div class="security-info">
+
+                                    <div class="security-name">
+                                        Oturum zaman aşımı
+                                    </div>
+
+                                    <div class="security-detail">
+                                        Uzun süre işlem yapılmadığında kullanıcı oturumunu kapat.
+                                    </div>
+
+                                </div>
+
+                                <select class="inline-select">
+
+                                    <option>
+                                        15 dakika
+                                    </option>
+
+                                    <option selected>
+                                        30 dakika
+                                    </option>
+
+                                    <option>
+                                        60 dakika
+                                    </option>
+
+                                    <option>
+                                        120 dakika
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="security-item">
+
+                                <div class="security-icon">
+                                    ◌
+                                </div>
+
+                                <div class="security-info">
+
+                                    <div class="security-name">
+                                        Giriş kayıtları
+                                    </div>
+
+                                    <div class="security-detail">
+                                        Kullanıcı giriş ve çıkış hareketlerini kayıt altında tut.
+                                    </div>
+
+                                </div>
+
+                                <div class="toggle active" onclick="toggleSetting(this)"></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="panel danger-panel">
+
+                        <div class="panel-header">
+
+                            <div>
+
+                                <div class="danger-title">
+                                    ⚠ Tehlikeli Bölge
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="danger-description">
+
+                            Sistem verilerini sıfırlama veya tüm yerel ayarları silme
+                            işlemleri geri alınamaz. Bu işlemleri gerçekleştirmeden
+                            önce mevcut verilerin yedeğini almanız önerilir.
+
+                        </div>
+
+
+                        <div class="actions">
+
+                            <button class="btn btn-danger" type="button" onclick="confirmReset()">
+                                Tüm Ayarları Sıfırla
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+            </div>
+
+        </div>
+
+
+
+        <div class="footer">
+
+            AI Stock Manager
+            •
+            Nebim V3 Entegrasyon Paneli
+
+        </div>
+
+    </main>
+
+
+
+    <!-- TOAST -->
+
+    <div id="toast" class="toast"></div>
+
+
+
+    <script src="/js/pages/ayarlar-1.js"></script>
+
+    <dialog id="integrationDialog" class="integration-dialog" aria-labelledby="integrationTitle">
+        <header><h2 id="integrationTitle">Entegrasyon Ayarları</h2><button type="button" id="integrationClose" aria-label="Ayarları kapat">×</button></header>
+        <div class="integration-dialog-body">
+            <p id="integrationSecretNote" class="integration-note"></p>
+            <form id="integrationForm"><div id="integrationFields" class="integration-fields"></div><div class="integration-dialog-actions"><button type="submit" class="btn btn-primary">Ayarları Kaydet</button><button type="button" id="integrationTest" class="btn">Bağlantıyı Test Et</button></div></form>
+            <section id="integrationApiTools" hidden>
+                <h3>API anahtar yönetimi</h3>
+                <label>Sunucu yönetim anahtarı (isteğe bağlı)<input type="password" id="integrationAdminToken" autocomplete="off" placeholder="Yalnızca bellekte tutulur"></label>
+                <p class="integration-note">Anahtar listeleme/oluşturma için sunucunun yönetim yetkisi gerekir. Otomatik veya örnek API anahtarı üretilmez.</p>
+                <div class="integration-fields"><label>Anahtar adı<input id="apiKeyName" maxlength="80" placeholder="Örn. Rapor servisi"></label><label>Erişim kapsamı<select id="apiKeyScope" aria-describedby="apiReadOnlyNote"><option value="read">Yalnızca okuma ve görüntüleme</option><option value="read_write">Okuma ve yazma</option></select></label></div>
+                <p id="apiReadOnlyNote">Varsayılan erişim yalnızca okumadır. Yazma kapsamını ileride seçip Ayarları Kaydet ile etkinleştirebilirsiniz. Bu tercih tek başına Nebim bağlantısı kurmaz; mevcut işlemler yerelde kalır. Gerçek yazma için sunucu desteği ve Nebim yetkisi gerekir. Kapsam değişikliği yeni oluşturulacak anahtarlara uygulanır; mevcut anahtarların yetkilerini değiştirmez.</p>
+                <div class="integration-dialog-actions"><button type="button" id="apiKeysRefresh" class="btn">Anahtarları Listele</button><button type="button" id="apiKeyCreate" class="btn btn-primary">Anahtar Oluştur</button></div>
+                <code id="issuedApiKey" class="issued-api-key"></code><ul id="apiKeysList"></ul>
+            </section>
+            <section id="integrationBackupTools" hidden><h3>Yedekleme işlemleri</h3><p class="integration-note">Bulut yedeklemesi ve zamanlama entegrasyon sunucusunda çalışır. Yerel yedek yalnızca bu tarayıcıdaki iş verilerini indirir.</p><div class="integration-dialog-actions"><button type="button" id="backupDownload" class="btn">Yerel Yedeği İndir</button><button type="button" id="backupRun" class="btn">Bulut Yedeklemeyi Başlat</button></div></section>
+            <p id="integrationFeedback" class="integration-feedback" role="status" aria-live="polite"></p>
+        </div>
+    </dialog>
+    <script src="/js/integration-settings.js"></script>
+</body>
+
+</html>

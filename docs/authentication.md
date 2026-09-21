@@ -1,3 +1,5 @@
+> Merkezi veri güncellemesi: Bu belgedeki Local Storage/yerel veri açıklamaları önceki sürüme aittir. Güncel kaynak, kurulum, yetkiler ve yedekleme için [merkezi veri rehberine](central-data.md) bakın. İş kuralları ve mevcut arayüzler korunmuştur.
+
 # Kullanıcı ve yetki düzeni
 
 ## Yönetici ve Admin ayrımı

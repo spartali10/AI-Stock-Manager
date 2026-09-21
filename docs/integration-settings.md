@@ -1,3 +1,5 @@
+> Merkezi veri güncellemesi: Bu belgedeki Local Storage/yerel veri açıklamaları önceki sürüme aittir. Güncel kaynak, kurulum, yetkiler ve yedekleme için [merkezi veri rehberine](central-data.md) bakın. İş kuralları ve mevcut arayüzler korunmuştur.
+
 # Ayarlar entegrasyonları
 
 `js/integration-settings.js`, dört entegrasyon kartının ayar pencerelerini yönetir. Gizli olmayan tercihler `aiStockIntegrationSettings` anahtarında bu tarayıcıda saklanır. Kartlar bağlantı kurulmuş gibi gösterilmez. Yerel JSON yedeği ürün, mağaza, transfer ve bildirim kayıtlarını içerir; kullanıcılar ve bağlantı sırları dahil değildir.

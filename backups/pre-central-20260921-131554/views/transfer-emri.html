@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Transfer Edilen Ürünler | AI Stock Manager</title>
+    <script src="/js/auth.js"></script>
+    <link rel="stylesheet" href="/css/transfer-order.css">
+</head>
+<body>
+    <header class="detail-heading"><a class="back-button" href="/Transfer" aria-label="Görev listesine dön">←</a><div><h1>Transfer Ayrıntısı</h1><p>Mağazalar arası ürün transferlerini görüntüleyin ve yönetin.</p></div><span id="orderLabel"></span></header>
+    <main>
+        <section class="order-metadata" aria-label="Transfer bilgileri">
+            <div><span>Transfer No</span><strong id="metaNumber">—</strong></div>
+            <div><span>Şablon</span><strong id="metaTemplate">—</strong></div>
+            <div><span>Kullanıcı</span><strong id="metaUser">—</strong></div>
+            <div><span>Oluşturulma Tarihi</span><strong id="metaCreated">—</strong></div>
+            <div><span>Durum</span><strong id="metaStatus" class="order-status">—</strong></div>
+            <div><span>Güncellenme Tarihi</span><strong id="metaUpdated">—</strong></div>
+        </section>
+        <h2 class="section-title">Transfer Edilen Ürünler</h2>
+        <section class="products-card" aria-label="Transfer edilen ürünler">
+        <div class="toolbar" aria-label="Emir araçları">
+            <label class="search">⌕ <input id="search" type="search" placeholder="Ara... (Depo, Ürün, Renk, Beden)" aria-label="Transferlerde ara"></label>
+            <label class="target">▣ Hedef Mağaza <select id="target" aria-label="Hedef mağaza"><option value="">Tümü</option></select></label>
+            <details class="columns"><summary>▥ Kolonlar</summary><div id="columnOptions"></div></details>
+            <button id="export" class="excel" disabled>▧ Excel'e Aktar</button>
+            <button id="refreshInventory" class="secondary">↻ Stokları Yenile</button>
+            <button id="expand">⊞ Tümünü Aç</button>
+            <button id="collapse" class="secondary">⊟ Tümünü Kapat</button>
+            <button class="send-all" disabled title="Fiş gönderme entegrasyonu henüz bağlı değil">➤ Tümünü Gönder</button>
+            <label class="special"><input id="special" type="checkbox"> Özel Görünüm</label>
+        </div>
+        <p id="status" role="status" aria-live="polite">Emir yükleniyor…</p>
+        <div id="groups"></div>
+        </section>
+        <div class="order-bottom">
+            <section class="summary-card"><h2>Transfer Özeti</h2><div class="summary-grid">
+                <div class="stat purple"><span>▧</span><div><small>Toplam Ürün</small><strong id="summaryProducts">0</strong></div></div>
+                <div class="stat green"><span>↥</span><div><small>Toplam Sevk Adet</small><strong id="summaryQuantity">0</strong></div></div>
+                <div class="stat blue"><span>▣</span><div><small>Hedef Depo</small><strong id="summaryTargets">0</strong></div></div>
+                <div class="stat orange"><span>◈</span><div><small>Ürün / Renk</small><strong id="summaryVariants">0</strong></div></div>
+            </div></section>
+            <section class="notes-card"><h2>▤ &nbsp;Notlar</h2><label class="sr-only" for="orderNotes">Transfer notu</label><textarea id="orderNotes" placeholder="Transfer ile ilgili not ekleyin…" maxlength="5000"></textarea><p id="notesStatus" role="status"></p></section>
+            <div class="bottom-actions"><button class="primary-send" disabled title="Fiş gönderme entegrasyonu henüz bağlı değil">➤ &nbsp;Transferi Gönder</button><button id="saveNotes" disabled>Notları Kaydet</button></div>
+        </div>
+        <p class="integration-note">Yeşil beden: transfere dahil · Kırmızı beden: transfere dahil değil. Envanter: transfer edilen bedenin işlem öncesi stoğu. Eski emirlerde anlık stok kaydı yoksa — gösterilir. Satış: emrin tarih aralığı; tarih aralığı yoksa kayıtlı tüm satışlar. —: veri yok veya dönem kapsamı eksik. Fiş gönderme ve silme işlemleri için entegrasyon henüz bağlı değil.</p>
+    </main>
+    <script src="/js/nebim-adapter.js"></script>
+    <script src="/vendor/exceljs.min.js"></script>
+    <script src="/js/transfer-tasks-excel.js"></script>
+    <script src="/js/transfer-order-matrix.js"></script>
+    <script src="/js/transfer-order-excel.js"></script>
+    <script src="/js/transfer-order.js"></script>
+</body>
+</html>

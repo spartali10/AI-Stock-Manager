@@ -12,7 +12,7 @@ function setup(stock) {
     });
     const env = { window: {}, localStorage: { getItem: () => stored, setItem: (_, value) => { stored = value; } } };
     for (const file of ['distribution-engine.js', 'nebim-adapter.js']) {
-        vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../public/js', file), 'utf8'), env);
+        vm.runInNewContext((file === 'nebim-adapter.js' ? require('./helpers/inventory-source.cjs')() : fs.readFileSync(path.join(__dirname, '../public/js', file), 'utf8')), env);
     }
     return { api: env.window.NebimAdapter, read: () => JSON.parse(stored) };
 }
