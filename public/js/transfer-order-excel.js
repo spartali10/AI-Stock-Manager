@@ -1,7 +1,7 @@
 (function (root) {
-    function build(records, context, columns, hidden, ExcelJS) {
-        const matrix = root.TransferOrderMatrix.build(records, context);
-        const visible = columns.filter(([key]) => !hidden.has(key)).flatMap(([key, label]) => key === 'size' ? matrix.sizes.map(size => [`size:${size}`, size]) : [[key, label]]);
+    function build(records, context, columns, hidden, ExcelJS, special = true) {
+        const matrix = root.TransferOrderMatrix.build(records, context, special);
+        const visible = columns.filter(([key]) => !hidden.has(key)).flatMap(([key, label]) => key === 'size' ? special ? matrix.sizes.map(size => [`size:${size}`, size]) : [['size', 'Beden']] : [[key, label]]);
         if (!visible.length) throw new Error('Excel aktarımı için en az bir kolon seçin.');
         const book = new ExcelJS.Workbook(), sheet = book.addWorksheet('Transfer Edilen Ürünler', { views: [{ state: 'frozen', ySplit: 1 }] });
         const widths = { from: 14, to: 14, product: 15, productName: 20, color: 13, sourceInventory: 12, sourceSales: 11, targetInventory: 12, targetSales: 11, quantity: 10 };

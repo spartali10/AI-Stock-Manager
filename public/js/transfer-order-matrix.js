@@ -5,7 +5,16 @@
         const label = text(value).toLocaleUpperCase('tr-TR').replace(/İ/g, 'I');
         return /^(ONE[\s_-]*SIZE|ONE)$/.test(label) ? 'ONE SIZE' : label || 'BELİRTİLMEMİŞ';
     }
-    function build(records, context = {}) {
+    function build(records, context = {}, special = true) {
+        if (!special) {
+            const rows = records.map(record => {
+                const sales = Array.isArray(context.sales) ? context.sales.filter(item => size(item.size) === size(record.size)) : context.sales;
+                const row = build([record], { ...context, sales }).rows[0];
+                return { ...row, size: size(record.size) };
+            });
+            rows.sort((a, b) => text(a.product).localeCompare(text(b.product), 'tr', { numeric: true }) || text(a.color).localeCompare(text(b.color), 'tr') || a.size.localeCompare(b.size, 'tr', { numeric: true }));
+            return { sizes: [], rows, total: rows.reduce((total, row) => total + row.quantity, 0) };
+        }
         const groups = new Map(), extra = new Set();
         records.forEach(record => {
             const product = text(record.product), color = text(record.color);

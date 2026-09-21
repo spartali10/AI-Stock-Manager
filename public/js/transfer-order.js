@@ -25,8 +25,9 @@
                 heading.append(pill('Hedef Depo: ', target), el('span', `Toplam: ${sum(targetRows)}`, 'total'), unavailable('▣ Fiş Sil', 'delete', 'Tamamlanmış transferlerin fiş silme entegrasyonu bağlı değil'), unavailable('➤ Fiş Gönder', 'send', 'Fiş gönderme entegrasyonu henüz bağlı değil'));
                 const wrap = el('div', null, 'table-wrap'), table = el('table'), head = el('thead'), tr = el('tr'), body = el('tbody');
                 table.setAttribute('aria-label', `${source} → ${target} ürünleri`);
-                const matrix = window.TransferOrderMatrix.build(targetRows, context);
-                const shownColumns = columns.filter(([key]) => !hidden.has(key)).flatMap(([key, label]) => key === 'size' ? matrix.sizes.map(size => [`size:${size}`, size]) : [[key, label]]);
+                const special = get('special').checked;
+                const matrix = window.TransferOrderMatrix.build(targetRows, context, special);
+                const shownColumns = columns.filter(([key]) => !hidden.has(key)).flatMap(([key, label]) => key === 'size' ? special ? matrix.sizes.map(size => [`size:${size}`, size]) : [['size', 'Beden']] : [[key, label]]);
                 const indexHeader = el('th', '#'); indexHeader.scope = 'col'; tr.append(indexHeader);
                 shownColumns.forEach(([key, label]) => { const th = el('th', label, key.startsWith('size:') ? 'size-cell' : key === 'quantity' ? 'shipment-cell' : ''); th.scope = 'col'; tr.append(th); }); head.append(tr);
                 matrix.rows.forEach((row, index) => {
@@ -63,7 +64,7 @@
     get('refreshInventory').addEventListener('click', async () => {
         try { await refreshInventory(); } catch (error) { get('status').textContent = 'Stoklar yenilenemedi: ' + error.message; }
     });
-    get('special').addEventListener('change', event => document.body.classList.toggle('compact', event.target.checked));
+    get('special').addEventListener('change', render);
     get('saveNotes').addEventListener('click', () => {
         if (!task) return;
         try {
@@ -79,7 +80,7 @@
             context = await window.NebimAdapter.getTransferOrderContext();
             render();
             get('export').disabled = true;
-            const records = visible(), book = window.TransferOrderExcel.build(records, context, columns, hidden, window.ExcelJS);
+            const records = visible(), book = window.TransferOrderExcel.build(records, context, columns, hidden, window.ExcelJS, get('special').checked);
             const url = URL.createObjectURL(new Blob([await book.xlsx.writeBuffer()], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
             const link = el('a'); link.href = url; link.download = `transfer-emri-${task.orderId}.xlsx`; document.body.append(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
         } catch (error) { get('status').textContent = error.message; }
